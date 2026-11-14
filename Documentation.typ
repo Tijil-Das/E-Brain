@@ -551,22 +551,62 @@ Head 3:   0.00 0.00 0.00 0.05 0.00 0.00 0.01 0.00 0.01 0.00 0.01 0.21 0.02 0.06 
 
 ---
 
-= Preview of Stage 10: Building the Full Transformer Architecture
+= Stage 10: The Complete Causal Transformer — Autoregressive Attention & Deep Block Stacking
 
-With Multi-Head Attention verified and outperforming the baseline, two final architectural transformations elevate this system into a complete production Transformer:
+Stage 10 transforms our multi-head attention network into a full, modern autoregressive Transformer. It introduces three core innovations:
+1. *Predicting at Every Position Simultaneously (Sequence-to-Sequence Training):* Instead of sliding 16 characters to predict a single 17th character, each window of $T=16$ characters predicts all 16 target characters simultaneously ($c_(t+1)$ for each $c_t$).
+2. *The Causal Lower-Triangular Mask:* Enforcing strict temporal directionality by masking future positions ($i > t$) with $-10^9$ before softmax.
+3. *Deep Residual Transformer Blocks ($L = 1$ and $L = 2$):* Implementing the complete canonical Transformer block (Multi-Head Attention + Residual Addition + Position-wise Feed-Forward Network + Residual Addition), and stacking them.
 
-1. *Deep Stacking with Residual Blocks:*
-   Currently, we run one attention operation followed by one feed-forward layer. A modern Transformer stacks multiple identical blocks:
-   $ x_1 = x_0 + "MultiHeadAttention"(x_0) $
-   $ x_2 = x_1 + "FeedForward"(x_1) $
-   $ x_3 = x_2 + "MultiHeadAttention"(x_2) $
-   $ x_4 = x_3 + "FeedForward"(x_3) $
-   Stacking allows higher layers to reason about complex grammatical structures built upon the primitives extracted by lower layers.
+== 10.1 Mathematical Formulation of Causal Attention
 
-2. *Causal Masking & Parallel Sequence Training:*
-   Currently, we feed 16 characters to predict a single 17th character.
-   With a *Causal Lower-Triangular Mask* ($s_(i, j) = -infinity$ for $j > i$), every position $i$ in the 16-character window can predict character $i+1$ simultaneously without leaking future information.
-   This yields *16 training predictions per sequence for the computational cost of one pass*, accelerating training throughput by $16 times$.
+Given a sequence of character indices $c_0, c_1, dots, c_(T-1)$ with targets $c_1, c_2, dots, c_T$:
+1. *Initial Embedding:*
+   $ X_t^((0)) = C[c_t] + P[t] in RR^D, quad t in {0, dots, T-1} $
+2. *Multi-Head Projections (Per Block $l$):*
+   For each head $h in {0, dots, H-1}$ and each position $t$:
+   $ q_t^((h)) = X_t W_q^((h)), quad k_t^((h)) = X_t W_k^((h)), quad v_t^((h)) = X_t W_v^((h)) in RR^(d_k) $
+3. *Causal Score Matrix & Masking:*
+   $ "score"[t][i]^((h)) = cases(
+     frac(q_t^((h)) dot k_i^((h)), sqrt(d_k)) & "if" i <= t,
+     -10^9 & "if" i > t " (future masked)"
+   ) $
+4. *Causal Softmax:*
+   $ A[t][i]^((h)) = cases(
+     frac(exp("score"[t][i]^((h)) - max_(j <= t) "score"[t][j]^((h))), sum_(j=0)^t exp("score"[t][j]^((h)) - max_(k <= t) "score"[t][k]^((h)))) & "if" i <= t,
+     0.0 & "if" i > t
+   ) $
+5. *Attention Output & First Residual:*
+   $ "head\_out"_t^((h)) = sum_(i=0)^t A[t][i]^((h)) v_i^((h)) in RR^(d_k) $
+   $ "att\_out"_t = ["head\_out"_t^((0)) \,||\, dots \,||\, "head\_out"_t^((H-1))] in RR^D $
+   $ Y_t = X_t + "att\_out"_t in RR^D $
+6. *Position-wise Feed-Forward Network & Second Residual:*
+   The same feed-forward layer is applied to every position independently:
+   $ h_t = tanh(Y_t W_1 + b_1) in RR^(H_"mlp") $
+   $ "ff\_out"_t = h_t W_2 + b_2 in RR^D $
+   $ Z_t = Y_t + "ff\_out"_t in RR^D $
+7. *Deep Stacking:*
+   For a 2-block model (Stage 10B), $Z_t^((0))$ becomes the input $X_t^((1))$ for Block 1.
+8. *Output Logits and Cross-Entropy Loss:*
+   $ "scores"_t = Z_t^((L-1)) W_"out" + b_"out" in RR^V $
+   $ p_t = "softmax"("scores"_t) $
+   $ "Loss" = frac(1, T) sum_(t=0)^(T-1) (-ln(p_t[c_(t+1)])) $
+
+== 10.2 Rigorous Verification Before Training
+
+Before launching full training, the architecture underwent two formal sanity tests:
+
+=== 1. Causality Invariance Test
+We passed a 16-character sequence through the transformer, perturbed the character at position 10, and recomputed the output probabilities:
+- *Positions 0 through 9:* Maximum absolute probability difference $= bold(0.00 times 10^0)$ (exact bitwise zero!).
+- *Positions 10 through 15:* Non-zero probability change ($approx 0.0014$).
+*Result:* Causal masking is airtight; no information leaks backwards from the future.
+
+=== 2. Gradient Checks (Relative Error $< 0.001$)
+Evaluated after 600 training steps on a single block ($L=1$):
+- *Check $W_v[0][2][3]$:* Analytic = $-0.00019477$, Numerical = $-0.00019477$, Relative Error = $2.52 times 10^(-8)$ [PASS]
+- *Check $W_1[4][5]$:* Analytic = $-0.00003141$, Numerical = $-0.00003141$, Relative Error = $1.76 times 10^(-7)$ [PASS]
+- *Check $W_k[2][0][4]$:* Analytic = $+0.00000006$, Numerical = $+0.00000006$, Relative Error = $1.33 times 10^(-4)$ [PASS]
 
 ---
 
