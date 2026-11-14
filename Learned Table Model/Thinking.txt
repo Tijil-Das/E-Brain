@@ -1,0 +1,24 @@
+Thinking & Reflection: Why did nudging only touch one row each step? And what happens with 10 letters of memory?
+
+1. Why only one row was touched each step:
+In our 2D learned table:
+- The rows represent the "current character" (the input context).
+- The columns represent the "next character" (the prediction).
+When we are at character 'a' and predicting the next character 'n', we ONLY look at the row for 'a'. The scores in row 'a' define the probabilities of what can come after 'a'.
+The rows for 'b', 'c', 'q', etc. have zero involvement in predicting what comes after 'a'.
+So when we calculate loss and compute gradients, the gradients are non-zero ONLY for the parameters that produced that prediction: row 'a'. All other rows have gradient 0, so nudging leaves them untouched!
+
+2. What would happen to a 10-letter-memory version of this?
+If we tried to give this table 10 letters of context instead of 1:
+- Number of unique characters V = 69.
+- A 10-letter context means every unique 10-character sequence needs its own row!
+- Total possible rows = V^10 = 69^10 ≈ 24,000,000,000,000,000,000 rows (2.4 x 10^18 rows).
+- Total table size = V^10 x V ≈ 1.6 x 10^20 cells!
+
+Problems:
+a) RAM would explode: Storing 1.6 x 10^20 doubles would take over 1.2 billion Terabytes of memory.
+b) Extreme sparsity & zero learning: In any real text of 85,000 letters, we only see 85,000 transitions. That means 99.99999999999% of all rows would NEVER be visited even once!
+Because nudging only touches one row per step, all unvisited rows remain frozen as random numbers. The model would learn NOTHING about similar sequences.
+
+This is the exact reason why tables hit a hard wall and why Stage 3 (Vectors / Embeddings & Neural Networks) is needed:
+Instead of giving every combination its own independent isolated row in a gigantic table, vectors compress characters into a continuous shared space where similar patterns share parameters and learn together!
