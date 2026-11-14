@@ -197,7 +197,9 @@ public class TransformerLibrary
         public double[][][] A;        // [H][T][T] softmax attention weights
         public double[][] att_out;    // [T][D]
         public double[][] Y;          // [T][D] after attention residual (X + att_out)
-        public double[][] h_mlp;      // [T][H_mlp] hidden tanh
+        public double[][] h_raw;      // [T][H_mlp] pre-dropout tanh
+        public double[][] drop_mask;  // [T][H_mlp] inverted dropout mask
+        public double[][] h_mlp;      // [T][H_mlp] after dropout
         public double[][] ff_out;     // [T][D]
         public double[][] Z;          // [T][D] after ff residual (Y + ff_out)
 
@@ -212,6 +214,8 @@ public class TransformerLibrary
             A = new double[n_heads][T][T];
             att_out = new double[T][D];
             Y = new double[T][D];
+            h_raw = new double[T][H_mlp];
+            drop_mask = new double[T][H_mlp];
             h_mlp = new double[T][H_mlp];
             ff_out = new double[T][D];
             Z = new double[T][D];
@@ -239,6 +243,12 @@ public class TransformerLibrary
 
     public static ForwardCache forward(int[] window_chars, int[] target_chars,
                                        TransformerModel model)
+    {
+        return forward(window_chars, target_chars, model, false, 0.0);
+    }
+
+    public static ForwardCache forward(int[] window_chars, int[] target_chars,
+                                       TransformerModel model, boolean is_training, double dropout_rate)
     {
         int T = model.T;
         int D = model.D;
@@ -298,7 +308,7 @@ public class TransformerLibrary
                     {
                         if(i > t)
                         {
-                            ba.scores[h][t][i] = -1e9; // Causal mask: future positions invisible
+                            ba.scores[h][t][i] = -1e9; // Causal mask
                         }
                         else
                         {
@@ -335,7 +345,7 @@ public class TransformerLibrary
             }
 
             // Residual 1: Y = X + att_out
-            // Feed-Forward: h_mlp = tanh(Y * W1 + b1), ff_out = h_mlp * W2 + b2
+            // Feed-Forward: h_mlp = tanh(Y * W1 + b1) with Dropout
             // Residual 2: Z = Y + ff_out
             for(int t = 0; t < T; t++)
             {
@@ -347,7 +357,26 @@ public class TransformerLibrary
                     double sum = 0.0;
                     for(int row = 0; row < D; row++)
                         sum += ba.Y[t][row] * bw.W1[row][col];
-                    ba.h_mlp[t][col] = Math.tanh(sum + bw.b1[col]);
+                    ba.h_raw[t][col] = Math.tanh(sum + bw.b1[col]);
+
+                    if(is_training && dropout_rate > 0.0)
+                    {
+                        if(ThreadLocalRandom.current().nextDouble() < dropout_rate)
+                        {
+                            ba.drop_mask[t][col] = 0.0;
+                            ba.h_mlp[t][col] = 0.0;
+                        }
+                        else
+                        {
+                            ba.drop_mask[t][col] = 1.0 / (1.0 - dropout_rate);
+                            ba.h_mlp[t][col] = ba.h_raw[t][col] * ba.drop_mask[t][col];
+                        }
+                    }
+                    else
+                    {
+                        ba.drop_mask[t][col] = 1.0;
+                        ba.h_mlp[t][col] = ba.h_raw[t][col];
+                    }
                 }
 
                 for(int col = 0; col < D; col++)
@@ -464,8 +493,10 @@ public class TransformerLibrary
                     double sum_h = 0.0;
                     for(int col = 0; col < D; col++)
                         sum_h += dZ[t][col] * bw.W2[row][col];
-                    double h_val = ba.h_mlp[t][row];
-                    dz_mlp[t][row] = sum_h * (1.0 - h_val * h_val);
+                    // Backprop through dropout mask
+                    double sum_h_dropped = sum_h * ba.drop_mask[t][row];
+                    double h_raw_val = ba.h_raw[t][row];
+                    dz_mlp[t][row] = sum_h_dropped * (1.0 - h_raw_val * h_raw_val);
                 }
 
                 for(int row = 0; row < D; row++)
@@ -688,13 +719,12 @@ public class TransformerLibrary
     }
 
     // =========================================================================
-    // TEXT GENERATION
+    // TEXT GENERATION WITH TEMPERATURE
     // =========================================================================
-    public static String generate_text(TransformerModel model, String seed_prompt, int length_to_gen, char[] vocab)
+    public static String generate_text(TransformerModel model, String seed_prompt, int length_to_gen, char[] vocab, double temperature)
     {
         int T = model.T;
         StringBuilder sb = new StringBuilder(seed_prompt);
-
         int[] window = new int[T];
 
         for(int step = 0; step < length_to_gen; step++)
@@ -710,16 +740,35 @@ public class TransformerLibrary
             for(int i = 0; i < sub.length(); i++)
                 window[pad + i] = find_ch_number(sub.charAt(i), vocab);
 
-            ForwardCache fc = forward(window, null, model);
-            double[] last_probs = fc.probs[T - 1];
+            ForwardCache fc = forward(window, null, model, false, 0.0);
+            double[] last_scores = fc.final_scores[T - 1];
 
-            // Sample from distribution
+            // Apply temperature: scores / temperature
+            double max_s = -Double.MAX_VALUE;
+            for(int j = 0; j < vocab.length; j++)
+            {
+                double s = last_scores[j] / temperature;
+                if(s > max_s)
+                    max_s = s;
+            }
+
+            double sum_exp = 0.0;
+            double[] temp_probs = new double[vocab.length];
+            for(int j = 0; j < vocab.length; j++)
+            {
+                temp_probs[j] = Math.exp((last_scores[j] / temperature) - max_s);
+                sum_exp += temp_probs[j];
+            }
+            for(int j = 0; j < vocab.length; j++)
+                temp_probs[j] /= sum_exp;
+
+            // Sample from temperature-scaled distribution
             double r = ThreadLocalRandom.current().nextDouble();
             double cum = 0.0;
             int picked = vocab.length - 1;
             for(int j = 0; j < vocab.length; j++)
             {
-                cum += last_probs[j];
+                cum += temp_probs[j];
                 if(r <= cum)
                 {
                     picked = j;
@@ -731,5 +780,121 @@ public class TransformerLibrary
         }
 
         return sb.substring(seed_prompt.length());
+    }
+
+    // =========================================================================
+    // MODEL SAVE & LOAD
+    // =========================================================================
+    public static void save_model(TransformerModel model, String filePath) throws Exception
+    {
+        try (java.io.DataOutputStream dos = new java.io.DataOutputStream(new java.io.BufferedOutputStream(new java.io.FileOutputStream(filePath))))
+        {
+            dos.writeInt(model.V);
+            dos.writeInt(model.T);
+            dos.writeInt(model.D);
+            dos.writeInt(model.n_heads);
+            dos.writeInt(model.H_mlp);
+            dos.writeInt(model.L);
+
+            for(int i = 0; i < model.V; i++)
+                for(int j = 0; j < model.D; j++)
+                    dos.writeDouble(model.C[i][j]);
+
+            for(int i = 0; i < model.T; i++)
+                for(int j = 0; j < model.D; j++)
+                    dos.writeDouble(model.P[i][j]);
+
+            int dk = model.D / model.n_heads;
+            for(int l = 0; l < model.L; l++)
+            {
+                BlockWeights bw = model.blocks[l];
+                for(int h = 0; h < model.n_heads; h++)
+                {
+                    for(int r = 0; r < model.D; r++)
+                        for(int c = 0; c < dk; c++) dos.writeDouble(bw.Wq[h][r][c]);
+                    for(int r = 0; r < model.D; r++)
+                        for(int c = 0; c < dk; c++) dos.writeDouble(bw.Wk[h][r][c]);
+                    for(int r = 0; r < model.D; r++)
+                        for(int c = 0; c < dk; c++) dos.writeDouble(bw.Wv[h][r][c]);
+                }
+                for(int r = 0; r < model.D; r++)
+                    for(int c = 0; c < model.H_mlp; c++) dos.writeDouble(bw.W1[r][c]);
+                for(int c = 0; c < model.H_mlp; c++) dos.writeDouble(bw.b1[c]);
+                for(int r = 0; r < model.H_mlp; r++)
+                    for(int c = 0; c < model.D; c++) dos.writeDouble(bw.W2[r][c]);
+                for(int c = 0; c < model.D; c++) dos.writeDouble(bw.b2[c]);
+            }
+
+            for(int r = 0; r < model.D; r++)
+                for(int c = 0; c < model.V; c++) dos.writeDouble(model.Wout[r][c]);
+            for(int c = 0; c < model.V; c++) dos.writeDouble(model.bout[c]);
+        }
+    }
+
+    public static TransformerModel load_model(String filePath) throws Exception
+    {
+        try (java.io.DataInputStream dis = new java.io.DataInputStream(new java.io.BufferedInputStream(new java.io.FileInputStream(filePath))))
+        {
+            int V = dis.readInt();
+            int T = dis.readInt();
+            int D = dis.readInt();
+            int n_heads = dis.readInt();
+            int H_mlp = dis.readInt();
+            int L = dis.readInt();
+
+            TransformerModel model = new TransformerModel();
+            model.V = V; model.T = T; model.D = D; model.n_heads = n_heads; model.H_mlp = H_mlp; model.L = L;
+
+            model.C = new double[V][D];
+            for(int i = 0; i < V; i++)
+                for(int j = 0; j < D; j++)
+                    model.C[i][j] = dis.readDouble();
+
+            model.P = new double[T][D];
+            for(int i = 0; i < T; i++)
+                for(int j = 0; j < D; j++)
+                    model.P[i][j] = dis.readDouble();
+
+            int dk = D / n_heads;
+            model.blocks = new BlockWeights[L];
+            for(int l = 0; l < L; l++)
+            {
+                BlockWeights bw = new BlockWeights();
+                bw.Wq = new double[n_heads][D][dk];
+                bw.Wk = new double[n_heads][D][dk];
+                bw.Wv = new double[n_heads][D][dk];
+                for(int h = 0; h < n_heads; h++)
+                {
+                    for(int r = 0; r < D; r++)
+                        for(int c = 0; c < dk; c++) bw.Wq[h][r][c] = dis.readDouble();
+                    for(int r = 0; r < D; r++)
+                        for(int c = 0; c < dk; c++) bw.Wk[h][r][c] = dis.readDouble();
+                    for(int r = 0; r < D; r++)
+                        for(int c = 0; c < dk; c++) bw.Wv[h][r][c] = dis.readDouble();
+                }
+                bw.W1 = new double[D][H_mlp];
+                for(int r = 0; r < D; r++)
+                    for(int c = 0; c < H_mlp; c++) bw.W1[r][c] = dis.readDouble();
+                bw.b1 = new double[H_mlp];
+                for(int c = 0; c < H_mlp; c++) bw.b1[c] = dis.readDouble();
+
+                bw.W2 = new double[H_mlp][D];
+                for(int r = 0; r < H_mlp; r++)
+                    for(int c = 0; c < D; c++) bw.W2[r][c] = dis.readDouble();
+                bw.b2 = new double[D];
+                for(int c = 0; c < D; c++) bw.b2[c] = dis.readDouble();
+
+                model.blocks[l] = bw;
+            }
+
+            model.Wout = new double[D][V];
+            for(int r = 0; r < D; r++)
+                for(int c = 0; c < V; c++) model.Wout[r][c] = dis.readDouble();
+
+            model.bout = new double[V];
+            for(int c = 0; c < V; c++) model.bout[c] = dis.readDouble();
+
+            return model;
+        }
     }
 }
