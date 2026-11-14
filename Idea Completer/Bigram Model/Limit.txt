@@ -1,0 +1,13 @@
+Couldn't go further because, if we proceed further with the table having compute the values with two or more letters instead of one, my Laptop will melt. This is not feasible either. Moving on with the vector idea.
+
+(
+    If we suppose the no. of tokens as 'n'(in our case, it's 94)
+    1 letter= (n) x (n) cells to manage and operate on
+    2 letters= (n x n) x (n x n) cells to manage and operate on
+    3 letters= (n x n x n) x (n x n x n) cells to manage and operate on
+    .
+    .
+    .
+    .
+    x letters= (n^x)^2 cells to manage and operate on 
+)
