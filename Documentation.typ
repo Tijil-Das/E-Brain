@@ -461,15 +461,30 @@ All three configurations were trained on the identical 90% train / 10% validatio
   [Change 3: Multi-Head ($H=4, d_k=8$)], [2.7027 / 2.4934], [2.2834 / 2.1955], [*2.1141* / *2.0781*], [*Best Val Loss (2.0781)*; multi-query routing],
 )
 
-=== Honest Analysis of the Bottleneck Removal
-1. *Bigger $D=32$ vs $D=10$:*
-   Raising $D$ from 10 to 32 immediately gave the blended context 32 continuous dimensions to work with. The model can now simultaneously track character identity and nearby contextual hints without averaging them into noise.
-2. *The Additive Residual ($x_N + "att\_out"$):*
-   By directly adding the current character's representation $x_(N-1)$ to the attention output, the training loss dropped from $2.1659$ to $2.1428$. More importantly, it cut the input dimensionality into $W_1$ from 64 down to 32, halving the weights in $W_1$ while improving model accuracy. The network no longer wastes attention capacity memorizing the immediate character.
-3. *Multi-Head Attention ($H=4$ Heads of $d_k=8$):*
-   Multi-head attention yielded the lowest validation loss of the entire project so far: *2.0781*.
-   Splitting the 32 numbers into 4 distinct subspaces of 8 numbers allows each head to specialize. One head tracks recent word boundaries, another tracks vowel/consonant alternating patterns, and others look deeper into the 16-character window.
-   Notice that validation loss ($2.0781$) is lower than train loss ($2.1141$), confirming clean generalization with zero overfitting.
+=== Critical Reflections & Diagnostics on Stage 8
+1. *Why We Couldn't Compare to Baseline Yet:*
+   Our Stage 6A MLP baseline achieved $approx 1.86$ after a long run of 15 to 20 epochs. In Stage 8, training stopped after only 5 epochs while losses were still dropping steadily by $approx 0.07$ per epoch. Evaluating attention fairly requires a matching long run.
+2. *Why Validation Loss Below Train Loss is Not "Proof of Zero Overfitting":*
+   During an epoch, train loss is computed online as a rolling average while the weights are continuously being updated and improved. By contrast, validation loss is measured in a separate evaluation pass using the final, most optimized weights of that epoch. In early epochs of rapid learning, validation loss naturally comes out lower than the lagging training average. This is an artifact of the evaluation timeline, not proof of generalization.
+3. *Borderline Key Gradients:*
+   The gradient check on $W_k$ yielded values around $10^(-8)$ and a relative error of $7.5 times 10^(-4)$, which sits right at the boundary of floating-point precision. Because initial dot products are small, the softmax distribution over 16 positions remains close to a uniform $1/16 = 0.0625$. When attention is uniform, perturbing keys barely changes the blended output, leaving key and query gradients tiny. To determine whether attention is actually specializing or merely averaging, we need direct diagnostics.
+
+---
+
+= Stage 9: Attention Diagnostics, The Fair Long Run & Tuning
+
+== 9A. The Diagnostic: Seeing What Attention is Doing
+To determine whether attention is truly earning its keep or merely performing a blurry uniform blur, we inspect the attention distribution $a_0, dots, a_(15)$ across each of the 4 heads for a concrete context window of 16 characters.
+- *Uniform baseline:* $frac(1, 16) = 0.0625$ per position.
+- If all weights linger near $0.06$, the heads have not specialized.
+- If individual heads concentrate their probability mass (e.g., $0.30 - 0.50$) on specific positions (such as the recent 1--3 characters, word-boundary spaces, or specific syntactic markers), the heads have specialized.
+
+== 9B. The Fair Long Run (30 Epochs, 2x Text, LR Decay, Best-Epoch Saving)
+To place Multi-Head Attention on equal footing with our Stage 6A baseline:
+- *Dataset:* Doubled corpus ($2 times$ text, $approx 171,000$ characters).
+- *Context & Geometry:* $N = 16, D = 32, H = 4$ heads ($d_k = 8$), $H_"mlp" = 100$, additive residual.
+- *Schedule:* 30 full epochs, starting learning rate $eta_0 = 0.015$ with exponential decay $times 0.95$ per epoch.
+- *Best-Epoch Saving:* Preserving and restoring the model checkpoint that achieves the lowest validation loss.
 
 ---
 
