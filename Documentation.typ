@@ -347,31 +347,105 @@ To learn $W_q, W_k, W_v, P,$ and $C$, the gradients must flow backwards through 
    Gradients from $v_i$ and $k_i$ project back through $W_v^T$ and $W_k^T$. For position $N-1$, gradients from $q$ and the residual connection add in.
    Finally, $d x_i$ splits equally into the character embeddings $C[c_i]$ and position vectors $P[i]$.
 
-*Numerical Gradient Check on $W_k[0][0]$:*
-```text
-Gradient Check (Wk[0][0], N=4)  -> Analytic: 0.00000006  | Numerical: 0.00000006  (Match: true)
-Gradient Check (Wk[0][0], N=16) -> Analytic: -0.00000001 | Numerical: -0.00000001 (Match: true)
-```
+*Rigorous Gradient Checking with Relative Error:*
+Early in training, all dot-product scores are nearly equal, making attention distributions virtually uniform. As a result, perturbing $W_k$ barely changes the loss, producing deceptively small analytic gradients ($\sim 10^{-8}$). To rigorously verify the calculus, we trained the weights for 500 steps until attention became non-uniform, and evaluated gradients across $W_v$, $W_1$, and $W_k$ using the relative error formula:
+$ "RelError" = frac(|"analytic" - "numerical"|, |"analytic"| + |"numerical"|) $
+All checks met the strict numerical threshold of $< 0.001$:
+- $W_v[2][3]$: Analytic = $-0.00003403$, Numerical = $-0.00003403$, Rel Error = $4.30 times 10^(-7)$ [PASS]
+- $W_1[4][5]$: Analytic = $+0.00047317$, Numerical = $+0.00047317$, Rel Error = $5.15 times 10^(-9)$ [PASS]
+- $W_k[1][2]$: Analytic = $+0.00000001$, Numerical = $+0.00000001$, Rel Error = $7.49 times 10^(-4)$ [PASS]
 
-== Experimental Results: N = 4 vs. Scaling to N = 16
+== Experimental Results & The Honest Diagnosis of Stage 7
 
 #table(
   columns: (2fr, 2fr, 2fr, 2fr),
   align: center,
   table.header([*Configuration*], [*Final Train Loss*], [*Final Val Loss*], [*Best Val Loss / Gap*]),
+  [Stage 6 Baseline ($N=4$, MLP)], [1.8340], [1.8624], [1.8624 (Gap: +0.0284)],
   [Attention ($N = 4$)], [2.0882], [2.1129], [2.1129 (Gap: +0.0247)],
-  [Attention ($N = 16$)], [2.1013], [*2.1107*], [*2.0944* (Gap: +0.0095!)],
+  [Attention ($N = 16$)], [2.1013], [*2.1107*], [*2.0944* (Gap: +0.0095)],
 )
 
-=== Analysis of the Results
-1. *Why N = 4 Attention doesn't beat the baseline yet:*
-   With only 4 characters of context, the sequence is so short that hardwired position weights can easily memorize the transitions. Attention has extra projection matrices ($W_q, W_k, W_v$) to learn, so on tiny context windows, the overhead shows little advantage.
-2. *The Breakthrough at N = 16:*
-   When context expanded by $4 times$ to $N = 16$:
-   - The validation loss dropped from $2.1129$ down to *2.0944*.
-   - The generalization gap shrank to just *+0.0095* (virtually zero overfitting!).
-   - In Stage 4, scaling context to $N = 16$ would have inflated $W_1$ from $4,000$ to $16,000$ weights. With Attention, $W_1$ remained strictly fixed at $(2 times 10) times 100 = 2,000$ weights!
-   - This proves the fundamental promise of the Transformer: long context becomes computationally scalable, and dynamic routing prevents the model from overfitting to fixed position slots.
+=== The Honest Reading: Underfitting and the Information Bottleneck
+At first glance, seeing a validation gap of only $+0.0095$ felt like a victory over overfitting. But an honest comparison against our Stage 6 baseline ($1.83$ train, $1.86$ val) reveals the real story:
+*The model was not just regularized; it was severely underfitting.*
+
+Why?
+In the old Stage 4/6 model, the network retained 4 separate character vectors ($4 times 10 = 40$ numbers) fed into $W_1$. It knew with absolute clarity which character occupied which exact slot.
+In Stage 7 Attention, we looked back across 16 characters, but compressed that entire history into *a single blended vector of 10 numbers*. A single 10-dimensional vector simply does not possess enough degrees of freedom to represent both "what the newest character is" and "what previous punctuation or prefixes occurred". Everything was averaged away.
+
+Yet, $N = 16$ ($2.094$) still beat $N = 4$ ($2.113$), proving that longer context helps. The limit was not the attention concept—it was the narrow bottleneck we forced it through.
+
+---
+
+= Stage 8: Removing the Bottleneck — Dimension Scaling, Residuals & Multi-Head Attention
+
+To shatter the information bottleneck, we systematically implemented and tested three architectural upgrades in order:
+1. *Change 1: Vector Dimension Scaling ($D: 10 arrow.r 32$)*
+2. *Change 2: Additive Residual Connection ($x_N + "att\_out"$)*
+3. *Change 3: Multi-Head Attention ($H = 4$ heads of dimension $d_k = 8$)*
+
+== Change 1: Expanding the Vector Highway ($D = 32, N = 16$)
+Instead of squeezing the blended context into 10 numbers, we expanded $D$ to 32. Each character vector and position vector now holds 32 continuous values.
+- Projection matrices $W_q, W_k, W_v$ expand from $10 times 10$ to $32 times 32$.
+- The scaled dot-product factor becomes $sqrt(D) = sqrt(32) approx 5.6568$.
+- The blended context vector `"att_out"` carries 32 numbers of rich linguistic nuance rather than 10.
+- Concatenating `"att_out"` with the current character vector $x_(N-1)$ creates an input vector of length $2D = 64$ into the hidden layer ($W_1: 64 times 100$).
+
+== Change 2: Additive Residual Connections ($x_N + "att\_out"$)
+In Change 1, the model concatenated the blended attention output with $x_(N-1)$, requiring $2D$ inputs into $W_1$.
+More importantly, in standard single-head attention, the model is constantly torn: should it spend its attention weights looking at the current character to remember it, or looking back into history?
+
+The *Residual Connection* solves this elegantly by element-wise addition:
+$ "net\_in" = x_(N-1) + "att\_out" $
+By adding $x_(N-1)$ directly into the attention output:
+1. *Direct Identity Highway:* The identity of the current character is provided to the hidden layer unconditionally and "for free".
+2. *Freed Attention Capacity:* The attention weights no longer need to waste energy copying $x_(N-1)$. Every ounce of attention capacity can focus entirely on retrieving past context.
+3. *Cleaner Gradient Flow:* Gradients flow uninterrupted straight back into $x_(N-1)$ via the addition rule ($frac(partial (A + B), partial A) = 1$), preventing gradient vanishing.
+4. *Parameter Efficiency:* Input dimension into $W_1$ drops from $2D = 64$ back down to $D = 32$, reducing $W_1$ parameters by half ($3,200$ vs $6,400$).
+
+== Change 3: Multi-Head Attention ($H = 4$ Heads, $d_k = 8$)
+=== The Theoretical Motivation
+With a single attention head, the model must produce a single probability distribution $a_0, dots, a_(N-1)$ over the context.
+However, natural language requires asking multiple independent questions at the same time:
+- *Head 1:* "Where was the last space or word boundary?"
+- *Head 2:* "What vowel preceded this consonant?"
+- *Head 3:* "Is there an opening quote or parenthesis in this clause?"
+- *Head 4:* "What is the root verb or prefix?"
+
+A single set of weights $W_q, W_k$ forces these distinct queries to average out into a compromised, blurry distribution.
+*Multi-Head Attention* resolves this by splitting the representation into $H = 4$ independent subspaces:
+- Total dimension: $D = 32$
+- Number of heads: $H = 4$
+- Dimension per head: $d_k = frac(D, H) = frac(32, 4) = 8$
+
+=== Multi-Head Mathematical Formulation
+For each head $h in {0, 1, 2, 3}$:
+1. *Independent Projections:*
+   $ q^((h)) = x_(N-1) times W_q^((h)), quad W_q^((h)) in RR^(D times d_k) $
+   $ k_i^((h)) = x_i times W_k^((h)), quad W_k^((h)) in RR^(D times d_k) $
+   $ v_i^((h)) = x_i times W_v^((h)), quad W_v^((h)) in RR^(D times d_k) $
+2. *Scaled Dot-Product per Head:*
+   $ s_i^((h)) = frac(q^((h)) dot k_i^((h)), sqrt(d_k)) = frac(sum_(m=0)^(d_k - 1) q_m^((h)) k_(i, m)^((h)), sqrt(8)) $
+3. *Softmax Distribution per Head:*
+   $ a_i^((h)) = frac(exp(s_i^((h)) - max_j s_j^((h))), sum_(j=0)^(N-1) exp(s_j^((h)) - max_j s_j^((h)))) $
+4. *Head Output:*
+   $ "head"_h = sum_(i=0)^(N-1) a_i^((h)) v_i^((h)) in RR^(d_k) $
+5. *Concatenation & Residual Assembly:*
+   The 4 head outputs (each 8 numbers) are concatenated side-by-side to reconstruct a 32-dimensional vector:
+   $ "MultiHeadOut" = ["head"_0 \,||\, "head"_1 \,||\, "head"_2 \,||\, "head"_3] in RR^(32) $
+   $ "net\_in" = "MultiHeadOut" + x_(N-1) $
+6. *Feed-Forward Network:*
+   $ h = tanh("net\_in" times W_1 + b_1), quad W_1 in RR^(32 times 100) $
+   $ "scores" = h times W_2 + b_2, quad W_2 in RR^(100 times V) $
+
+=== Backpropagation Through Multi-Head Attention
+During the backward pass:
+1. $d"net\_in"$ splits directly: $d x_(N-1) += d"net\_in"$, and $d"MultiHeadOut" = d"net\_in"$.
+2. The gradient $d"MultiHeadOut"$ is sliced into $H$ chunks of length $d_k$, yielding $d"head"_h$ for each head.
+3. For each head independently, the attention gradients ($d v_i^((h)), d a_i^((h)), d s_i^((h)), d k_i^((h)), d q^((h))$) are computed exactly as derived in Stage 7, scaling by $frac(1, sqrt(d_k))$.
+4. Gradients for $W_q^((h)), W_k^((h)), W_v^((h))$ accumulate across sequences.
+5. All heads project their input gradients back to the shared embeddings $x_i$, where they sum together before updating $C$ and $P$.
 
 ---
 
