@@ -1,32 +1,32 @@
 """
-Stage 12 - Step 2: High-Speed Incremental Byte-Level BPE Tokenizer
-Uses inverted word index and incremental pair-count updates (O(affected_words) per merge).
-Trains full 16,384 vocabulary in seconds.
-Zero-loss roundtrip guarantee on all languages, emojis, and scripts.
+Fast Incremental Byte-Level BPE Tokenizer (Compact & Contiguous)
+===============================================================
+Key Invariants:
+1. Base Alphabet: Exact 256 byte tokens (IDs 0..255).
+2. Merges: Contiguous IDs starting at 256 up to 255 + M.
+3. Special Tokens: Strictly contiguous immediately following the last merge:
+   <|unk|>     = 256 + M
+   <|pad|>     = 256 + M + 1
+   <|endoftext|> = 256 + M + 2
+4. Embedding Invariant: max_token_id + 1 == len(vocab) == vocab_size. Zero phantom gap rows.
+5. 100% Bitwise exact roundtrip: decode(encode(text)) == text.
 """
 
-import os
-import re
-import json
 import time
-from collections import defaultdict, Counter
+import json
+import re
+from collections import Counter, defaultdict
 
 class FastByteBPE:
-    def __init__(self, vocab_size=16384):
-        self.vocab_size = vocab_size
-        self.special_tokens = {
-            "<|unk|>": 16381,
-            "<|pad|>": 16382,
-            "<|endoftext|>": 16383
-        }
-        self.special_token_inv = {v: k for k, v in self.special_tokens.items()}
+    def __init__(self):
         self.merges = {} # (p0, p1) -> new_token_id
         self.vocab = {i: bytes([i]) for i in range(256)}
-        for s_tok, s_id in self.special_tokens.items():
-            self.vocab[s_id] = s_tok.encode('utf-8')
+        self.special_tokens = {}
+        self.special_token_inv = {}
+        self.vocab_size = 256
 
-    def train(self, text, target_vocab_size=16384, min_freq=2):
-        print(f"Training Incremental Byte-Level BPE up to {target_vocab_size:,} tokens...")
+    def train(self, text, num_merges=8000, min_freq=2):
+        print(f"Training Incremental Byte-Level BPE for {num_merges:,} merges...")
         t0 = time.time()
 
         # Split text into whitespace/punctuation chunks
@@ -51,40 +51,31 @@ class FastByteBPE:
             for i in range(len(w) - 1):
                 pair_counts[(w[i], w[i + 1])] += c
 
-        num_merges = target_vocab_size - 256 - len(self.special_tokens)
-        print(f"Target merges to learn: {num_merges:,}")
         current_token_id = 256
+        actual_merges = 0
 
         for merge_i in range(num_merges):
             if not pair_counts:
                 print(f"No more adjacent pairs to merge at step {merge_i}.")
                 break
 
+            # Find most frequent pair
             top_pair = max(pair_counts, key=pair_counts.get)
             top_freq = pair_counts[top_pair]
+
             if top_freq < min_freq:
-                print(f"Top pair frequency {top_freq} < min_freq ({min_freq}). Halting at {current_token_id} tokens.")
+                print(f"Top pair frequency {top_freq} is below min_freq={min_freq}. Halting merges.")
                 break
 
             p0, p1 = top_pair
             self.merges[top_pair] = current_token_id
             self.vocab[current_token_id] = self.vocab[p0] + self.vocab[p1]
+
+            # Inverted index lookup
+            candidate_words = token_to_words[p0].intersection(token_to_words[p1])
             del pair_counts[top_pair]
 
-            # Find only words that contain both p0 and p1
-            candidate_words = token_to_words[p0].intersection(token_to_words[p1])
-            words_to_update = []
-            for w_idx in candidate_words:
-                w = words[w_idx]
-                has_pair = False
-                for i in range(len(w) - 1):
-                    if w[i] == p0 and w[i + 1] == p1:
-                        has_pair = True
-                        break
-                if has_pair:
-                    words_to_update.append(w_idx)
-
-            for w_idx in words_to_update:
+            for w_idx in list(candidate_words):
                 w = words[w_idx]
                 c = counts[w_idx]
 
@@ -119,12 +110,29 @@ class FastByteBPE:
                 words[w_idx] = new_w
 
             current_token_id += 1
+            actual_merges += 1
 
             if (merge_i + 1) % 1000 == 0 or (merge_i + 1) == num_merges:
                 elapsed = time.time() - t0
                 print(f"Merge {merge_i + 1:5d}/{num_merges} | Vocab: {current_token_id:5d} | Top Pair: {top_pair} (freq: {top_freq:,}) | Elapsed: {elapsed:.1f}s", flush=True)
 
-        print(f"BPE Training Complete in {time.time() - t0:.2f}s! Final Vocab Size: {len(self.vocab):,} tokens.")
+        # Append special tokens IMMEDIATELY after the last merge
+        self.special_tokens = {
+            "<|unk|>": current_token_id,
+            "<|pad|>": current_token_id + 1,
+            "<|endoftext|>": current_token_id + 2
+        }
+        self.special_token_inv = {v: k for k, v in self.special_tokens.items()}
+        for s_tok, s_id in self.special_tokens.items():
+            self.vocab[s_id] = s_tok.encode('utf-8')
+
+        self.vocab_size = len(self.vocab)
+        assert max(self.vocab.keys()) + 1 == self.vocab_size, "Vocab ID space is not compact!"
+        print(f"\nBPE Training Complete in {time.time() - t0:.2f}s!")
+        print(f" -> Base Bytes:       256 (0..255)")
+        print(f" -> Learned Merges:   {actual_merges:,} (256..{current_token_id - 1})")
+        print(f" -> Special Tokens:   {self.special_tokens}")
+        print(f" -> Final Total Vocab:{self.vocab_size:,} tokens (Contiguous 0..{self.vocab_size - 1})")
 
     def encode_chunk(self, byte_list):
         tokens = list(byte_list)
@@ -170,25 +178,33 @@ class FastByteBPE:
 
     def save(self, filepath):
         data = {
-            "vocab_size": len(self.vocab),
+            "vocab_size": self.vocab_size,
             "merges": [f"{p[0]},{p[1]},{idx}" for p, idx in self.merges.items()],
             "special_tokens": self.special_tokens
         }
         with open(filepath, "w", encoding="utf-8") as f:
             json.dump(data, f)
-        print(f"Saved tokenizer to {filepath}")
+        print(f"Saved compact tokenizer to {filepath}")
 
     @classmethod
     def load(cls, filepath):
         with open(filepath, "r", encoding="utf-8") as f:
             data = json.load(f)
-        tok = cls(vocab_size=data["vocab_size"])
+        tok = cls()
+        tok.vocab_size = data["vocab_size"]
         tok.special_tokens = data["special_tokens"]
-        tok.special_token_inv = {v: k for k, v in tok.special_tokens.items()}
-        for line in data["merges"]:
-            p0, p1, idx = map(int, line.split(","))
+        tok.special_token_inv = {int(v): k for k, v in tok.special_tokens.items()}
+        tok.merges = {}
+        tok.vocab = {i: bytes([i]) for i in range(256)}
+        
+        for m_str in data["merges"]:
+            parts = m_str.split(",")
+            p0, p1, idx = int(parts[0]), int(parts[1]), int(parts[2])
             tok.merges[(p0, p1)] = idx
             tok.vocab[idx] = tok.vocab[p0] + tok.vocab[p1]
+            
         for s_tok, s_id in tok.special_tokens.items():
-            tok.vocab[s_id] = s_tok.encode("utf-8")
+            tok.vocab[int(s_id)] = s_tok.encode('utf-8')
+            
+        assert max(tok.vocab.keys()) + 1 == tok.vocab_size, "Loaded vocab is not contiguous!"
         return tok
