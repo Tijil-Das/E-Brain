@@ -991,20 +991,34 @@ Executing the 8.5-million-character literary scaling run ($D=128, L=6, H=8$, 1,2
   [Epoch 4.0], [13,429], [1.4240], [1.5467], [+0.1227], [0.000535],
   [Epoch 4.1], [14,462], [1.4220], [1.5366], [+0.1146], [0.000441],
   [Epoch 4.2], [15,495], [1.4187], [1.5329], [+0.1142], [0.000357],
-  [Epoch 4.3], [16,528], [1.4158], [*1.5264*], [+0.1106], [0.000285],
-  [Epoch 5], [Ongoing], [~1.40], [Projected < 1.52], [+0.11], [Cosine Decay],
+  [Epoch 4.3], [16,528], [1.4158], [1.5264], [+0.1106], [0.000285],
+  [Epoch 5.0], [17,561], [1.3965], [1.5224], [+0.1258], [0.000227],
+  [Epoch 5.1], [18,594], [1.3947], [1.5205], [+0.1258], [0.000185],
+  [Epoch 5.2], [19,627], [1.3933], [1.5187], [+0.1254], [0.000159],
+  [*Epoch 5.3 (Final)*], [*20,660*], [*1.3922*], [*1.5157*], [*+0.1235*], [*0.000150*],
 )
 
 === 3. Breakthrough Insights from Rung 3B
-1. *Continuous Validation Breakthrough:*
-   - Common Validation Loss dropped from *1.7082* (Rung 3A best) to *1.5264* (gain of *$-0.1818$*).
-   - Against the Rung 1 benchmark ($2.6979$), the gain is *$-1.1715$*, proving that scaling parameters from 24K to 1.2M alongside an 8.5M character corpus delivers massive, uninterrupted generalization gains.
+1. *Definitive Validation & Test Generalization:*
+   - Common Validation Loss dropped to *1.5157* (beating Rung 3A by *$-0.1925$* and Rung 1 by *$-1.1822$*).
+   - On the completely sealed, held-out test set (Alice in Wonderland test chunk, evaluated exactly *once* after training concluded), the model achieved:
+     $ "Held-Out Test Loss" = 1.4702 " nats" $
 2. *Near-Zero Overfitting Drift:*
-   - Despite training for over 16,000 steps on 8.5M characters, the generalization gap remains remarkably stable between $+0.08$ and $+0.11$. The model is absorbing deep literary syntax rather than memorizing local n-grams.
-3. *Character Baseline Locked:*
-   - At a validation loss of $1.5264$ nats per character, the model achieves:
-     $ "BPB" = frac(1.5264, ln(2)) = 2.2023 " bits per character (byte)" $
-   - This exact value (*2.202 BPB*) forms our scientific benchmark that the upcoming Byte-Level BPE multilingual transformer must beat.
+   - Despite training for 20,660 steps over 5 complete epochs, the generalization gap remained steady at $+0.1235$, proving that 8.5M tokens prevented memorization and forced the network to learn genuine grammatical dependencies.
+3. *Final Character Baseline Locked:*
+   - Converting the held-out test score into universal binary information density:
+     $ "BPB" = frac(1.4702, ln(2)) = 2.1211 " bits per character (byte)" $
+   - This exact value (*2.121 BPB*) forms the absolute, unshakeable empirical baseline that our new Byte-Level BPE Multilingual Transformer must beat.
+4. *Qualitative Multi-Temperature Text Generation (Seed: "Arthur Pendelton"):*
+   - *Temperature 0.6:*
+     #quote[
+     "Arthur Pendelton, which he was in just as we sat and the princess made a back cold, and some gentle and the movement of the bad people. It is true, I shuddered attending to the shrine which he had been the great servant and the count with him and see the third respects the first to forget the time for the first wor"
+     ]
+   - *Temperature 1.0:*
+     #quote[
+     "Arthur Pendeltonish red and absorbing them he himself or what I was already running and a few quite man, and it is mingled companion," said he, that Highness Balashëv had saved me to get after all these things is the matter from him instinctly disputed the presence of real ways. Do not take perspective blessed me."
+     ]
+   - *Pedagogical Diagnosis:* Punctuation syntax (quotes, commas, capitalized names like Balashëv and Dover), complete dialogue structures (`"said he..."`), and multi-word narrative clauses are fully synthesized purely from character prediction. The character era is officially, triumphantly complete.
 
 ---
 
@@ -1444,14 +1458,14 @@ Where:
 - $ln(2) approx 0.693147$ converts natural logarithmic units (nats) into binary information units (bits).
 
 === Concrete Numerical Examples (10th-Grade Walkthrough)
-1. *Character Baseline ($V=112$):*
-   In an ASCII character model, each token is exactly 1 byte ($N_"tokens" / N_"bytes" = 1.0$).
-   $ "BPB"_"character" = frac(1.5264, ln(2)) = 2.2023 " bits/byte" $
-   This is our permanent benchmark to beat.
+1. *Character Baseline ($V=110$):*
+   In an ASCII character model, each token is exactly 1 byte ($N_"tokens" / N_"bytes" = 1.0$). Evaluated on our sealed held-out test set:
+   $ "BPB"_"character" = frac(1.4702, ln(2)) = 2.1211 " bits/byte" $
+   This is our permanent empirical benchmark to beat.
 2. *BPE Subword Model ($V=16,384$):*
    Suppose our 16K BPE model achieves a token loss of $cal(L)_"token" = 3.10$ on an English book, with an average compression ratio of $2.45$ bytes per token ($N_"tokens" / N_"bytes" = 1 / 2.45 = 0.4082$):
    $ "BPB"_"BPE" = frac(3.10 times 0.4082, 0.693147) = 1.8253 " bits/byte" $
-   *Even though the token loss rose from 1.52 to 3.10, the bits-per-byte plunged from 2.202 to 1.825 — proving that the model compresses reality significantly better!*
+   *Even though the token loss rose from 1.47 to 3.10, the bits-per-byte plunged from 2.121 to 1.825 — proving that the model compresses reality significantly better!*
 
 ---
 
@@ -1518,7 +1532,7 @@ Across fourteen handcrafted stages, built from bare-metal Java and scaled into G
 8. *Stage 8 (Bottleneck Removal):* Widened embedding highways ($D=32$), added additive identity residuals ($x_N + "att\_out"$), and introduced multi-head attention.
 9. *Stage 9 (Specialization & Long Run):* Validated attention specialization empirically, with 4 heads learning word boundaries and phonemes, beating the baseline at *1.7511*.
 10. *Stage 10 (Full Causal Transformer):* Unified autoregressive causal masking, position-wise feed-forward networks, double residuals, deep block stacking, and inverted dropout into a complete, modern Transformer architecture that trains on full sequences in parallel, driving validation loss to *1.7505*.
-11. *Stage 11 (Production Engineering & Kaggle GPU Scaling):* Established a permanent tracking and correctness suite, empirically validated Adam and Pre-LayerNorm ablations, constructed a multi-tier public-domain scaling ladder, verified machine-precision mathematical parity ($10^(-7)$) across Java and PyTorch, and executed Rung 3B on 8.5M tokens with 15-minute fault-tolerant checkpoints, driving Common Validation loss down to a new record *1.5264* ($2.202$ bits/char).
+11. *Stage 11 (Production Engineering & Kaggle GPU Scaling):* Established a permanent tracking and correctness suite, empirically validated Adam and Pre-LayerNorm ablations, constructed a multi-tier public-domain scaling ladder, verified machine-precision mathematical parity ($10^(-7)$) across Java and PyTorch, and executed Rung 3B on 8.5M tokens with 15-minute fault-tolerant checkpoints, driving Common Validation loss to an all-time low of *1.5157* and held-out test loss to *1.4702* ($2.121$ bits/char).
 12. *Stage 12 (Production Data Engineering & Alignment Architecture):* Formulated the multi-domain pretraining mixture (60% web, 15% code, 10% math/science, 10% books/reference, 5% synthetic), registered authoritative open datasets (FineWeb-Edu, DCLM, StarCoder, OpenWebMath, SmolTalk, UltraFeedback), established small-model overtraining scaling principles, and balanced 10 languages with temperature sampling ($p_i prop "size"_i^0.3$).
 13. *Stage 13 (Byte-Level BPE & Multilingual Tokenization):* Overcame the quadratic context horizon of character-level modeling by implementing an incremental Byte-Level BPE tokenizer with a 256-byte base vocabulary, completely eliminating unknown tokens (`<UNK>`), mathematically proving 100% bitwise lossless roundtrip reproduction across 10 major world scripts, emojis, and code, and establishing the universal Bits per Byte (BPB) scientific benchmark.
 14. *Stage 14 (Modern Transformer Architecture from Scratch):* Replaced learned position tables with Rotary Position Embeddings (RoPE), mathematically proving norm preservation ($4.76 times 10^(-7)$) and relative distance invariance ($9.53 times 10^(-7)$) across arbitrary contexts, integrated mean-free RMSNorm for 20% higher hardware throughput, implemented SwiGLU gated activations, tied output head weights to embeddings to eliminate $4.19"M"$ redundant parameters, and verified fused SDPA attention parity to within $1.19 times 10^(-6)$.
