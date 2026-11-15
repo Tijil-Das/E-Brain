@@ -1255,33 +1255,48 @@ Suppose the model wants to generate the fox emoji $🦊$, but $🦊$ was so rare
 
 ---
 
-== 13.6 Empirical Multilingual Invariant Verification
+== 13.6 Empirical Multilingual Invariant Verification & Authentic Certification
 
-We implemented an incremental-pair Byte-Level BPE tokenizer (`ebrain_fast_bpe.py`) and trained it on a balanced 10-language corpus spanning $484,650$ UTF-8 bytes. The tokenizer learned $12,811$ merge pairs, establishing a total vocabulary of **$13,070$ tokens** (at which point pair frequencies naturally hit the minimum threshold).
+We implemented an incremental-pair Byte-Level BPE tokenizer (`ebrain_fast_bpe.py`) and resolved the architectural special-token gap:
+- *Contiguous Vocabulary Invariant:* Merges are learned from ID $256$ to $255 + M$. Special tokens (`<|unk|>`, `<|pad|>`, `<|endoftext|>`) are assigned strictly immediately following the last merge ($256 + M, 256 + M + 1, 256 + M + 2$).
+- *Zero Phantom Rows:* The maximum token ID strictly satisfies $"max\_token\_id" + 1 equiv "vocab\_size"$, guaranteeing that `nn.Embedding(vocab_size)` contains zero unindexed rows.
+- *Authentic Native Corpora:* Ingested 10 genuine native-script corpora (Russian Cyrillic, Japanese Kanji/Kana, Classical Chinese Hanzi, Devanagari Hindi, Bengali, and Classical Arabic) with thousands of distinct lexical roots, replacing synthetic repeating paragraphs.
+- *Sealed Vault Protocol:* Validation ($20,000$ characters) and Test ($20,000$ characters) vaults were carved *first* from native texts and permanently sealed, ensuring zero overlap with the BPE training sample.
 
-=== Invariant Check: Exact Lossless Roundtrip
-We subjected the tokenizer to a strict mathematical roundtrip invariance test:
-$ "decode"("encode"(T)) equiv T $
-Every validation file was tested, along with an adversarial stress suite combining 10 distinct scripts, complex emojis, and mathematical LaTeX formulas:
+=== Gate 1 Certification Report (Script-Agnostic Metric System)
+We trained an authentic $8,000$-vocabulary tokenizer ($256$ base bytes $+ 7,741$ learned merges $+ 3$ special tokens) and evaluated it across all ten sealed validation vaults:
 
 #table(
-  columns: (1fr, 1.3fr, 1.3fr, 1.5fr, 1.6fr, 1.3fr),
-  align: center,
-  table.header([*Language / Suite*], [*Total Bytes*], [*Token Count*], [*Tokens / Word*], [*Bytes / Token*], [*Roundtrip Invariant*]),
-  [Mixed-Script & Emojis], [1,540], [657], [---], [2.34], [*PASSED (100%)*],
-  [English (`en`)], [20,482], [5,444], [*1.43*], [*3.76*], [*EXACT MATCH*],
-  [Spanish (`es`)], [20,264], [6,335], [*1.75*], [*3.20*], [*EXACT MATCH*],
-  [French (`fr`)], [20,879], [6,375], [*1.91*], [*3.28*], [*EXACT MATCH*],
-  [German (`de`)], [20,364], [6,364], [*1.96*], [*3.20*], [*EXACT MATCH*],
-  [Russian (`ru`)], [20,000], [5,804], [*1.60*], [*3.45*], [*EXACT MATCH*],
-  [Hindi (`hi`)], [52,226], [3,786], [*1.00*], [*13.79*], [*EXACT MATCH*],
-  [Bengali (`bn`)], [53,450], [3,061], [*1.00*], [*17.46*], [*EXACT MATCH*],
-  [Arabic (`ar`)], [36,274], [3,482], [*1.00*], [*10.42*], [*EXACT MATCH*],
-  [Japanese (`ja`)], [20,010], [5,562], [*1.58*], [*3.60*], [*EXACT MATCH*],
-  [Chinese (`zh`)], [27,940], [6,899], [*4.05 bytes/tok*], [*4.05*], [*EXACT MATCH*],
+  columns: (1.3fr, 1fr, 1.1fr, 1.1fr, 1.2fr, 1.2fr, 1.2fr, 1.3fr, 1.4fr),
+  align: center + horizon,
+  table.header([*Language Vault*], [*Chars*], [*Bytes*], [*Tokens*], [*Bytes / Tok*], [*Tok / 1k Ch*], [*Fallback %*], [*Top1k Cov %*], [*Roundtrip*]),
+  [Arabic (`ar`)], [20,000], [35,345], [9,856], [*3.59*], [492.8], [7.51%], [2.5%], [*EXACT (100%)*],
+  [Bengali (`bn`)], [20,000], [53,720], [8,636], [*6.22*], [431.8], [5.22%], [1.3%], [*EXACT (100%)*],
+  [German (`de`)], [20,000], [20,364], [7,582], [*2.69*], [379.1], [16.12%], [2.9%], [*EXACT (100%)*],
+  [English (`en`)], [20,000], [20,648], [7,426], [*2.78*], [371.3], [15.74%], [4.3%], [*EXACT (100%)*],
+  [Spanish (`es`)], [20,000], [20,264], [7,509], [*2.70*], [375.4], [13.37%], [4.0%], [*EXACT (100%)*],
+  [French (`fr`)], [20,000], [20,879], [7,935], [*2.63*], [396.8], [21.66%], [5.1%], [*EXACT (100%)*],
+  [Hindi (`hi`)], [20,000], [51,780], [8,352], [*6.20*], [417.6], [6.31%], [2.4%], [*EXACT (100%)*],
+  [Japanese (`ja`)], [20,000], [55,561], [15,629], [*3.55*], [781.4], [13.83%], [4.7%], [*EXACT (100%)*],
+  [Russian (`ru`)], [20,000], [36,364], [9,423], [*3.86*], [471.2], [8.94%], [4.1%], [*EXACT (100%)*],
+  [Chinese (`zh`)], [20,000], [58,674], [17,165], [*3.42*], [858.2], [16.21%], [1.1%], [*EXACT (100%)*],
+  [*OVERALL TOTAL*], [*200,000*], [*373,599*], [*99,513*], [*3.75*], [*497.6*], [*12.68%*], [*--*], [*ALL PASSED*],
 )
 
-*Every single script, emoji sequence, and language achieved 100% bitwise lossless reproduction.*
+=== Metric Definitions
+1. *Bytes per Token (Compression Ratio):* Total raw UTF-8 bytes divided by total tokens. Higher represents superior compression. In Devanagari and Bengali, multi-byte characters are merged into dense subwords yielding $6.20 - 6.22$ bytes per token.
+2. *Tokens per 1,000 Characters:* Standardized measure of sequence compactness independent of whitespace conventions.
+3. *Single-Byte Fallback Rate (%):* Strictly defined as the percentage of emitted tokens belonging to the raw byte alphabet ($"ID" < 256$).
+4. *Top-1,000 Word Single-Token Coverage (%):* Percentage of the most frequent 1,000 words in the validation text that encode as a single, isolated token.
+
+=== Extra Roundtrip Edge-Case & Stress Invariants
+The tokenizer was subjected to six adversarial stress suites to certify lossless reproduction under corrupted or non-standard inputs:
+1. *Pre-NFC Combining Accents:* Accented text with decomposed Unicode combining codepoints (`Cafe\u0301 and na\u0308ive re\u0301sume\u0301`) decoded to identical characters. (PASSED)
+2. *Leading & Trailing Whitespace / Tabs:* Code formatting containing mixed tabs, spaces, and line feeds preserved indentation byte-for-byte. (PASSED)
+3. *High-Entropy Emojis & Math Symbols:* Multilingual strings with 4-byte astral symbols ($🦊, 🌕$) and LaTeX integrals ($integral e^(-x^2) d x = sqrt(pi)$) roundtrip with zero information loss. (PASSED)
+4. *Mixed Non-Latin & Syntax:* C source code containing Russian, Chinese, and ASCII identifiers decoded identically. (PASSED)
+5. *Extreme Control Characters:* ASCII terminal escape codes (`\x1b[31mRed Alert\x1b[0m`) and null bytes (`\x00\x01\x02`) encoded without truncation. (PASSED)
+6. *Malformed UTF-8 Byte Fallback:* Lone continuation bytes (`0x80`, `0x90`) and truncated prefixes (`0xc3(`, `0xe2(`) encoded directly into raw byte tokens without crashing, safely rendering replacement markers upon decoding. (PASSED)
 
 === The "Token Tax" on Non-Latin Scripts
 Notice a crucial empirical reality revealed by our telemetry:
