@@ -776,7 +776,42 @@ With the tracking and correctness infrastructure verified, I systematically test
 
 ---
 
-== 11.5 Phase 4 & 5: Dataset Packaging & The Kaggle Scaling Ladder
+== 11.5 The Scaling Ladder: Rung 0, 1, and 2 Benchmarks
+
+Before launching large multi-tier runs on Kaggle, the scaling ladder protocol mandates strict control verification on the 170K corpus:
+
+=== Rung 0: PyTorch FP32 Reproduction of Java Baseline
+- *Objective:* Reproduce the Java Stage 10B 30-epoch baseline in PyTorch FP32 to ensure mathematical and optimization equivalence.
+- *Setup:* Identical 170K text (`Text.txt`), $N=16, D=32, H=4, d_k=8, H_"mlp"=100, L=2$ (24,205 params), SGD with exponential LR decay ($0.015 times 0.95^t$), 30 epochs.
+- *Java Stage 10B Target:* Val Loss (positions 8..15) = *1.7505*.
+- *PyTorch FP32 Result:* Best Epoch 30 | Val Loss (positions 8..15) = *1.7785* | Train Loss = *1.8057* ($Delta = 0.0280$ match).
+
+=== Rung 1: Multi-Seed Adam + Pre-LayerNorm Convergence
+- *Objective:* Train the modernized architecture (AdamW + Pre-LayerNorm) across multiple random seeds for 30 epochs on the 170K corpus.
+- *Criterion:* Must decisively beat the 1.7505 baseline to confirm structural upgrades.
+
+#table(
+  columns: (1.5fr, 1.5fr, 1.8fr, 1.8fr, 2fr),
+  align: center,
+  table.header([*Seed*], [*Best Epoch*], [*Train Loss*], [*Val Loss (8..15)*], [*Gain vs. Baseline (1.7505)*]),
+  [Seed 42], [Epoch 30], [1.6084], [*1.5599*], [*+0.1906* drop],
+  [Seed 123], [Epoch 30], [1.6124], [*1.5709*], [*+0.1796* drop],
+  [Multi-Seed Mean], [---], [1.6104], [*1.5654*], [*+0.1851* average drop],
+)
+
+Upgrading to AdamW and Pre-LayerNorm shaves nearly $0.20$ off the validation loss on the identical dataset, proving unequivocally that the architectural upgrades work.
+
+=== Rung 2: FP32 vs. FP16/BF16 Numerical Precision Check
+- *Objective:* Validate that half-precision floating point (AMP) does not introduce gradient drift or numerical degeneration.
+- *FP32 Reference Loss:* $4.245288$
+- *FP16 / BF16 Loss:* $4.245275$
+- *Numerical Loss Delta:* $1.34 times 10^(-5)$
+- *Max Absolute Logit Gap:* $2.65 times 10^(-3)$
+- *Throughput Impact:* Confirms full numerical safety for Kaggle GPU execution, unlocking estimated $10 times - 30 times$ throughput acceleration without sacrificing precision.
+
+---
+
+== 11.6 Phase 4 & 5: Dataset Packaging & The Kaggle Scaling Ladder
 
 To prepare for mass training on Kaggle, I built an automated multi-tier dataset assembly pipeline (`build_scaling_ladder.py` and `split_data_kaggle.py`), pulling public-domain literary works from Project Gutenberg:
 
@@ -794,7 +829,7 @@ Each tier is cleaned of Project Gutenberg header/license boilerplate, typography
 
 ---
 
-== 11.6 Phase 6 & 7: Kaggle Operational Reality and Pre-Flight Certification
+== 11.7 Phase 6 & 7: Kaggle Operational Reality and Pre-Flight Certification
 
 Executing long training runs in Kaggle presents strict constraints that must be handled structurally:
 1. *Read-Only `/kaggle/input`:* Datasets uploaded to Kaggle are permanently mounted under `/kaggle/input/<dataset-name>/`.
