@@ -399,15 +399,15 @@ To learn $W_q, W_k, W_v, P,$ and $C$, the gradients must flow backwards through 
    $ d k_i = frac(d s_i, sqrt(D)) times q $
    $ d q = sum_(i=0)^(N-1) frac(d s_i, sqrt(D)) times k_i $
 6. *Weight Matrix Gradients:*
-   $ "grad"_Wq = x_(N-1)^T times d q $
-   $ "grad"_Wk = sum_(i=0)^(N-1) x_i^T times d k_i $
-   $ "grad"_Wv = sum_(i=0)^(N-1) x_i^T times d v_i $
+   $ "grad"_(W_q) = x_(N-1)^T times d q $
+   $ "grad"_(W_k) = sum_(i=0)^(N-1) x_i^T times d k_i $
+   $ "grad"_(W_v) = sum_(i=0)^(N-1) x_i^T times d v_i $
 7. *Gradients for Inputs ($x_i$):*
    Gradients from $v_i$ and $k_i$ project back through $W_v^T$ and $W_k^T$. For position $N-1$, gradients from $q$ and the residual connection add in.
    Finally, $d x_i$ splits equally into the character embeddings $C[c_i]$ and position vectors $P[i]$.
 
 *Rigorous Gradient Checking with Relative Error:*
-Early in training, all dot-product scores are nearly equal, making attention distributions virtually uniform. As a result, perturbing $W_k$ barely changes the loss, producing deceptively small analytic gradients ($\sim 10^{-8}$). To rigorously verify the calculus, we trained the weights for 500 steps until attention became non-uniform, and evaluated gradients across $W_v$, $W_1$, and $W_k$ using the relative error formula:
+Early in training, all dot-product scores are nearly equal, making attention distributions virtually uniform. As a result, perturbing $W_k$ barely changes the loss, producing deceptively small analytic gradients ($tilde 10^(-8)$). To rigorously verify the calculus, we trained the weights for 500 steps until attention became non-uniform, and evaluated gradients across $W_v$, $W_1$, and $W_k$ using the relative error formula:
 $ "RelError" = frac(|"analytic" - "numerical"|, |"analytic"| + |"numerical"|) $
 All checks met the strict numerical threshold of $< 0.001$:
 - $W_v[2][3]$: Analytic = $-0.00003403$, Numerical = $-0.00003403$, Rel Error = $4.30 times 10^(-7)$ [PASS]
@@ -895,7 +895,7 @@ Executing long training runs in Kaggle presents strict constraints that must be 
 2. *Writable `/kaggle/working` (20 GB Cap):* All checkpoints, CSV metrics, and model outputs are written to `/kaggle/working/`.
 3. *The 9–12 Hour Session Limit & Auto-Resume:*
    Interactive sessions die if the browser tab disconnects. The solution is twofold:
-   - Use **"Save Version $arrow$ Save & Run All (Commit)"** to run in a dedicated headless background container.
+   - Use *"Save Version $arrow$ Save & Run All (Commit)"* to run in a dedicated headless background container.
    - Implement persistent 15-minute checkpointing (`KaggleCheckpointManager`). When a session finishes or is interrupted, its output can be mounted as an input dataset for the next run, allowing the model to load its weights, optimizer state, and epoch counters and seamlessly continue.
 4. *Automated Pre-Flight Checklist (`preflight_checklist.py`):*
    Every Kaggle run executes a 6-point checklist prior to training:
@@ -1143,7 +1143,7 @@ Because self-attention computes an attention score between *every pair of positi
 - If context $T = 32$ characters, the attention matrix requires $32^2 = 1,024$ scores.
 - To read a single paragraph ($approx 1,000$ characters), the attention matrix explodes to $1,000^2 = 1,000,000$ scores ($1,000 times$ more compute).
 
-Under our character-level model ($T=16$), the entire context window can hold only **two to three words**. The model literally suffers from severe anterograde amnesia: by the time it reaches the fourth word of a sentence, the beginning of the sentence has slipped completely beyond its attention horizon.
+Under our character-level model ($T=16$), the entire context window can hold only *two to three words*. The model literally suffers from severe anterograde amnesia: by the time it reaches the fourth word of a sentence, the beginning of the sentence has slipped completely beyond its attention horizon.
 
 ---
 
@@ -1158,7 +1158,7 @@ $ 2^8 = 256 " possible distinct integer values, from " 0 " to " 255. $
 In the 1960s, American engineers created the *ASCII standard*, which assigned English characters to numbers between $0$ and $127$ (e.g. `'A'` is byte `65`, `'a'` is byte `97`, and a space `' '` is byte `32`). However, ASCII completely ignored the rest of the planet: Greek, Cyrillic, Hindi, Bengali, Arabic, Chinese, Japanese, and emojis did not exist in ASCII.
 
 === The Global Standard: UTF-8 Encoding
-To solve this, computer scientists designed **UTF-8**, a variable-length byte encoding that represents all $150,000+$ human symbols using combinations of 1 to 4 bytes:
+To solve this, computer scientists designed *UTF-8*, a variable-length byte encoding that represents all $150,000+$ human symbols using combinations of 1 to 4 bytes:
 1. *1 Byte (ASCII / Standard English):*
    - `'a'` $arrow$ `[97]`
    - `'Z'` $arrow$ `[90]`
@@ -1191,7 +1191,7 @@ Because *every file, every script, every emoji, every image, and every line of c
 
 == 13.4 How Pair Merging Works (From Silicon to Subwords)
 
-Now, how do we compress raw bytes into meaningful subwords? We use the **Byte Pair Encoding (BPE)** algorithm:
+Now, how do we compress raw bytes into meaningful subwords? We use the *Byte Pair Encoding (BPE)* algorithm:
 
 === A Concrete Walkthrough: How `" the"` Becomes a Single Token
 Suppose our training text contains the phrase `" the"` repeating thousands of times.
@@ -1212,7 +1212,7 @@ Suppose our training text contains the phrase `" the"` repeating thousands of ti
    - We assign a new token ID: `Token 258 = bytes([32, 257]) = " the"`.
    - The sequence now becomes: `[258]`. (Length reduced from $2 arrow 1$!).
 
-*The Result:* What originally took four distinct positions in our Transformer's attention matrix is now represented by **one single integer token ID (258)**. The context window can now span $4 times$ more narrative meaning for the exact same compute budget!
+*The Result:* What originally took four distinct positions in our Transformer's attention matrix is now represented by *one single integer token ID (258)*. The context window can now span $4 times$ more narrative meaning for the exact same compute budget!
 
 ---
 
@@ -1314,11 +1314,11 @@ When comparing a character-level model ($V=110$) against a Byte-Level BPE model 
 - A character model predicting one character out of $110$ has a random baseline loss of $ln(110) approx 4.70$.
 - A BPE model predicting one subword out of $16,384$ has a random baseline loss of $ln(16,384) approx 9.70$.
 
-To compare models scientifically across completely different tokenizers and languages, we convert loss into **Bits per Byte (BPB)**:
+To compare models scientifically across completely different tokenizers and languages, we convert loss into *Bits per Byte (BPB)*:
 $ "BPB" = frac(sum_(t=1)^(N_"tokens") "Loss"_t, ln(2) times N_"bytes") = frac(cal(L)_"token" times N_"tokens", 0.69315 times N_"bytes") $
 - *Physical Meaning:* BPB measures how many bits of information the model requires to compress one raw byte of text.
 - *The Universal Benchmark:* Our Stage 11 character model achieved a validation loss of $1.5654$ nats per character. Since English ASCII is $1$ byte per character, this translates to:
-  $ "Baseline BPB" = frac(1.5654, ln(2)) = frac(1.5654, 0.69315) approx mathbf(2.2585 " bits per byte") $
+  $ "Baseline BPB" = frac(1.5654, ln(2)) = frac(1.5654, 0.69315) approx bold(2.2585 " bits per byte") $
 Any Byte-Level BPE model we train must achieve an English BPB lower than $2.26$ to prove mathematically that its subword representations exceed our character-level baseline.
 
 ---
@@ -1345,23 +1345,23 @@ While intuitive, this approach hits three fatal walls:
 
 == 14.2 Rotary Position Embeddings (RoPE) — From First Principles
 
-To explain RoPE (Jianlin Su et al., *RoFormer*, 2021) so that a tenth grader can understand, we discard complex tensor jargon and start with high school 2D geometry: **the rotation of a vector in a plane**.
+To explain RoPE (Jianlin Su et al., *RoFormer*, 2021) so that a tenth grader can understand, we discard complex tensor jargon and start with high school 2D geometry: *the rotation of a vector in a plane*.
 
 === Step 1: The 2D Clock Analogy
 Imagine a vector as an arrow on a 2D graph with coordinates $(x, y)$. If you rotate that arrow counter-clockwise by an angle $theta$, its new coordinates $(x', y')$ are given by the standard rotation matrix:
 $ mat(x'; y') = mat(cos theta, -sin theta; sin theta, cos theta) mat(x; y) $
 
 === Step 2: The Core Insight of RoPE
-Instead of *adding* a static vector to the token embedding ($x + P_t$), RoPE leaves the token embedding alone. Instead, it **rotates the Query ($q$) and Key ($k$) vectors in 2D coordinate planes** by an angle that is strictly proportional to the token's position index:
+Instead of *adding* a static vector to the token embedding ($x + P_t$), RoPE leaves the token embedding alone. Instead, it *rotates the Query ($q$) and Key ($k$) vectors in 2D coordinate planes* by an angle that is strictly proportional to the token's position index:
 - At position $m$, Query vector $q_m$ is rotated by angle $m theta$.
 - At position $n$, Key vector $k_n$ is rotated by angle $n theta$.
 
 === Step 3: The Dot-Product Miracle
 Now, observe what happens when the Transformer computes the dot-product between Query $q_m$ and Key $k_n$ in self-attention:
-$ langle q_m, k_n rangle = (R_m q)^top (R_n k) = q^top (R_m^top R_n) k $
-In 2D rotation geometry, undoing a rotation of $m$ and rotating by $n$ is mathematically equivalent to rotating by the **relative difference $(n - m)$**:
+$ chevron.l q_m, k_n chevron.r = (R_m q)^top (R_n k) = q^top (R_m^top R_n) k $
+In 2D rotation geometry, undoing a rotation of $m$ and rotating by $n$ is mathematically equivalent to rotating by the *relative difference $(n - m)$*:
 $ R_m^top R_n = R_(n - m) $
-$ langle q_m, k_n rangle = q^top R_(n - m) k $
+$ chevron.l q_m, k_n chevron.r = q^top R_(n - m) k $
 
 #quote[
 *The Mathematical Miracle:* The dot-product between position $m$ and position $n$ depends purely on their relative distance $(n - m)$!
@@ -1381,14 +1381,14 @@ In `ebrain_rope.py`, we implemented and tested the three foundational mathematic
 1. *Norm Preservation ($||R x||_2 == ||x||_2$):*
    Rotation changes only the angle, never the vector's length.
    - Empirical difference: $4.76 times 10^(-7)$ (PASSED). This prevents attention scores from vanishing or exploding as context grows.
-2. *Relative Shift Invariance ($langle q_m, k_n rangle equiv f(m - n)$):*
-   - $langle q_5, k_2 rangle = 5.10158014$ (diff = 3)
-   - $langle q_12, k_9 rangle = 5.10158110$ (diff = 3)
-   - $langle q_25, k_22 rangle = 5.10158014$ (diff = 3)
+2. *Relative Shift Invariance ($chevron.l q_m, k_n chevron.r equiv f(m - n)$):*
+   - $chevron.l q_5, k_2 chevron.r = 5.10158014$ (diff = 3)
+   - $chevron.l q_12, k_9 chevron.r = 5.10158110$ (diff = 3)
+   - $chevron.l q_25, k_22 chevron.r = 5.10158014$ (diff = 3)
    - Relative invariance delta: $9.53 times 10^(-7)$ (PASSED).
 3. *Directional Asymmetry (Order Sensitivity):*
-   - Forward score $langle q_5, k_2 rangle = 5.10158014$
-   - Backward score $langle q_2, k_5 rangle = 3.88440800$
+   - Forward score $chevron.l q_5, k_2 chevron.r = 5.10158014$
+   - Backward score $chevron.l q_2, k_5 chevron.r = 3.88440800$
    - Difference = $1.21717215$ (PASSED). Proving the model strictly distinguishes "verb before noun" from "noun before verb".
 
 ---
@@ -1396,15 +1396,15 @@ In `ebrain_rope.py`, we implemented and tested the three foundational mathematic
 == 14.3 Root Mean Square Normalization (RMSNorm)
 
 In Stages 10 and 11, we utilized Layer Normalization:
-$ "LN"(x) = frac(x - mu, sqrt(sigma^2 + epsilon)) odot gamma + beta, quad mu = frac(1), sigma^2 = frac(1) $
+$ "LN"(x) = frac(x - mu, sqrt(sigma^2 + epsilon)) ⊙ gamma + beta, quad mu = frac(1, D) sum_(i=1)^D x_i, quad sigma^2 = frac(1, D) sum_(i=1)^D (x_i - mu)^2 $
 
 === Why LayerNorm's Mean-Centering is Redundant
-Biao Zhang and Rico Sennrich (2019) demonstrated that the computational benefit of Layer Normalization does *not* come from shifting the activations to zero mean ($x - mu$). What stabilizes deep neural networks is strictly **scaling the magnitude** of the activations to prevent gradient explosion.
+Biao Zhang and Rico Sennrich (2019) demonstrated that the computational benefit of Layer Normalization does *not* come from shifting the activations to zero mean ($x - mu$). What stabilizes deep neural networks is strictly *scaling the magnitude* of the activations to prevent gradient explosion.
 
 === The RMSNorm Formulation
 RMSNorm eliminates the mean calculation entirely:
 $ "RMS"(x) = sqrt(frac(1, d) sum_(i=1)^d x_i^2 + epsilon) $
-$ "RMSNorm"(x) = frac(x, "RMS"(x)) odot gamma $
+$ "RMSNorm"(x) = frac(x, "RMS"(x)) ⊙ gamma $
 - *Speed Advantage:* Eliminating the mean calculation reduces GPU memory bandwidth transfers, accelerating training by $15% - 20%$.
 - *Zero Bias ($beta = 0$):* Following modern best practices (LLaMA, Gemma), no additive bias parameters are used.
 
@@ -1412,13 +1412,13 @@ $ "RMSNorm"(x) = frac(x, "RMS"(x)) odot gamma $
 
 == 14.4 SwiGLU: Gated Linear Units in the Feed-Forward Layer
 
-In early stages, our feed-forward network was a simple linear transformation followed by $\tanh$:
+In early stages, our feed-forward network was a simple linear transformation followed by $tanh$:
 $ h = tanh(x W_1 + b_1) W_2 + b_2 $
 
 === The Architecture of a Gated Valve
-Noam Shazeer (*GLU Variants Improve Transformer*, 2020) proved that replacing static non-linearities with a **Gated Linear Unit (GLU)** produces superior convergence. Instead of a single path, the input passes through two parallel linear projections that multiply each other elementwise:
-$ "SwiGLU"(x) = (x W_"gate" odot "SiLU"(x W_"up")) W_"down" $
-where $\text{SiLU}(z) = z \cdot \sigma(z) = \frac{z}{1 + e^{-z}}$.
+Noam Shazeer (*GLU Variants Improve Transformer*, 2020) proved that replacing static non-linearities with a *Gated Linear Unit (GLU)* produces superior convergence. Instead of a single path, the input passes through two parallel linear projections that multiply each other elementwise:
+$ "SwiGLU"(x) = (x W_"gate" ⊙ "SiLU"(x W_"up")) W_"down" $
+where $"SiLU"(z) = z dot sigma(z) = frac(z, 1 + e^(-z))$.
 
 - *Intuition:* One branch ($x W_"up"$) computes features, while the second branch ($"SiLU"(x W_"gate")$) acts as a continuous, differentiable valve controlling exactly which feature dimensions are allowed to pass through to $W_"down"$.
 - *Dimension Scaling:* To preserve total parameters compared to standard $4D$ feed-forward layers, the hidden dimension is scaled to $frac(8, 3) D$.
@@ -1429,7 +1429,7 @@ where $\text{SiLU}(z) = z \cdot \sigma(z) = \frac{z}{1 + e^{-z}}$.
 
 In standard architectures, the token embedding matrix $C in RR^(V times D)$ maps token IDs to vectors, while the output head $W_"head" in RR^(D times V)$ maps vectors back to vocabulary logits.
 
-In **Weight Tying** (Press & Wolf, 2017):
+In *Weight Tying* (Press & Wolf, 2017):
 $ W_"head" = C^top $
 The weights of the output projection are mathematically tied to the input embedding table.
 1. *Parameter Efficiency:* In a $16,384$-vocabulary model with $D = 256$, separate tables would waste $16,384 times 256 = 4,194,304$ parameters. Weight tying saves over $4.19$ million weights.
@@ -1458,7 +1458,7 @@ Before adopting fused attention, we executed a strict cross-implementation parit
 === Why Token Loss Cannot Be Compared Directly
 A fundamental trap in machine learning is comparing cross-entropy token losses across different tokenizers. 
 - In our character-level model, predicting 1 character has a vocabulary size of $V = 112$. A cross-entropy loss of $1.5264$ means the model suffers an average error of $1.5264$ nats per single letter.
-- In our BPE model, predicting 1 subword has a vocabulary size of $V = 16,384$. Because $\ln(16,384) = 9.70$ is much larger than $\ln(112) = 4.70$, a raw cross-entropy loss of $3.20$ might look "worse" at first glance.
+- In our BPE model, predicting 1 subword has a vocabulary size of $V = 16,384$. Because $ln(16,384) = 9.70$ is much larger than $ln(112) = 4.70$, a raw cross-entropy loss of $3.20$ might look "worse" at first glance.
 - However, one BPE subword token might encode an entire 5-letter word like `"apple"` (5 bytes). In that case, $3.20$ nats of error is spread across *5 bytes of information*, meaning the error per byte is actually vastly lower!
 
 === The Mathematical Formulation of Bits-Per-Byte
@@ -1524,8 +1524,8 @@ For a student or researcher replicating this project from scratch, here is the c
   [2], [BPE Merging], [Build an incremental pair-frequency table. Iteratively merge the top pair until target vocab (16K) is reached.],
   [3], [Embeddings], [Initialize $C in RR^(V times D)$ with Gaussian variance $sigma = 1 / sqrt(D)$. Share weights with $W_"head"$.],
   [4], [Rotary Positions], [Precompute complex frequencies $theta_i = 10000^(-2i / d_k)$. Rotate $Q$ and $K$ vectors in 2D pairs before dot-product.],
-  [5], [RMSNorm], [Normalize layer inputs by root-mean-square: $x / sqrt("mean"(x^2) + epsilon) odot gamma$. No additive bias.],
-  [6], [Gated SwiGLU], [Replace standard ReLU/GELU with $(x W_"gate" odot "SiLU"(x W_"up")) W_"down"$, scaling hidden dimension to $8/3 D$.],
+  [5], [RMSNorm], [Normalize layer inputs by root-mean-square: $x / sqrt("mean"(x^2) + epsilon) ⊙ gamma$. No additive bias.],
+  [6], [Gated SwiGLU], [Replace standard ReLU/GELU with $(x W_"gate" ⊙ "SiLU"(x W_"up")) W_"down"$, scaling hidden dimension to $8/3 D$.],
   [7], [Fused Attention], [Use PyTorch Fused SDPA kernel inside blocks, with additive causal lower-triangular boolean mask.],
   [8], [Optimization], [AdamW ($beta_1=0.9, beta_2=0.95$, weight decay $0.1$), linear warmup for $2%$ of steps, cosine decay to $10%$.],
   [9], [Streaming Shards], [Pre-tokenize data into binary `uint16` files. Stream via `np.memmap` to keep RAM usage under 100 MB.],
@@ -1540,7 +1540,7 @@ Across fourteen handcrafted stages, built from bare-metal Java and scaled into G
 1. *Stage 1 (Bigram Counting):* Proved that counting co-occurrences hits an impossible exponential memory wall ($V^x$ combinations, requiring $1.2$ billion TB for 10 characters).
 2. *Stage 2 (Learned Continuous Tables):* Proved that continuous score matrices and gradient descent can learn probability distributions without counting.
 3. *Stage 3 (Character Vector Embeddings):* Eliminated table explosions by mapping discrete characters into compact continuous vectors ($C in RR^(V times D)$).
-4. *Stage 4 (Non-Linear Hidden Layers):* Introduced $\tanh$ activations to model non-linear combinations of context letters.
+4. *Stage 4 (Non-Linear Hidden Layers):* Introduced $tanh$ activations to model non-linear combinations of context letters.
 5. *Stage 5 (Train/Val Splits):* Established rigorous validation protocols to distinguish authentic generalization from memorization.
 6. *Stage 6 (Regularization & Scaling):* Proved that training volume and learning rate decay are the primary defenders against overfitting, setting the reference baseline of $approx 1.86$.
 7. *Stage 7 (Self-Attention):* Introduced Query-Key-Value routing, decoupling sequence context length from parameter counts.
@@ -1571,7 +1571,7 @@ To ensure zero overclaims, complete reproducibility, and Chinchilla-aligned data
   table.header([*Phase*], [*Task / Gate Description*], [*Deliverables & Standards*], [*Status*]),
   [Gate 2], [Dual-Seed Character Regression], [Reproduce Rung 3B ($1.5157 plus.minus 0.02$) on `common_val_tokens.npy` across Seed 42 and Seed 123. Report Step 0, Ep 1, and Final Train loss. Test set sealed.], [*In Progress* \ (Seed 42: 1.5157 Passed)],
   [Data Quality], [High-Volume Corpus Expansion], [20--50 MB real text per language across 10 scripts. Reinstate full 8.52M English chars. Document-level splits only. Strip all templates & boilerplate.], [*Pending* \ (Data Pipeline Ready)],
-  [Gate 1 (Final)], [Re-train Tokenizer & Audit], [Train candidate 8K and 16K BPE tokenizers on balanced $(size)^0.3$ sample. Report Ch/Tok, B/Tok, and High-Byte Fallback on 1 MB+ vaults.], [*Pending* \ (Follows Corpus)],
+  [Gate 1 (Final)], [Re-train Tokenizer & Audit], [Train candidate 8K and 16K BPE tokenizers on balanced $("size")^0.3$ sample. Report Ch/Tok, B/Tok, and High-Byte Fallback on 1 MB+ vaults.], [*Pending* \ (Follows Corpus)],
   [Ablation], [8K vs. 16K Vocab Comparison], [Train small causal models ($D=128$) comparing 8K and 16K vocabularies. Compare at equal depth AND equal parameters. Report Bits-per-Byte per language.], [*Pending* \ (Follows Tokenizer)],
   [Gate 3], [10 MB Multilingual Dry Run], [Train $approx 5"M"$ parameter modern transformer ($T=256$, RoPE, SwiGLU, RMSNorm). Report tok/sec and Bits per Byte per language.], [*Pending* \ (Pre-flight)],
   [Gate 3], [Cross-Session Resume Test], [Save checkpoint at Step $K$. Abort run. Resume in a fresh independent session. Verify exact loss curve continuity ($Delta L < 10^(-5)$).], [*Pending* \ (Pre-flight)],

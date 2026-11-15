@@ -11,3 +11,4 @@ kaggle_key.local
 *.local
 .env
 *.zip
+*.pdf
