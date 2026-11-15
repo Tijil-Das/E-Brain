@@ -190,3 +190,4 @@ def run_step3_parity_test():
 
 if __name__ == "__main__":
     run_step3_parity_test()
+
