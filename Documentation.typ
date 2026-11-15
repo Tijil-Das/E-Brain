@@ -3,11 +3,11 @@
   paper: "a4",
   margin: (top: 2.5cm, bottom: 2.5cm, left: 2.5cm, right: 2.5cm),
   header: align(right)[_Building the E-Brain — Personal Engineering Journal_],
-  footer: locate(loc => {
-    let page_number = counter(page).at(loc).first()
-    let total_pages = counter(page).final(loc).first()
+  footer: context {
+    let page_number = counter(page).get().first()
+    let total_pages = counter(page).final().first()
     align(center)[#page_number of #total_pages]
-  })
+  }
 )
 #set text(font: "Linux Libertine", size: 11pt, lang: "en")
 #set par(justify: true, leading: 0.65em)
@@ -1555,3 +1555,46 @@ Across fourteen handcrafted stages, built from bare-metal Java and scaled into G
 From pure counting tables to deep multi-layer causal transformers executing on modern GPU clusters, the entire engine of modern Artificial Intelligence has been derived, built, mathematically verified, and mastered from the bare metal up.
 
 
+
+
+---
+
+= Stage 15: Production Gates, High-Quality Data Manifesto & Execution Roadmap
+
+To ensure zero overclaims, complete reproducibility, and Chinchilla-aligned data scaling, this section documents the exact criteria, pending gates, and data engineering standards governing all remaining runs.
+
+== 15.1 The Master Production Checklist (Things Left in Strict Order)
+
+#table(
+  columns: (0.7fr, 1.8fr, 1.5fr, 1fr),
+  align: center + horizon,
+  table.header([*Phase*], [*Task / Gate Description*], [*Deliverables & Standards*], [*Status*]),
+  [Gate 2], [Dual-Seed Character Regression], [Reproduce Rung 3B ($1.5157 plus.minus 0.02$) on `common_val_tokens.npy` across Seed 42 and Seed 123. Report Step 0, Ep 1, and Final Train loss. Test set sealed.], [*In Progress* \ (Seed 42: 1.5157 Passed)],
+  [Data Quality], [High-Volume Corpus Expansion], [20--50 MB real text per language across 10 scripts. Reinstate full 8.52M English chars. Document-level splits only. Strip all templates & boilerplate.], [*Pending* \ (Data Pipeline Ready)],
+  [Gate 1 (Final)], [Re-train Tokenizer & Audit], [Train candidate 8K and 16K BPE tokenizers on balanced $(size)^0.3$ sample. Report Ch/Tok, B/Tok, and High-Byte Fallback on 1 MB+ vaults.], [*Pending* \ (Follows Corpus)],
+  [Ablation], [8K vs. 16K Vocab Comparison], [Train small causal models ($D=128$) comparing 8K and 16K vocabularies. Compare at equal depth AND equal parameters. Report Bits-per-Byte per language.], [*Pending* \ (Follows Tokenizer)],
+  [Gate 3], [10 MB Multilingual Dry Run], [Train $approx 5"M"$ parameter modern transformer ($T=256$, RoPE, SwiGLU, RMSNorm). Report tok/sec and Bits per Byte per language.], [*Pending* \ (Pre-flight)],
+  [Gate 3], [Cross-Session Resume Test], [Save checkpoint at Step $K$. Abort run. Resume in a fresh independent session. Verify exact loss curve continuity ($Delta L < 10^(-5)$).], [*Pending* \ (Pre-flight)],
+  [Stage 16], [100 MB Architectural Ablations], [Compare context lengths ($T=256$ vs $T=512$). Confirm stable convergence curve and check overfitting gap across all 10 languages.], [*Pending* \ (Production Scale)],
+  [Stage 17], [1 GB Dress Rehearsal], [Full-scale dress rehearsal on GPU. Verify learning rate schedule, gradient norm clipping, and loss stability across billions of tokens.], [*Pending* \ (Pre-Production)],
+  [Final], [Multi-Day Production Pretraining], [Multi-session Kaggle GPU relay chain with automated Hugging Face / GCS checkpoint synchronization.], [*Final Target*],
+)
+
+== 15.2 The High-Quality Data Manifesto
+
+To prevent contamination, memorization, and register skew, all multilingual training and evaluation data must adhere to six non-negotiable standards:
+
+1. *Document-Level Isolation (Zero Intra-Book Leakage):*
+   No line-level or paragraph-level slicing within the same document. Complete independent books or complete independent articles are designated 100% as `validation_vault` or `test_vault`. The training vault contains zero overlapping documents ($0.00%$ 8-gram and 10-gram overlap).
+2. *Volume Restoration & Balance:*
+   English training volume is restored to its full $8.52"M"$ characters ($1.51"M"$ words) so that the multilingual model sees identical English volume to the 3B baseline. Small-resource languages are expanded to $20$--$50"M"$ characters of real, non-synthetic text.
+3. *Strict Template & Boilerplate Stripping:*
+   - *Gutenberg Texts:* Strip all header banners, transcriber notes, licenses, and footers.
+   - *Wikimedia Texts:* Strip infobox templates, navigation boxes, references, category links, and table of contents markup using explicit regex parsers.
+   - *Duplicate Rate Threshold:* Duplicate line rate must remain $< 3.0%$ for running prose.
+4. *Script Purity ($ge 98%$):*
+   Discard classical texts diluted with Latin numerals or translation headers (e.g., classical *Rites of Zhou*). Native scripts must contain $ge 98%$ valid native Unicode characters (excluding universal punctuation).
+5. *Dual-Register Multi-Author Text:*
+   Avoid single-author literary dominance (e.g. Tagore or Premchand alone). Pair literary classics with modern, multi-author, domain-diverse encyclopedia and news corpora spanning science, geography, technology, history, and arts.
+6. *Attribution & Licensing Ledger:*
+   Maintain a strict audit ledger tracking every document's source and license (Gutenberg Public Domain, Wikimedia CC BY-SA 4.0).

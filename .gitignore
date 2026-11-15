@@ -10,3 +10,4 @@ cleaned_tier*.txt
 kaggle_key.local
 *.local
 .env
+*.zip

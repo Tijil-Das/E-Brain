@@ -167,6 +167,11 @@ class FastByteBPE:
             result.extend(self.encode_chunk(b_list))
         return result
 
+    def encode_bytes(self, raw_bytes: bytes):
+        if not raw_bytes:
+            return []
+        return self.encode_chunk(list(raw_bytes))
+
     def decode(self, ids):
         raw_bytes = bytearray()
         for tok in ids:
@@ -175,6 +180,15 @@ class FastByteBPE:
             else:
                 raw_bytes.extend(b"<|unk|>")
         return raw_bytes.decode('utf-8', errors='replace')
+
+    def decode_bytes(self, ids):
+        raw_bytes = bytearray()
+        for tok in ids:
+            if tok in self.vocab:
+                raw_bytes.extend(self.vocab[tok])
+            else:
+                raw_bytes.extend(b"<|unk|>")
+        return bytes(raw_bytes)
 
     def save(self, filepath):
         data = {
