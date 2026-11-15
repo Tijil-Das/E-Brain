@@ -1,0 +1,54 @@
+{
+  "project": "E-Brain Causal Transformer",
+  "phase": "Stage 12 - Byte-Level BPE & Multilingual Base",
+  "author": "Antigravity Research Engine",
+  "step0_decisions": {
+    "target_languages": [
+      {"code": "en", "name": "English", "script": "Latin", "family": "Indo-European (Germanic)"},
+      {"code": "es", "name": "Spanish", "script": "Latin", "family": "Indo-European (Romance)"},
+      {"code": "fr", "name": "French", "script": "Latin", "family": "Indo-European (Romance)"},
+      {"code": "de", "name": "German", "script": "Latin", "family": "Indo-European (Germanic)"},
+      {"code": "ru", "name": "Russian", "script": "Cyrillic", "family": "Indo-European (Slavic)"},
+      {"code": "hi", "name": "Hindi", "script": "Devanagari", "family": "Indo-European (Indo-Aryan)"},
+      {"code": "bn", "name": "Bengali", "script": "Bengali", "family": "Indo-European (Indo-Aryan)"},
+      {"code": "ar", "name": "Arabic", "script": "Arabic (RTL)", "family": "Afroasiatic (Semitic)"},
+      {"code": "zh", "name": "Chinese", "script": "Hanzi (Ideographic)", "family": "Sino-Tibetan"},
+      {"code": "ja", "name": "Japanese", "script": "Kanji / Kana", "family": "Japonic"}
+    ],
+    "vocab_size": 16384,
+    "base_vocab": 256,
+    "special_tokens": {
+      "<|endoftext|>": 0,
+      "<|pad|>": 1,
+      "<|unk|>": 2
+    },
+    "max_bpe_merges": 16125,
+    "context_window_T": 256,
+    "planned_context_expansion_T": 512,
+    "target_model_scales": {
+      "dry_run_mini_5m": {
+        "D": 256,
+        "L": 6,
+        "H": 8,
+        "approx_params": "8.5M"
+      },
+      "production_base_32m": {
+        "D": 384,
+        "L": 12,
+        "H": 12,
+        "approx_params": "32.4M"
+      }
+    },
+    "compute_budget_kaggle": {
+      "allocated_gpu_hours_week": 30,
+      "gpu_hardware": "Tesla T4 (16GB) or P100 (16GB)",
+      "projected_throughput_tokens_sec": "15,000 to 25,000",
+      "weekly_training_capacity_tokens": "1.5 to 2.5 Billion"
+    },
+    "evaluation_metrics": {
+      "primary_cross_lingual_metric": "Bits per Byte (BPB)",
+      "english_character_baseline_bpb": 2.26,
+      "lossless_roundtrip_requirement": true
+    }
+  }
+}

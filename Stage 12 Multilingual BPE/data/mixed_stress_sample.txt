@@ -1,0 +1,13 @@
+
+    English: The quick brown fox jumps over the lazy dog. 🦊⚡
+    Spanish: El veloz murciélago hindú comía feliz cardillo y kiwi. 🦇✨
+    French: Voix ambiguë d'un cœur qui, au zéphyr, préfère les jattes de kiwi. 🍷🥖
+    German: Victor jagt zwölf Boxkämpfer quer über den großen Sylter Deich. 🏔️🍺
+    Russian: Съешь же ещё этих мягких французских булок, да выпей чаю. 🍵🪆
+    Hindi: नमस्ते दुनिया! विज्ञान और प्रौद्योगिकी मानव कल्याण के लिए हैं। 🇮🇳🕉️
+    Bengali: আমাদের সুন্দর দেশ বাংলাদেশ ও ভারত, সাহিত্য ও সঙ্গীত। 🌸🇧🇩
+    Arabic: السلام عليكم ورحمة الله وبركاته، العلم نور والجهل ظلام. 🕌📜
+    Chinese: 天地玄黄，宇宙洪荒。日月盈昃，辰宿列张。🇨🇳🐉
+    Japanese: いろはにほへと ちりぬるを わかよたれそ つねならむ。🗾⛩️
+    Math & Code: def softmax(x): return np.exp(x) / np.sum(np.exp(x), axis=-1) # $\int_0^\infty e^{-x} dx = 1$
+    
