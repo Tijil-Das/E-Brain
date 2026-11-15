@@ -1,0 +1,6 @@
+run_id,timestamp,purpose,git_commit,data_file,data_hash,data_chars,vocab_size,N,D,H,L,H_mlp,params,optimizer,batch_size,lr_init,lr_decay,dropout,epochs,best_epoch,train_loss_best,val_loss_best
+RUN_20261115_002,2026-11-15 08:31:43,"Baseline: SGD Online",10c25f34bbfcb3b0c8bc9eca64cbc4599fa589d0,Text.txt,0f12fa1f44473f32,85389,68,16,32,4,2,64,21508,SGD,1,0.02,0.95,0.0,4,4,2.7152,2.7298
+RUN_20261115_003,2026-11-15 08:33:14,"Ablation 1: + Adam Optimizer",10c25f34bbfcb3b0c8bc9eca64cbc4599fa589d0,Text.txt,0f12fa1f44473f32,85389,68,16,32,4,2,64,21508,Adam,1,0.003,0.95,0.0,4,4,2.3782,2.4664
+RUN_20261115_004,2026-11-15 08:34:38,"Ablation 2: + Mini-Batches (B=16)",10c25f34bbfcb3b0c8bc9eca64cbc4599fa589d0,Text.txt,0f12fa1f44473f32,85389,68,16,32,4,2,64,21508,Adam,16,0.005,0.95,0.0,4,4,2.5021,2.5469
+RUN_20261115_005,2026-11-15 08:36:21,"Ablation 3: + LR Warmup (1 Epoch)",10c25f34bbfcb3b0c8bc9eca64cbc4599fa589d0,Text.txt,0f12fa1f44473f32,85389,68,16,32,4,2,64,21508,Adam,16,0.005,0.95,0.0,4,4,2.5021,2.5469
+RUN_20261115_006,2026-11-15 08:38:04,"Ablation 4: + Pre-LayerNorm",10c25f34bbfcb3b0c8bc9eca64cbc4599fa589d0,Text.txt,0f12fa1f44473f32,85389,68,16,32,4,2,64,21828,Adam,16,0.005,0.95,0.0,4,4,2.3640,2.4189

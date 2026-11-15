@@ -1,0 +1,14 @@
+{
+  "source_file": "cleaned_tier3.txt",
+  "total_chars": 8682956,
+  "sha256": "8669acb43c7c53dcbe80cf5e9e3d46d9fa2b304708f3f92bad0d1ef938b4475f",
+  "vocab_size": 110,
+  "train_chars": 7380512,
+  "val_chars": 868296,
+  "test_chars": 434148,
+  "splits": {
+    "train": 0.85,
+    "val": 0.1,
+    "test": 0.05
+  }
+}

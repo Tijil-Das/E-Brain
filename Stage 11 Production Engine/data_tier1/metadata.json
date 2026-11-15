@@ -1,0 +1,14 @@
+{
+  "source_file": "Text.txt",
+  "total_chars": 85505,
+  "sha256": "2711317df6955e0bb8f5b665fd1bd76a90551eb47f56da30c7c2eb12b6da3e74",
+  "vocab_size": 68,
+  "train_chars": 72679,
+  "val_chars": 8550,
+  "test_chars": 4276,
+  "splits": {
+    "train": 0.85,
+    "val": 0.1,
+    "test": 0.05
+  }
+}

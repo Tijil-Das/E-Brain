@@ -1,1 +1,8 @@
 *.class
+__pycache__/
+*.pyc
+*.pt
+*.bin
+raw_books/
+raw_tier*.txt
+cleaned_tier*.txt

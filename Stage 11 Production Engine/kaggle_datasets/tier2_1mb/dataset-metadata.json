@@ -1,0 +1,16 @@
+{
+  "dataset_name": "EBrain Tier 2 (1 MB)",
+  "source_file": "cleaned_tier2.txt",
+  "total_characters": 897329,
+  "sha256_checksum": "5810f57c18267564b670c7b2b8040c31e49a4010d046f407d5bde455f919bdaf",
+  "vocab_size": 85,
+  "train_chars": 762729,
+  "val_chars": 89733,
+  "test_chars": 44867,
+  "split_ratio": {
+    "train": 0.85,
+    "val": 0.1,
+    "test": 0.05
+  },
+  "random_seed": 42
+}
