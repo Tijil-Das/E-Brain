@@ -1,6 +1,17 @@
 const https = require('https');
+const fs = require('fs');
+const path = require('path');
 
-const API_KEY = "KGAT_e2b0f4b96a5a7b66bb6d04c0e4385649";
+function getApiKey() {
+  if (process.env.KAGGLE_API_KEY) return process.env.KAGGLE_API_KEY;
+  const localKeyPath = path.join(__dirname, 'kaggle_key.local');
+  if (fs.existsSync(localKeyPath)) {
+    return fs.readFileSync(localKeyPath, 'utf8').trim();
+  }
+  return "";
+}
+
+const API_KEY = getApiKey();
 
 function callKaggle(toolName, args) {
   return new Promise((resolve, reject) => {

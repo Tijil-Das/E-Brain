@@ -6,3 +6,7 @@ __pycache__/
 raw_books/
 raw_tier*.txt
 cleaned_tier*.txt
+
+kaggle_key.local
+*.local
+.env
