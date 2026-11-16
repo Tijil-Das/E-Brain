@@ -44,6 +44,7 @@ import glob
 import zipfile
 import hashlib
 import random
+import shutil
 import numpy as np
 import torch
 import torch.nn as nn
@@ -54,11 +55,10 @@ from tokenizers import Tokenizer
 # Configuration & Run Modes
 # -------------------------------------------------------------
 # Set RUN_MODE:
-# "SMOKE_1000": Steps 1 -> 1,000 (pre-flight check & initial log)
 # "FULL": Full 21,520 steps with Step 10,000 seam checkpoint & verification
-RUN_MODE = os.environ.get("EBRAIN_RUN_MODE", "SMOKE_1000")
-MAX_STEPS = 1000 if RUN_MODE == "SMOKE_1000" else 21520
-EVAL_INTERVAL = 1000 if RUN_MODE == "SMOKE_1000" else 2000
+RUN_MODE = os.environ.get("EBRAIN_RUN_MODE", "FULL")
+MAX_STEPS = 21520
+EVAL_INTERVAL = 2000
 SEAM_STEP = 10000
 
 GIT_COMMIT = "f6a8390"
@@ -543,7 +543,7 @@ for step in range(1, MAX_STEPS + 1):
             uninterrupted_losses.append(l_u.item())
 
         # 2. Reload from saved checkpoint and re-run steps 10,001 -> 10,010
-        loaded = torch.load(seam_ckpt_path, map_location=device)
+        loaded = torch.load(seam_ckpt_path, map_location=device, weights_only=False)
         model.load_state_dict(loaded["model_state"])
         optimizer.load_state_dict(loaded["optimizer_state"])
         scaler.load_state_dict(loaded["scaler_state"])
@@ -681,7 +681,7 @@ for step in range(1, MAX_STEPS + 1):
         if mean_val_bpb < best_mean_bpb:
             best_mean_bpb = mean_val_bpb
             best_ckpt_path = os.path.join(WORK_DIR, "checkpoint_best.pt")
-            torch.save(torch.load(curr_ckpt_path), best_ckpt_path)
+            shutil.copyfile(curr_ckpt_path, best_ckpt_path)
             print(f"  [New Best Val BPB: {best_mean_bpb:.4f}] Saved to {best_ckpt_path}")
 
         # Check Early Stopping
