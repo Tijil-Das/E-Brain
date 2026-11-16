@@ -514,8 +514,8 @@ for step in range(1, MAX_STEPS + 1):
             "scheduler_state": scheduler.state_dict(),
             "lr": optimizer.param_groups[0]['lr'],
             "stream_state": stream.state_dict(),
-            "torch_rng": torch.get_rng_state(),
-            "cuda_rng": torch.cuda.get_rng_state() if torch.cuda.is_available() else None,
+            "torch_rng": torch.get_rng_state().cpu(),
+            "cuda_rng": torch.cuda.get_rng_state().cpu() if torch.cuda.is_available() else None,
             "numpy_rng": np.random.get_state(),
             "random_rng": random.getstate(),
         }
@@ -543,15 +543,24 @@ for step in range(1, MAX_STEPS + 1):
             uninterrupted_losses.append(l_u.item())
 
         # 2. Reload from saved checkpoint and re-run steps 10,001 -> 10,010
-        loaded = torch.load(seam_ckpt_path, map_location=device, weights_only=False)
+        loaded = torch.load(seam_ckpt_path, map_location="cpu", weights_only=False)
         model.load_state_dict(loaded["model_state"])
         optimizer.load_state_dict(loaded["optimizer_state"])
         scaler.load_state_dict(loaded["scaler_state"])
         scheduler.load_state_dict(loaded["scheduler_state"])
         stream.load_state_dict(loaded["stream_state"])
-        torch.set_rng_state(loaded["torch_rng"])
+
+        t_rng = loaded["torch_rng"]
+        if isinstance(t_rng, torch.Tensor):
+            t_rng = t_rng.cpu().to(torch.uint8)
+        torch.set_rng_state(t_rng)
+
         if loaded["cuda_rng"] is not None and torch.cuda.is_available():
-            torch.cuda.set_rng_state(loaded["cuda_rng"])
+            c_rng = loaded["cuda_rng"]
+            if isinstance(c_rng, torch.Tensor):
+                c_rng = c_rng.cpu().to(torch.uint8)
+            torch.cuda.set_rng_state(c_rng)
+
         np.random.set_state(loaded["numpy_rng"])
         random.setstate(loaded["random_rng"])
 
@@ -585,6 +594,19 @@ for step in range(1, MAX_STEPS + 1):
             print(">>> SEAM INVARIANT VERIFICATION: PASSED (Exact Bitwise Continuity Across Seam)")
         else:
             raise ValueError(f"CRITICAL: Seam Continuity Violation! Diff {max_seam_diff:.2e} >= 1e-5")
+
+        # 3. Restore state back to step 10,000 so the outer loop naturally executes step 10,001
+        model.load_state_dict(loaded["model_state"])
+        optimizer.load_state_dict(loaded["optimizer_state"])
+        scaler.load_state_dict(loaded["scaler_state"])
+        scheduler.load_state_dict(loaded["scheduler_state"])
+        stream.load_state_dict(loaded["stream_state"])
+        torch.set_rng_state(t_rng)
+        if loaded["cuda_rng"] is not None and torch.cuda.is_available():
+            torch.cuda.set_rng_state(c_rng)
+        np.random.set_state(loaded["numpy_rng"])
+        random.setstate(loaded["random_rng"])
+        print("Restored model and stream back to Step 10,000. Outer loop resuming to Step 10,001.")
         print(f"{'='*80}\n")
 
     # -------------------------------------------------------------
