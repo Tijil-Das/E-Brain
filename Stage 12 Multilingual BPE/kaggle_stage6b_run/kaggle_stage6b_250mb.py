@@ -1,7 +1,7 @@
 """
 Stage 12 - Stage 6b: Full 250 MB Multilingual Pretraining & Seam Invariant Run (Kaggle GPU)
 =============================================================================================
-Commit: f97cbea91d78b9541caee16d7a5c987934a6cfea
+Commit: f6a8390
 Architecture: Modern Transformer (V=16,000, D=256, H=8, L=6, T=512)
 Total Parameters: 8,814,848 (4,718,848 Non-Embedding + 4,096,000 Tied Embedding)
 Data Budget: Full certified 250 MB corpus (~80.3M tokens across 10 languages)
@@ -61,7 +61,7 @@ MAX_STEPS = 1000 if RUN_MODE == "SMOKE_1000" else 21520
 EVAL_INTERVAL = 1000 if RUN_MODE == "SMOKE_1000" else 2000
 SEAM_STEP = 10000
 
-GIT_COMMIT = "f97cbea91d78b9541caee16d7a5c987934a6cfea"
+GIT_COMMIT = "f6a8390"
 RUN_ID = f"stage6b_250mb_{RUN_MODE.lower()}_{int(time.time())}"
 
 WORK_DIR = "/kaggle/working" if os.path.exists("/kaggle/working") else "."
