@@ -1754,7 +1754,7 @@ Dual-seed ablation ($T=512$, batch size 16, equal bytes budget, seeds 42 and 133
 
 == 15.8 Stage 6a: 100 MB Empirical Results & Certification
 
-Stage 6a completed a 5,000-step pretraining run on Kaggle GPU ($40,960,000$ tokens, $1.43$ epochs of the 100 MB certified corpus).
+Stage 6a was executed as a shortened dress rehearsal (5,000 steps, $40,960,000$ tokens, $1.43$ epochs of the 100 MB certified slice) to rapidly audit per-language convergence, gradient stability, pure hardware throughput, and evaluation overhead prior to the full multi-epoch run.
 
 === Checkpoint Progression Across 5,000 Steps
 
@@ -1789,8 +1789,22 @@ Stage 6a completed a 5,000-step pretraining run on Kaggle GPU ($40,960,000$ toke
 )
 
 === Verification Against Pass Criteria
-1. *Loss Continuity & Stability:* Smooth decay with zero NaNs, zero infs, and zero gradient explosions ($cal(L)_"train": 4.618 arrow.r 4.156$).
+1. *Loss Continuity & Stability:* Smooth decay with zero NaNs, zero infs, and zero gradient spikes across all 5,000 steps ($cal(L)_"train": 4.618 arrow.r 4.156$).
 2. *Strict Monotonic Per-Language Validation Drop:* All 10 individual language validation sets dropped strictly monotonically across all 5 checkpoints with zero upward drift.
-3. *Generalization Gap:* The generalization gap contracted to $+0.0297" BPB"$ at Step 5,000, confirming zero overfitting even at $1.43$ epochs of repeated data. Early stopping was not triggered.
-4. *Alice English Trajectory:* Alice validation BPB plunged monotonically from $3.6973$ (Stage 5 Step 250) $arrow.r 3.6056$ (Stage 5 Step 500) $arrow.r 3.4503$ (Step 1K) $arrow.r 3.1384$ (Step 3K) $arrow.r 3.0874$ (Step 4K) $arrow.r bold(3.0538)$ (Step 5K). The undertraining hypothesis is conclusively validated as training tokens grow.
+3. *Generalization Gap:* The generalization gap contracted to $+0.0297" BPB"$ at Step 5,000. Because this rehearsal spanned only $1.43$ epochs, this confirms absence of immediate divergence, but overfit risk will be rigorously audited at $2+$ epochs in Stage 6b.
+4. *Alice English Trajectory:* Alice validation BPB is improving steadily ($3.6973 arrow.r 3.6056 arrow.r 3.4503 arrow.r 3.1384 arrow.r 3.0874 arrow.r bold(3.0538)$). However, it remains substantially above the $2.26" bpb"$ mono-English baseline. Undertraining resolution is improving, while domain shift remains untested until full pretraining.
+5. *Pure Hardware Throughput:* AMP FP16 on T4 GPU yielded an average pure compute time of $91.7" ms/step"$ ($89,331" tok/sec"$), completely decoupled from the $62.4" s"$ evaluation passes ($\approx 5\%$ eval overhead). At $89"k tok/sec"$, the full $176.3"M token"$ Chinchilla target ($21,520$ steps) requires $approx 33" minutes"$ of pure compute and $approx 22" minutes"$ of validation ($approx 55" minutes"$ total runtime).
+
+== 15.9 Stage 6b: Full 250 MB Corpus Pretraining & Mid-Run Resume Rehearsal (Option A)
+
+In accordance with Option A, Stage 6b executes the full 250 MB certified corpus ($approx 80.3"M tokens"$) across the full Chinchilla budget:
+- *Total Steps:* $21,520$ steps ($B=16, T=512$, $176,291,840$ tokens $\approx 2.20$ epochs).
+- *Evaluation Cadence:* Checkpoints every $1,000$ steps evaluating all 10 language validation vaults + Alice English.
+- *Forced Disruption & Resume Test:* An intentional kill and resume at Step 10,000 to execute a realistic mid-run cross-session restoration dress rehearsal.
+- *Pass Criteria:*
+  1. Smooth loss with no NaN or loss spikes.
+  2. Per-language validation falling or flat at every checkpoint.
+  3. Generalization gap under $0.10" BPB"$.
+  4. Alice BPB continuing to improve.
+  5. *Early Stopping:* Halt immediately if mean validation BPB turns upward for 2 consecutive checkpoints.
 5. *Pure Hardware Throughput:* AMP FP16 on T4 GPU yielded an average pure compute time of $91.7" ms/step"$ ($89,331" tok/sec"$), completely decoupled from the $approx 62.4" s"$ evaluation passes. This resolves the throughput discrepancy from Stage 5 ($247.3" ms"$ in un-accelerated FP32).
