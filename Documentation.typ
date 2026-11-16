@@ -1698,12 +1698,31 @@ Dual-seed ablation ($T=512$, batch size 16, equal bytes budget, seeds 42 and 133
   - Embedding Parameters (Tied): $16,000 times 256 = 4,096,000$.
   - Total Model Parameters: $4,718,848 + 4,096,000 = bold(8,814,848)$.
 - *Training Budget & Scaling Target:*
-  - Chinchilla target ($20" tokens/param"$): $20 times 8.81"M" approx 176"M tokens"$.
-  - Certified corpus size: $approx 250" MB" approx 80"M tokens"$.
-  - Full pretraining requires $approx 2.2" epochs"$.
-- *Benchmark Timing:*
-  - CPU: $19.7" s/step"$ ($B=16, T=512$).
-  - Kaggle T4 GPU benchmark: $approx 90$--$110" ms/step"$ ($approx 75,000$--$90,000" tok/sec"$).
+  - Chinchilla target ($20" tokens/param"$): $20 times 8.81"M" = 176,296,960" tokens" approx 176.3"M tokens"$.
+  - At $33,121" tok/s"$ ($247.3" ms/step"$), training $176.3"M tokens"$ ($21,520" steps"$) takes $approx bold(1.48" hours")$.
+  - *Single-Pass Epoch Times:*
+    - 1 pass (1 epoch) of 100 MB slice ($approx 32.1"M tokens"$, $3,918" steps"$): $approx bold(16.1" minutes")$.
+    - 1 pass (1 epoch) of 250 MB full corpus ($approx 80.3"M tokens"$, $9,800" steps"$): $approx bold(40.4" minutes")$.
+    - The $176.3"M"$ target corresponds to $approx 5.5$ epochs of the 100 MB slice, or $approx 2.20$ epochs of the 250 MB full corpus.
+- *Benchmark Timing & Throughput Diagnosis:*
+  - In Stage 5, the step time was $247.3" ms/step"$ running in pure FP32 on CUDA with synchronous host CPU batch slicing.
+  - For Stage 6a, AMP FP16 (`torch.amp.autocast`) and `GradScaler` are enabled to engage T4 Tensor Cores, and pure GPU compute time is measured and logged separately from data extraction, validation, and disk checkpointing.
+  - Block MLP Width: SwiGLU hidden dim $= "int"(2 times 4 times 256 / 3) = 682$. Three projections ($w_1, w_2, w_3$) total $3 times (256 times 682) = 523,776$ params. Adding self-attention ($262,144$) and norms ($512$) yields exactly $786,432 = 12 dot D^2$ per block.
+
+== 15.7 Stage 6a: 100 MB Multilingual Pretraining Dress Rehearsal
+
+- *Corpus Budget:* 100 MB total (10 MB per language across all 10 certified vaults).
+- *Token Count:* $approx 32.1"M tokens"$ at 16K BPE compression.
+- *Training Protocol:*
+  - Steps: 5,000 steps ($B=16, T=512$, $8,192" tokens/step"$ $= 40,960,000" tokens" approx 1.28" epochs"$).
+  - Cosine annealing learning rate: $8 times 10^(-4) arrow.r 8 times 10^(-5)$.
+  - AMP FP16 accelerated with gradient scaling.
+- *Evaluation & Early Stopping Pass Criteria:*
+  1. *Convergence:* Loss decays smoothly with zero NaNs or loss spikes.
+  2. *Multilingual Validation:* All 10 equalized 1.5 MB validation vaults evaluated at Steps 1000, 2000, 3000, 4000, 5000. Per-language validation BPB must fall monotonically.
+  3. *Generalization Gap:* Monitored at every 1,000 steps ($"Gap" = "Mean Val BPB" - "Train BPB"$). If mean validation BPB turns upward ($> 0.05$ degradation), early stopping triggers to prevent overfit.
+  4. *Alice English Trajectory:* Tracked at every checkpoint to evaluate monotonic decline toward the $2.2585$ baseline.
+  5. *Throughput Profiling:* Pure GPU forward/backward step time reported independently from evaluation and disk serialization time.
 - *Stage 5 Pass Criteria (Frozen) & Empirical Results:*
   1. *10 MB Dry Run Convergence:*
      - Step 1 Initial Loss: $9.7217$ (matches $ln(16,000) = 9.6803$).
