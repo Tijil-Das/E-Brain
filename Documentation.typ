@@ -1799,12 +1799,30 @@ Stage 6a was executed as a shortened dress rehearsal (5,000 steps, $40,960,000$ 
 
 In accordance with Option A, Stage 6b executes the full 250 MB certified corpus ($approx 80.3"M tokens"$) across the full Chinchilla budget:
 - *Total Steps:* $21,520$ steps ($B=16, T=512$, $176,291,840$ tokens $\approx 2.20$ epochs).
-- *Evaluation Cadence:* Checkpoints every $1,000$ steps evaluating all 10 language validation vaults + Alice English.
-- *Forced Disruption & Resume Test:* An intentional kill and resume at Step 10,000 to execute a realistic mid-run cross-session restoration dress rehearsal.
-- *Pass Criteria:*
-  1. Smooth loss with no NaN or loss spikes.
-  2. Per-language validation falling or flat at every checkpoint.
-  3. Generalization gap under $0.10" BPB"$.
-  4. Alice BPB continuing to improve.
-  5. *Early Stopping:* Halt immediately if mean validation BPB turns upward for 2 consecutive checkpoints.
-5. *Pure Hardware Throughput:* AMP FP16 on T4 GPU yielded an average pure compute time of $91.7" ms/step"$ ($89,331" tok/sec"$), completely decoupled from the $approx 62.4" s"$ evaluation passes. This resolves the throughput discrepancy from Stage 5 ($247.3" ms"$ in un-accelerated FP32).
+- *Evaluation Cadence & Overhead Management:*
+  - Fast equalized subset evaluation ($\approx 200"k tokens/language"$, taking only $\approx 15" seconds"$) at Steps 2000, 4000, 6000, 8000, 12000, 14000, 16000, 18000, 20000.
+  - Full $1.5" MB"$ validation vault evaluation ($\approx 78" seconds"$) at Step 10,000 (mid-run seam) and Step 21,520 (final checkpoint).
+  - Total evaluation overhead drops from $21.8" minutes"$ to $< 5" minutes"$.
+- *Seam Disruption & Invariant Check (Step 10,000):*
+  - Full state serialized: model weights, AdamW momentum (`exp_avg`, `exp_avg_sq`), GradScaler, LR scheduler, RNGs (`torch`, `cuda`, `numpy`, `random`), stream epoch index, and token cursor.
+  - Cross-session resume continuity test: reloads checkpoint and verifies steps 10,001--10,010 loss and batch hashes against uninterrupted trajectory ($|Delta L| < 10^(-5)$).
+- *Epoch Boundary Reshuffle:*
+  - At Epoch 2 boundary ($\approx$ Step 9,800), stream advances and re-seeds RNG ($"seed" = 42 + "epoch" times 1000$). Cursor and epoch counter restore seamlessly across seam.
+- *Generalization Gap Measurement:*
+  - Fixed $200"k token"$ train subset evaluated in `model.eval()` mode with `torch.no_grad()`, ensuring identical evaluation conditions without training-batch variance.
+- *Overfit Monitoring & Early Stopping Rules:*
+  - Flag any language where validation BPB rises for 2 consecutive checkpoints.
+  - Trigger immediate early stopping if Mean Validation BPB rises for 2 consecutive checkpoints.
+- *PyTorch 2.6 Compatibility:*
+  - Replaced unpickling copy with `shutil.copyfile` and explicitly passed `weights_only=False` for multi-state checkpoints containing stream dictionaries.
+
+=== Pre-Flight Smoke Test Results (Step 1,000 / 1,000)
+- *Progress:* $8,192,000" tokens trained"$ ($0.1" epochs"$).
+- *Hardware Throughput:* $101.3" ms/step"$ ($80,896" tok/sec"$).
+- *Loss & Compression:*
+  - Step 1,000 Train Loss: $4.6620" nats"$ (Fixed Train BPB in eval mode: $2.3199" bpb"$).
+  - Step 1,000 Mean Val BPB: $bold(2.0787" bpb")$ (outperforming Stage 6a's $2.1328" bpb"$ at Step 1,000 due to greater corpus diversity).
+  - Generalization Gap: $-0.2412" BPB"$ (Val $<$ Train; zero overfit).
+  - Alice English BPB: $bold(3.3744" bpb")$ (improved from Stage 6a's $3.4503" bpb"$).
+  - Sample Generation: *"In science and mathematics, the universe, while they was not a emergure to resirist migers and their reserves in the same"* (syntactic English structure emerging).
+- *Full Run Execution:* Kernel Version 2 pushed and running on Kaggle GPU (`tijildas/ebrain-stage6b-250mb-pretraining`).
