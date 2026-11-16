@@ -1,0 +1,44 @@
+{
+  "stage": "Stage 4 Vocabulary Ablation",
+  "verdict": "WINNER: 16K",
+  "tokenizer_hashes": {
+    "8k": "00b002bbc515fee3aaec67325738ea92c9bda4d23d4af1bf261850d9896a9467",
+    "16k": "41cb92f102d2a11dbde826c54f09b487a27c4a157be0f179ea09682ad04344bf"
+  },
+  "parameters": {
+    "model_a_8k": { "non_embedding": 1180544, "total": 2204544 },
+    "model_b_16k": { "non_embedding": 1180544, "total": 3228544 }
+  },
+  "runs": {
+    "run_1_model_a_seed_42": {
+      "mean_bpb": 2.3122,
+      "alice_bpb": 3.4586,
+      "per_lang": { "en": 2.8554, "es": 2.6799, "ru": 1.6747, "fr": 2.8547, "de": 3.0224, "ja": 2.3941, "zh": 3.1994, "hi": 1.2489, "bn": 1.2513, "ar": 1.9410 }
+    },
+    "run_2_model_a_seed_1337": {
+      "mean_bpb": 2.2989,
+      "alice_bpb": 3.4646,
+      "per_lang": { "en": 2.8359, "es": 2.6716, "ru": 1.6511, "fr": 2.8478, "de": 3.0182, "ja": 2.3689, "zh": 3.1627, "hi": 1.2780, "bn": 1.2385, "ar": 1.9158 }
+    },
+    "run_3_model_b_seed_42": {
+      "mean_bpb": 2.2435,
+      "alice_bpb": 3.3975,
+      "per_lang": { "en": 2.7410, "es": 2.5791, "ru": 1.6137, "fr": 2.7668, "de": 2.9320, "ja": 2.3177, "zh": 3.0955, "hi": 1.2506, "bn": 1.2233, "ar": 1.9151 }
+    },
+    "run_4_model_b_seed_1337": {
+      "mean_bpb": 2.2217,
+      "alice_bpb": 3.3405,
+      "per_lang": { "en": 2.7105, "es": 2.5542, "ru": 1.5991, "fr": 2.7599, "de": 2.9129, "ja": 2.2662, "zh": 3.0649, "hi": 1.2263, "bn": 1.2205, "ar": 1.9027 }
+    }
+  },
+  "decision_summary": {
+    "avg_8k_mean_bpb": 2.3055,
+    "avg_16k_mean_bpb": 2.2326,
+    "gap": 0.0729,
+    "max_seed_spread": 0.0218,
+    "threshold_2x_spread": 0.0436,
+    "gap_exceeds_threshold": true,
+    "16k_wins": "10/10",
+    "8k_wins": "0/10"
+  }
+}

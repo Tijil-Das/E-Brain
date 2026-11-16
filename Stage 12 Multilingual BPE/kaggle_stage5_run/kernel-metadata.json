@@ -1,0 +1,16 @@
+{
+  "id": "tijildas/ebrain-stage5-10mb-dry-run",
+  "title": "ebrain-stage5-10mb-dry-run",
+  "code_file": "kaggle_stage5_dry_run.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "tijildas/ebrain-multilingual-v3-certified"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}
