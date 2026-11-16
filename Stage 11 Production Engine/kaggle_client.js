@@ -55,7 +55,14 @@ module.exports = { callKaggle };
 if (require.main === module) {
   (async () => {
     const tool = process.argv[2] || 'get_accelerator_quota';
-    const args = process.argv[3] ? JSON.parse(process.argv[3]) : { request: {} };
+    let args = { request: {} };
+    if (process.argv[3]) {
+      if (fs.existsSync(process.argv[3])) {
+        args = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'));
+      } else {
+        args = JSON.parse(process.argv[3]);
+      }
+    }
     console.log(`Calling Kaggle MCP tool: ${tool}...`);
     const res = await callKaggle(tool, args);
     console.log('Result:\n', JSON.stringify(res, null, 2));

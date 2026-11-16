@@ -49,58 +49,73 @@ else:
     print("WARNING: CUDA not detected. Kaggle GPU accelerator recommended.")
 
 # -------------------------------------------------------------
-# 1. Dataset & File Locations
+# 1. Dataset & File Locations (Recursive Search)
 # -------------------------------------------------------------
-DATA_ROOT = None
-cands = [
-    "/kaggle/input/ebrain-multilingual-v3-certified",
-    "/kaggle/input/ebrain-multilingual-v2",
-    "Stage 12 Multilingual BPE/kaggle_dataset_v3",
-    "kaggle_dataset_v3",
-    "."
-]
-for c in cands:
-    if os.path.exists(c):
-        DATA_ROOT = c
-        print(f"Found dataset root at: {DATA_ROOT}")
-        break
-
-if DATA_ROOT is None and os.path.exists("/kaggle/input"):
-    items = os.listdir("/kaggle/input")
-    if items:
-        DATA_ROOT = os.path.join("/kaggle/input", items[0])
-        print(f"Using dynamic input: {DATA_ROOT}")
-
 WORK_DIR = "/kaggle/working" if os.path.exists("/kaggle/working") else "."
 os.makedirs(WORK_DIR, exist_ok=True)
 
-def find_or_unzip(vault_name):
-    direct = os.path.join(DATA_ROOT, vault_name)
-    if os.path.exists(direct) and os.path.isdir(direct):
-        return direct
-    work_v = os.path.join(WORK_DIR, vault_name)
-    if os.path.exists(work_v):
-        return work_v
-    zip_cand = os.path.join(DATA_ROOT, f"{vault_name}.zip")
-    if os.path.exists(zip_cand):
-        print(f"Extracting {zip_cand} to {WORK_DIR}...")
-        with zipfile.ZipFile(zip_cand, "r") as z:
-            z.extractall(WORK_DIR)
-        return os.path.join(WORK_DIR, vault_name)
-    raise FileNotFoundError(f"Cannot locate {vault_name}")
+if os.path.exists("/kaggle/input"):
+    print("Inspecting /kaggle/input:", os.listdir("/kaggle/input"))
+    for item in os.listdir("/kaggle/input"):
+        item_p = os.path.join("/kaggle/input", item)
+        if os.path.isdir(item_p):
+            print(f"  Folder {item}: {os.listdir(item_p)[:8]}")
 
-TRAIN_VAULT = find_or_unzip("train_vault")
-VAL_VAULT = find_or_unzip("val_vault")
+def locate_vault(vault_name):
+    # 1. Search recursively in /kaggle/input
+    if os.path.exists("/kaggle/input"):
+        for root, dirs, files in os.walk("/kaggle/input"):
+            if vault_name in dirs:
+                p = os.path.join(root, vault_name)
+                print(f"Found {vault_name} directory at: {p}")
+                return p
+            if f"{vault_name}.zip" in files:
+                zip_p = os.path.join(root, f"{vault_name}.zip")
+                print(f"Found {vault_name}.zip at: {zip_p}, unzipping to {WORK_DIR}...")
+                with zipfile.ZipFile(zip_p, "r") as z:
+                    z.extractall(WORK_DIR)
+                return os.path.join(WORK_DIR, vault_name)
+    # 2. Search local candidate locations
+    cand_roots = [
+        "Stage 12 Multilingual BPE/data_v3",
+        "Stage 12 Multilingual BPE/kaggle_dataset_v3",
+        "data_v3",
+        "kaggle_dataset_v3",
+        WORK_DIR
+    ]
+    for cr in cand_roots:
+        cand_dir = os.path.join(cr, vault_name)
+        if os.path.exists(cand_dir) and os.path.isdir(cand_dir):
+            return cand_dir
+        cand_zip = os.path.join(cr, f"{vault_name}.zip")
+        if os.path.exists(cand_zip):
+            with zipfile.ZipFile(cand_zip, "r") as z:
+                z.extractall(WORK_DIR)
+            return os.path.join(WORK_DIR, vault_name)
+    raise FileNotFoundError(f"Cannot locate {vault_name} in /kaggle/input or local paths.")
 
 def find_file(fname):
-    for root in [DATA_ROOT, WORK_DIR, os.path.join(DATA_ROOT, ".."), "."]:
-        cand = os.path.join(root, fname)
+    if os.path.exists("/kaggle/input"):
+        for root, dirs, files in os.walk("/kaggle/input"):
+            if fname in files:
+                p = os.path.join(root, fname)
+                print(f"Found {fname} at: {p}")
+                return p
+    for cr in [
+        "Stage 12 Multilingual BPE",
+        "Stage 12 Multilingual BPE/data_v3",
+        "Stage 12 Multilingual BPE/kaggle_dataset_v3",
+        "Stage 11 Production Engine/canonical_datasets/common_eval",
+        WORK_DIR,
+        "."
+    ]:
+        cand = os.path.join(cr, fname)
         if os.path.exists(cand):
             return cand
-    for p in glob.glob(f"/kaggle/input/**/{fname}", recursive=True):
-        return p
-    return fname
+    raise FileNotFoundError(f"Cannot locate {fname}")
 
+TRAIN_VAULT = locate_vault("train_vault")
+VAL_VAULT = locate_vault("val_vault")
 TOK16K_PATH = find_file("ebrain_tokenizer_16k.json")
 ALICE_PATH = find_file("alice_common_val.txt")
 

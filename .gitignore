@@ -12,3 +12,6 @@ kaggle_key.local
 .env
 *.zip
 *.pdf
+raw_cache/
+kaggle_dataset/
+
