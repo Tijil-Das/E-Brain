@@ -1,0 +1,117 @@
+name: E-Brain Daily Training Trigger
+on:
+  schedule:
+    # 02:00 IST = 20:30 UTC  (runs every day)
+    - cron: '30 20 * * *'
+  workflow_dispatch:   # allow manual trigger from GitHub UI
+
+jobs:
+  trigger-training:
+    runs-on: ubuntu-latest
+    timeout-minutes: 720   # 12 h upper bound (Kaggle session finishes within 4 h)
+
+    steps:
+      # ── 0. Install Kaggle CLI ────────────────────────────────────────────────
+      - name: Install Kaggle CLI
+        run: pip install --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY:      ${{ secrets.KAGGLE_KEY }}
+        run: |
+          mkdir -p ~/.kaggle
+          echo '{"username":"'"$KAGGLE_USERNAME"'","key":"'"$KAGGLE_KEY"'"}' > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
+
+      # ── 1. Check control flag ────────────────────────────────────────────────
+      - name: Check control flag
+        id: control_check
+        env:
+          WORKER_URL: ${{ secrets.WORKER_URL }}
+        run: |
+          CTRL=$(curl -sf "$WORKER_URL/control" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['control'])" 2>/dev/null || echo "RUN")
+          echo "control=$CTRL" >> $GITHUB_OUTPUT
+          echo "Control flag: $CTRL"
+          if [ "$CTRL" = "PAUSE" ] || [ "$CTRL" = "STOP" ]; then
+            echo "Flag is $CTRL — skipping today's session."
+            exit 0
+          fi
+
+      # ── 2. Check step count ──────────────────────────────────────────────────
+      - name: Check step count
+        if: steps.control_check.outputs.control == 'RUN'
+        id: step_check
+        env:
+          WORKER_URL: ${{ secrets.WORKER_URL }}
+        run: |
+          STEP=$(curl -sf "$WORKER_URL/status" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('step',0))" 2>/dev/null || echo "0")
+          echo "step=$STEP" >> $GITHUB_OUTPUT
+          echo "Current step: $STEP / 73242"
+          if [ "$STEP" -ge 73242 ]; then
+            echo "Training complete (step >= 73242). Skipping."
+            exit 0
+          fi
+
+      # ── 3. Checkout repo ─────────────────────────────────────────────────────
+      - name: Checkout repository
+        if: steps.control_check.outputs.control == 'RUN'
+        uses: actions/checkout@v4
+
+      # ── 4. Push training kernel ──────────────────────────────────────────────
+      - name: Push training kernel to Kaggle
+        if: steps.control_check.outputs.control == 'RUN'
+        id: push_kernel
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY:      ${{ secrets.KAGGLE_KEY }}
+        run: |
+          cd orchestrator/kaggle_training_kernel
+          kaggle kernels push -p .
+          echo "Kernel pushed."
+
+      # ── 5. Poll kernel status ────────────────────────────────────────────────
+      - name: Poll kernel until complete
+        if: steps.control_check.outputs.control == 'RUN'
+        id: poll_kernel
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY:      ${{ secrets.KAGGLE_KEY }}
+        run: |
+          # Kernel slug = {KAGGLE_USERNAME}/{kernel-slug-from-metadata}
+          KERNEL_SLUG=$(python3 -c "import json; d=json.load(open('orchestrator/kaggle_training_kernel/kernel-metadata.json')); print(d['id'])")
+          echo "Polling kernel: $KERNEL_SLUG"
+          for i in $(seq 1 240); do
+            sleep 90
+            STATUS=$(kaggle kernels status "$KERNEL_SLUG" 2>&1 | tail -1)
+            echo "[$i] Status: $STATUS"
+            if echo "$STATUS" | grep -q "complete\|COMPLETE"; then
+              echo "kernel_status=COMPLETE" >> $GITHUB_OUTPUT
+              echo "Kernel completed successfully."
+              exit 0
+            fi
+            if echo "$STATUS" | grep -q "error\|ERROR\|cancel\|CANCEL"; then
+              echo "kernel_status=ERROR" >> $GITHUB_OUTPUT
+              echo "Kernel failed or was cancelled."
+              exit 1
+            fi
+          done
+          echo "kernel_status=TIMEOUT" >> $GITHUB_OUTPUT
+          echo "Poll timeout after 360 min."
+          exit 1
+
+      # ── 6. Alert on failure ──────────────────────────────────────────────────
+      - name: Alert on kernel failure
+        if: failure() && steps.control_check.outputs.control == 'RUN'
+        env:
+          WORKER_URL:      ${{ secrets.WORKER_URL }}
+          DASHBOARD_TOKEN: ${{ secrets.DASHBOARD_TOKEN }}
+        run: |
+          STEP=${{ steps.step_check.outputs.step || '?' }}
+          MSG="❌ GitHub Actions: training kernel failed or timed out. Last step: $STEP. Manual check required."
+          curl -sf -X POST "$WORKER_URL/heartbeat" \
+            -H "Content-Type: application/json" \
+            -H "X-Token: $DASHBOARD_TOKEN" \
+            -d "{\"step\":0,\"loss\":0,\"lr\":0,\"tok_s\":0,\"vram_gb\":0,\"eta_h\":0,\"nan_alert\":false,\"loss_spike\":false,\"val_alert\":null,\"lang_gap_alert\":null,\"actions_alert\":\"$MSG\"}" \
+            || true
+          echo "Alert sent to Worker."

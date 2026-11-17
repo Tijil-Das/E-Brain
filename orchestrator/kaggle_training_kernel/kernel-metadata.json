@@ -1,0 +1,18 @@
+{
+  "id": "TRAINING_KAGGLE_USERNAME/ebrain-100m-daily-train",
+  "title": "EBrain 100M Daily Train",
+  "code_file": "train.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": [
+    "TRAINING_KAGGLE_USERNAME/ebrain-data-binary",
+    "TRAINING_KAGGLE_USERNAME/ebrain-checkpoints",
+    "TRAINING_KAGGLE_USERNAME/ebrain-val-vault",
+    "TRAINING_KAGGLE_USERNAME/ebrain-tokenizer"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

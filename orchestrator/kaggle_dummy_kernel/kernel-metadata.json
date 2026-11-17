@@ -1,0 +1,13 @@
+{
+  "id": "TRAINING_KAGGLE_USERNAME/ebrain-dummy-gate-d1",
+  "title": "EBrain Dummy Gate D1",
+  "code_file": "dummy_train.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": true,
+  "enable_gpu": true,
+  "enable_internet": true,
+  "dataset_sources": [],
+  "competition_sources": [],
+  "kernel_sources": []
+}
