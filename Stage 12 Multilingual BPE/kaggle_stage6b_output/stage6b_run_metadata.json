@@ -1,0 +1,56 @@
+{
+  "run_id": "stage6b_250mb_full_1794858288",
+  "run_mode": "FULL",
+  "git_commit": "f6a8390",
+  "parameters": {
+    "total": 8814848,
+    "non_embedding": 4718848,
+    "tied_embedding": 4096000,
+    "mlp_width": 682,
+    "formula": "12 * D^2"
+  },
+  "tokens": {
+    "total_corpus_bytes": 229129614,
+    "total_corpus_tokens": 65252701,
+    "tokens_trained": 176291840,
+    "final_epoch": 2
+  },
+  "hashes": {
+    "tokenizer_16k_sha256": "41cb92f102d2a11dbde826c54f09b487a27c4a157be0f179ea09682ad04344bf",
+    "tokenizer_8k_sha256": "00b002bbc515fee3aaec67325738ea92c9bda4d23d4af1bf261850d9896a9467",
+    "train_vault_data_hashes": {
+      "en": "46d22ac32d2b66d821fc12335ea48c6a5bc6570e7b6487bae3b9110451becd55",
+      "es": "fba870230896bcc8a0bb14d115874f1c264c34e3e392362ecfdbcce25e9634ab",
+      "ru": "e0540904a76647610836897b0617cf65d1764023b0d44d684b043ec994c500a1",
+      "fr": "1fbc387a0882afcb54ba4fe8f2d6b19308abd2ca27fe3e981c5bea3293133a4b",
+      "de": "56ccad1e560ec56e12b5296d3d77faa4e911834d037cfa88629c8e72681c6400",
+      "ja": "205e7115c04e2f03d53b86e4a59ee6c8b71f74e1b8220dd7427e5255b2513a40",
+      "zh": "b428e5385310a6138c804a8ce45e44f4f9d379f88619c821253a7c2256227176",
+      "hi": "d2e7eedd154555801507600a7e583b6a2171521b8187992321d34130a71b8620",
+      "bn": "0dcc3454ff7c0c97e966da989becf8b290c277daaaf80f101e0c871ef31eb3ec",
+      "ar": "75c52a3d3af0958c6f64e417185da1f2b64ac218a56675731cf45142513698e9"
+    }
+  },
+  "retained_checkpoints": {
+    "checkpoint_step_20000.pt": {
+      "size_bytes": 106252387,
+      "sha256": "ece5f286c2cf7893fc4adde3497c563f93ece3064234eff59e695b7c4c0f2a68"
+    },
+    "checkpoint_best.pt": {
+      "size_bytes": 106252323,
+      "sha256": "8fcac6510d9d5e563747e04299560e68770ef6cec82289ca39a9d91f400c87dc"
+    },
+    "checkpoint_step_10000.pt": {
+      "size_bytes": 106252387,
+      "sha256": "9af938121e70f26845992f14ad166ae8f0699687da49b2ab0a514f426dff431b"
+    },
+    "stage6b_checkpoint_step_10000.pt": {
+      "size_bytes": 106267547,
+      "sha256": "273b28fa437e5537dc4b3e75ced864b08a72db88156b2662129eb7b1c765b881"
+    },
+    "checkpoint_step_21520.pt": {
+      "size_bytes": 106252323,
+      "sha256": "8fcac6510d9d5e563747e04299560e68770ef6cec82289ca39a9d91f400c87dc"
+    }
+  }
+}

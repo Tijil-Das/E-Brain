@@ -1,0 +1,610 @@
+[{"stream_name":"stdout","time":9.769651591,"data":"================================================================================\n"}
+,{"stream_name":"stdout","time":9.769712973,"data":"STAGE 6b: 250 MB MULTILINGUAL PRETRAINING \u0026 SEAM INVARIANT RUN\n"}
+,{"stream_name":"stdout","time":9.76972008,"data":"Run ID: stage6b_250mb_full_1794858288 | Mode: FULL | Target Steps: 21520\n"}
+,{"stream_name":"stdout","time":9.769723986,"data":"Commit: f6a8390\n"}
+,{"stream_name":"stdout","time":9.769728047,"data":"================================================================================\n"}
+,{"stream_name":"stdout","time":10.012094728,"data":"Device: cuda\n"}
+,{"stream_name":"stdout","time":10.046664431,"data":"GPU: Tesla T4\n"}
+,{"stream_name":"stdout","time":10.046691468,"data":"VRAM: 14.56 GB\n"}
+,{"stream_name":"stdout","time":10.320980536,"data":"16K Tokenizer SHA-256: 41cb92f102d2a11dbde826c54f09b487a27c4a157be0f179ea09682ad04344bf\n"}
+,{"stream_name":"stdout","time":10.321019951,"data":"8K  Tokenizer SHA-256: 00b002bbc515fee3aaec67325738ea92c9bda4d23d4af1bf261850d9896a9467\n"}
+,{"stream_name":"stdout","time":10.871623247,"data":"Model Parameters: Total=8,814,848 | Non-Embedding=4,718,848 | Tied=4,096,000\n"}
+,{"stream_name":"stdout","time":10.871693279,"data":"\n"}
+,{"stream_name":"stdout","time":10.871698676,"data":"Ingesting full 250 MB certified multilingual training corpus...\n"}
+,{"stream_name":"stdout","time":31.718947534,"data":"  EN: 23,590,397 bytes | 7,159,977 tokens (3.29 B/tok)\n"}
+,{"stream_name":"stdout","time":52.955619513,"data":"  ES: 23,598,466 bytes | 7,135,794 tokens (3.31 B/tok)\n"}
+,{"stream_name":"stdout","time":69.02776779,"data":"  RU: 22,318,667 bytes | 4,873,263 tokens (4.58 B/tok)\n"}
+,{"stream_name":"stdout","time":91.232605801,"data":"  FR: 23,846,856 bytes | 7,660,429 tokens (3.11 B/tok)\n"}
+,{"stream_name":"stdout","time":111.64492209,"data":"  DE: 23,812,306 bytes | 7,593,504 tokens (3.14 B/tok)\n"}
+,{"stream_name":"stdout","time":126.739091247,"data":"  JA: 21,834,866 bytes | 5,936,344 tokens (3.68 B/tok)\n"}
+,{"stream_name":"stdout","time":144.146476444,"data":"  ZH: 23,197,787 bytes | 7,697,739 tokens (3.01 B/tok)\n"}
+,{"stream_name":"stdout","time":164.1488337,"data":"  HI: 21,670,585 bytes | 5,833,079 tokens (3.72 B/tok)\n"}
+,{"stream_name":"stdout","time":184.337890173,"data":"  BN: 21,544,888 bytes | 6,020,423 tokens (3.58 B/tok)\n"}
+,{"stream_name":"stdout","time":202.116462663,"data":"  AR: 23,714,796 bytes | 5,342,149 tokens (4.44 B/tok)\n"}
+,{"stream_name":"stdout","time":202.170750826,"data":"Total Pretraining Stream: 229,129,614 bytes | 65,252,701 tokens\n"}
+,{"stream_name":"stdout","time":202.171031742,"data":"\n"}
+,{"stream_name":"stdout","time":202.171058468,"data":"Ingesting validation streams...\n"}
+,{"stream_name":"stdout","time":214.46957261,"data":"Alice English Val: 50,001 bytes | 18,890 tokens\n"}
+,{"stream_name":"stdout","time":220.269920408,"data":"\n"}
+,{"stream_name":"stdout","time":220.269947177,"data":"Starting Pretraining to step 21520 (Warmup: 500, Schedule Target: 21520)...\n"}
+,{"stream_name":"stdout","time":222.332014612,"data":"  Step     1/21520 | Epoch 0.0 | Train Loss: 9.7325 | LR: 1.60e-06 | GPU Step: 2053.2 ms (3,990 tok/s)\n"}
+,{"stream_name":"stdout","time":231.017645472,"data":"  Step   100/21520 | Epoch 0.0 | Train Loss: 8.5412 | LR: 1.60e-04 | GPU Step: 107.0 ms (76,534 tok/s)\n"}
+,{"stream_name":"stdout","time":239.765535572,"data":"  Step   200/21520 | Epoch 0.0 | Train Loss: 6.9681 | LR: 3.20e-04 | GPU Step: 87.1 ms (94,024 tok/s)\n"}
+,{"stream_name":"stdout","time":248.569780817,"data":"  Step   300/21520 | Epoch 0.0 | Train Loss: 5.9393 | LR: 4.80e-04 | GPU Step: 87.7 ms (93,417 tok/s)\n"}
+,{"stream_name":"stdout","time":257.432525873,"data":"  Step   400/21520 | Epoch 0.0 | Train Loss: 6.5719 | LR: 6.40e-04 | GPU Step: 88.3 ms (92,805 tok/s)\n"}
+,{"stream_name":"stdout","time":266.340815402,"data":"  Step   500/21520 | Epoch 0.0 | Train Loss: 5.6614 | LR: 8.00e-04 | GPU Step: 88.7 ms (92,323 tok/s)\n"}
+,{"stream_name":"stdout","time":275.300353508,"data":"  Step   600/21520 | Epoch 0.0 | Train Loss: 5.7824 | LR: 8.00e-04 | GPU Step: 89.2 ms (91,792 tok/s)\n"}
+,{"stream_name":"stdout","time":284.307492976,"data":"  Step   700/21520 | Epoch 0.0 | Train Loss: 5.3975 | LR: 8.00e-04 | GPU Step: 89.7 ms (91,305 tok/s)\n"}
+,{"stream_name":"stdout","time":293.364379307,"data":"  Step   800/21520 | Epoch 0.1 | Train Loss: 4.7623 | LR: 8.00e-04 | GPU Step: 90.2 ms (90,794 tok/s)\n"}
+,{"stream_name":"stdout","time":302.46142003,"data":"  Step   900/21520 | Epoch 0.1 | Train Loss: 5.1498 | LR: 7.99e-04 | GPU Step: 90.6 ms (90,392 tok/s)\n"}
+,{"stream_name":"stdout","time":311.538752664,"data":"  Step  1000/21520 | Epoch 0.1 | Train Loss: 4.6309 | LR: 7.99e-04 | GPU Step: 90.4 ms (90,605 tok/s)\n"}
+,{"stream_name":"stdout","time":320.56284909,"data":"  Step  1100/21520 | Epoch 0.1 | Train Loss: 4.9344 | LR: 7.99e-04 | GPU Step: 89.9 ms (91,145 tok/s)\n"}
+,{"stream_name":"stdout","time":329.564143299,"data":"  Step  1200/21520 | Epoch 0.1 | Train Loss: 5.0146 | LR: 7.98e-04 | GPU Step: 89.7 ms (91,370 tok/s)\n"}
+,{"stream_name":"stdout","time":338.536942787,"data":"  Step  1300/21520 | Epoch 0.1 | Train Loss: 4.7226 | LR: 7.97e-04 | GPU Step: 89.4 ms (91,657 tok/s)\n"}
+,{"stream_name":"stdout","time":347.498539336,"data":"  Step  1400/21520 | Epoch 0.1 | Train Loss: 4.6464 | LR: 7.97e-04 | GPU Step: 89.3 ms (91,769 tok/s)\n"}
+,{"stream_name":"stdout","time":356.464951,"data":"  Step  1500/21520 | Epoch 0.1 | Train Loss: 4.5072 | LR: 7.96e-04 | GPU Step: 89.3 ms (91,726 tok/s)\n"}
+,{"stream_name":"stdout","time":365.433623586,"data":"  Step  1600/21520 | Epoch 0.2 | Train Loss: 4.7671 | LR: 7.95e-04 | GPU Step: 89.3 ms (91,706 tok/s)\n"}
+,{"stream_name":"stdout","time":374.416761326,"data":"  Step  1700/21520 | Epoch 0.2 | Train Loss: 4.5935 | LR: 7.94e-04 | GPU Step: 89.5 ms (91,556 tok/s)\n"}
+,{"stream_name":"stdout","time":383.412236819,"data":"  Step  1800/21520 | Epoch 0.2 | Train Loss: 4.3072 | LR: 7.93e-04 | GPU Step: 89.6 ms (91,438 tok/s)\n"}
+,{"stream_name":"stdout","time":392.415665483,"data":"  Step  1900/21520 | Epoch 0.2 | Train Loss: 4.6195 | LR: 7.92e-04 | GPU Step: 89.7 ms (91,351 tok/s)\n"}
+,{"stream_name":"stdout","time":401.42472609,"data":"  Step  2000/21520 | Epoch 0.2 | Train Loss: 4.4179 | LR: 7.91e-04 | GPU Step: 89.7 ms (91,291 tok/s)\n"}
+,{"stream_name":"stdout","time":401.424777843,"data":"\n"}
+,{"stream_name":"stdout","time":401.424784471,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":401.424789966,"data":"CHECKPOINT EVALUATION AT STEP 2000 / 21520 [FAST (~200k toks/lang)]\n"}
+,{"stream_name":"stdout","time":401.424795335,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":434.565397679,"data":"  Progress       : 16,384,000 tokens trained (0.2 epochs)\n"}
+,{"stream_name":"stdout","time":434.565449066,"data":"  Throughput     : 89.7 ms/step (91,291 tok/s) [Eval overhead: 33.1 s]\n"}
+,{"stream_name":"stdout","time":434.565457428,"data":"  Train Loss     : 4.4179 nats | Fixed Train BPB (Eval mode): 2.0628\n"}
+,{"stream_name":"stdout","time":434.565463063,"data":"  Mean Val BPB   : 1.8655\n"}
+,{"stream_name":"stdout","time":434.565468078,"data":"  Val/Train Gap  : -0.1973 BPB (Rule: \u003c 0.10)\n"}
+,{"stream_name":"stdout","time":434.565488832,"data":"  Alice BPB      : 3.0347 (Improving check)\n"}
+,{"stream_name":"stdout","time":434.56549265,"data":"  Learning Rate  : 7.9099e-04\n"}
+,{"stream_name":"stdout","time":434.565495968,"data":"\n"}
+,{"stream_name":"stdout","time":434.565499242,"data":"  Per-Language Val BPB:\n"}
+,{"stream_name":"stdout","time":434.565505301,"data":"    EN: 2.2321 bpb (Delta: +0.0000)\n"}
+,{"stream_name":"stdout","time":434.565508982,"data":"    ES: 2.0666 bpb (Delta: +0.0000)\n"}
+,{"stream_name":"stdout","time":434.565512842,"data":"    RU: 1.3424 bpb (Delta: +0.0000)\n"}
+,{"stream_name":"stdout","time":434.565515886,"data":"    FR: 2.0785 bpb (Delta: +0.0000)\n"}
+,{"stream_name":"stdout","time":434.565530854,"data":"    DE: 2.2603 bpb (Delta: +0.0000)\n"}
+,{"stream_name":"stdout","time":434.565534364,"data":"    JA: 2.0991 bpb (Delta: +0.0000)\n"}
+,{"stream_name":"stdout","time":434.565537725,"data":"    ZH: 2.8098 bpb (Delta: +0.0000)\n"}
+,{"stream_name":"stdout","time":434.565540667,"data":"    HI: 1.0818 bpb (Delta: +0.0000)\n"}
+,{"stream_name":"stdout","time":434.565543712,"data":"    BN: 1.0817 bpb (Delta: +0.0000)\n"}
+,{"stream_name":"stdout","time":434.565547404,"data":"    AR: 1.6025 bpb (Delta: +0.0000)\n"}
+,{"stream_name":"stdout","time":434.988549783,"data":"\n"}
+,{"stream_name":"stdout","time":434.988587848,"data":"  Sample Generation:\n"}
+,{"stream_name":"stdout","time":434.988591664,"data":"    \"In science and mathematics, the universe of the community in the eurozone, and is also been used by the east of the newspap\"\n"}
+,{"stream_name":"stdout","time":435.152229084,"data":"  [New Best Val BPB: 1.8655] Saved to /kaggle/working/checkpoint_best.pt\n"}
+,{"stream_name":"stdout","time":435.152260963,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":435.152265918,"data":"\n"}
+,{"stream_name":"stdout","time":444.164640437,"data":"  Step  2100/21520 | Epoch 0.2 | Train Loss: 4.1639 | LR: 7.90e-04 | GPU Step: 89.8 ms (91,255 tok/s)\n"}
+,{"stream_name":"stdout","time":453.235563989,"data":"  Step  2200/21520 | Epoch 0.2 | Train Loss: 4.0898 | LR: 7.88e-04 | GPU Step: 90.4 ms (90,667 tok/s)\n"}
+,{"stream_name":"stdout","time":462.372537137,"data":"  Step  2300/21520 | Epoch 0.2 | Train Loss: 4.1558 | LR: 7.87e-04 | GPU Step: 91.0 ms (90,001 tok/s)\n"}
+,{"stream_name":"stdout","time":471.483896701,"data":"  Step  2400/21520 | Epoch 0.3 | Train Loss: 4.4213 | LR: 7.86e-04 | GPU Step: 90.8 ms (90,259 tok/s)\n"}
+,{"stream_name":"stdout","time":480.524716434,"data":"  Step  2500/21520 | Epoch 0.3 | Train Loss: 3.5094 | LR: 7.84e-04 | GPU Step: 90.1 ms (90,955 tok/s)\n"}
+,{"stream_name":"stdout","time":489.539280573,"data":"  Step  2600/21520 | Epoch 0.3 | Train Loss: 3.9208 | LR: 7.82e-04 | GPU Step: 89.8 ms (91,242 tok/s)\n"}
+,{"stream_name":"stdout","time":498.516771162,"data":"  Step  2700/21520 | Epoch 0.3 | Train Loss: 4.1193 | LR: 7.81e-04 | GPU Step: 89.4 ms (91,602 tok/s)\n"}
+,{"stream_name":"stdout","time":507.47804637,"data":"  Step  2800/21520 | Epoch 0.3 | Train Loss: 4.1909 | LR: 7.79e-04 | GPU Step: 89.3 ms (91,764 tok/s)\n"}
+,{"stream_name":"stdout","time":516.441738371,"data":"  Step  2900/21520 | Epoch 0.3 | Train Loss: 4.2787 | LR: 7.77e-04 | GPU Step: 89.3 ms (91,746 tok/s)\n"}
+,{"stream_name":"stdout","time":525.403924509,"data":"  Step  3000/21520 | Epoch 0.3 | Train Loss: 3.8171 | LR: 7.75e-04 | GPU Step: 89.3 ms (91,758 tok/s)\n"}
+,{"stream_name":"stdout","time":534.383495295,"data":"  Step  3100/21520 | Epoch 0.3 | Train Loss: 4.3723 | LR: 7.73e-04 | GPU Step: 89.5 ms (91,579 tok/s)\n"}
+,{"stream_name":"stdout","time":543.393992964,"data":"  Step  3200/21520 | Epoch 0.4 | Train Loss: 4.3357 | LR: 7.71e-04 | GPU Step: 89.7 ms (91,278 tok/s)\n"}
+,{"stream_name":"stdout","time":552.420480207,"data":"  Step  3300/21520 | Epoch 0.4 | Train Loss: 4.2854 | LR: 7.69e-04 | GPU Step: 89.9 ms (91,109 tok/s)\n"}
+,{"stream_name":"stdout","time":561.447966043,"data":"  Step  3400/21520 | Epoch 0.4 | Train Loss: 3.7196 | LR: 7.67e-04 | GPU Step: 89.9 ms (91,094 tok/s)\n"}
+,{"stream_name":"stdout","time":570.462841535,"data":"  Step  3500/21520 | Epoch 0.4 | Train Loss: 3.9969 | LR: 7.64e-04 | GPU Step: 89.8 ms (91,216 tok/s)\n"}
+,{"stream_name":"stdout","time":579.475876734,"data":"  Step  3600/21520 | Epoch 0.4 | Train Loss: 3.9540 | LR: 7.62e-04 | GPU Step: 89.8 ms (91,246 tok/s)\n"}
+,{"stream_name":"stdout","time":588.473007534,"data":"  Step  3700/21520 | Epoch 0.4 | Train Loss: 4.4299 | LR: 7.60e-04 | GPU Step: 89.6 ms (91,406 tok/s)\n"}
+,{"stream_name":"stdout","time":597.467209758,"data":"  Step  3800/21520 | Epoch 0.4 | Train Loss: 3.7601 | LR: 7.57e-04 | GPU Step: 89.6 ms (91,429 tok/s)\n"}
+,{"stream_name":"stdout","time":606.459167758,"data":"  Step  3900/21520 | Epoch 0.4 | Train Loss: 3.9551 | LR: 7.55e-04 | GPU Step: 89.6 ms (91,459 tok/s)\n"}
+,{"stream_name":"stdout","time":615.446723155,"data":"  Step  4000/21520 | Epoch 0.5 | Train Loss: 3.7774 | LR: 7.52e-04 | GPU Step: 89.5 ms (91,504 tok/s)\n"}
+,{"stream_name":"stdout","time":615.446777353,"data":"\n"}
+,{"stream_name":"stdout","time":615.446784826,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":615.446790179,"data":"CHECKPOINT EVALUATION AT STEP 4000 / 21520 [FAST (~200k toks/lang)]\n"}
+,{"stream_name":"stdout","time":615.446795325,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":648.30703965,"data":"  Progress       : 32,768,000 tokens trained (0.5 epochs)\n"}
+,{"stream_name":"stdout","time":648.30709112,"data":"  Throughput     : 89.5 ms/step (91,504 tok/s) [Eval overhead: 32.9 s]\n"}
+,{"stream_name":"stdout","time":648.307098946,"data":"  Train Loss     : 3.7774 nats | Fixed Train BPB (Eval mode): 1.9214\n"}
+,{"stream_name":"stdout","time":648.307104825,"data":"  Mean Val BPB   : 1.7390\n"}
+,{"stream_name":"stdout","time":648.307110627,"data":"  Val/Train Gap  : -0.1824 BPB (Rule: \u003c 0.10)\n"}
+,{"stream_name":"stdout","time":648.307115968,"data":"  Alice BPB      : 2.9108 (Improving check)\n"}
+,{"stream_name":"stdout","time":648.307120568,"data":"  Learning Rate  : 7.5186e-04\n"}
+,{"stream_name":"stdout","time":648.30712473,"data":"\n"}
+,{"stream_name":"stdout","time":648.307129118,"data":"  Per-Language Val BPB:\n"}
+,{"stream_name":"stdout","time":648.307143963,"data":"    EN: 2.0936 bpb (Delta: -0.1385)\n"}
+,{"stream_name":"stdout","time":648.307147596,"data":"    ES: 1.9437 bpb (Delta: -0.1229)\n"}
+,{"stream_name":"stdout","time":648.307150519,"data":"    RU: 1.2287 bpb (Delta: -0.1137)\n"}
+,{"stream_name":"stdout","time":648.307153411,"data":"    FR: 1.9391 bpb (Delta: -0.1394)\n"}
+,{"stream_name":"stdout","time":648.307156251,"data":"    DE: 2.0864 bpb (Delta: -0.1739)\n"}
+,{"stream_name":"stdout","time":648.30715923,"data":"    JA: 1.9704 bpb (Delta: -0.1288)\n"}
+,{"stream_name":"stdout","time":648.307162139,"data":"    ZH: 2.6309 bpb (Delta: -0.1789)\n"}
+,{"stream_name":"stdout","time":648.307165065,"data":"    HI: 0.9935 bpb (Delta: -0.0884)\n"}
+,{"stream_name":"stdout","time":648.307167945,"data":"    BN: 1.0031 bpb (Delta: -0.0785)\n"}
+,{"stream_name":"stdout","time":648.307178445,"data":"    AR: 1.5010 bpb (Delta: -0.1015)\n"}
+,{"stream_name":"stdout","time":648.448671246,"data":"\n"}
+,{"stream_name":"stdout","time":648.448728814,"data":"  Sample Generation:\n"}
+,{"stream_name":"stdout","time":648.448735466,"data":"    \"In science and mathematics, the universe is the only a fighte of the easy with a threat that they have been analystle\"\n"}
+,{"stream_name":"stdout","time":648.627763134,"data":"  [New Best Val BPB: 1.7390] Saved to /kaggle/working/checkpoint_best.pt\n"}
+,{"stream_name":"stdout","time":648.627797311,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":648.627803088,"data":"\n"}
+,{"stream_name":"stdout","time":657.624640435,"data":"  Step  4100/21520 | Epoch 0.5 | Train Loss: 3.8539 | LR: 7.49e-04 | GPU Step: 89.6 ms (91,414 tok/s)\n"}
+,{"stream_name":"stdout","time":666.682843729,"data":"  Step  4200/21520 | Epoch 0.5 | Train Loss: 3.9862 | LR: 7.46e-04 | GPU Step: 90.2 ms (90,793 tok/s)\n"}
+,{"stream_name":"stdout","time":675.813466863,"data":"  Step  4300/21520 | Epoch 0.5 | Train Loss: 3.8971 | LR: 7.43e-04 | GPU Step: 91.0 ms (90,062 tok/s)\n"}
+,{"stream_name":"stdout","time":684.953981849,"data":"  Step  4400/21520 | Epoch 0.5 | Train Loss: 4.1818 | LR: 7.41e-04 | GPU Step: 91.1 ms (89,968 tok/s)\n"}
+,{"stream_name":"stdout","time":694.005152624,"data":"  Step  4500/21520 | Epoch 0.5 | Train Loss: 4.1748 | LR: 7.38e-04 | GPU Step: 90.2 ms (90,851 tok/s)\n"}
+,{"stream_name":"stdout","time":703.021690588,"data":"  Step  4600/21520 | Epoch 0.5 | Train Loss: 4.0233 | LR: 7.34e-04 | GPU Step: 89.8 ms (91,209 tok/s)\n"}
+,{"stream_name":"stdout","time":712.01674047,"data":"  Step  4700/21520 | Epoch 0.5 | Train Loss: 4.1138 | LR: 7.31e-04 | GPU Step: 89.6 ms (91,424 tok/s)\n"}
+,{"stream_name":"stdout","time":720.984527636,"data":"  Step  4800/21520 | Epoch 0.6 | Train Loss: 4.1556 | LR: 7.28e-04 | GPU Step: 89.3 ms (91,707 tok/s)\n"}
+,{"stream_name":"stdout","time":729.956646486,"data":"  Step  4900/21520 | Epoch 0.6 | Train Loss: 3.9831 | LR: 7.25e-04 | GPU Step: 89.4 ms (91,663 tok/s)\n"}
+,{"stream_name":"stdout","time":738.92914069,"data":"  Step  5000/21520 | Epoch 0.6 | Train Loss: 4.3425 | LR: 7.22e-04 | GPU Step: 89.4 ms (91,656 tok/s)\n"}
+,{"stream_name":"stdout","time":747.903745193,"data":"  Step  5100/21520 | Epoch 0.6 | Train Loss: 4.0720 | LR: 7.18e-04 | GPU Step: 89.4 ms (91,633 tok/s)\n"}
+,{"stream_name":"stdout","time":756.908461609,"data":"  Step  5200/21520 | Epoch 0.6 | Train Loss: 4.0257 | LR: 7.15e-04 | GPU Step: 89.7 ms (91,334 tok/s)\n"}
+,{"stream_name":"stdout","time":765.920032727,"data":"  Step  5300/21520 | Epoch 0.6 | Train Loss: 3.9162 | LR: 7.11e-04 | GPU Step: 89.8 ms (91,260 tok/s)\n"}
+,{"stream_name":"stdout","time":774.940620527,"data":"  Step  5400/21520 | Epoch 0.6 | Train Loss: 3.6336 | LR: 7.08e-04 | GPU Step: 89.9 ms (91,168 tok/s)\n"}
+,{"stream_name":"stdout","time":783.961439249,"data":"  Step  5500/21520 | Epoch 0.6 | Train Loss: 4.1485 | LR: 7.04e-04 | GPU Step: 89.9 ms (91,169 tok/s)\n"}
+,{"stream_name":"stdout","time":792.976733544,"data":"  Step  5600/21520 | Epoch 0.7 | Train Loss: 3.6255 | LR: 7.00e-04 | GPU Step: 89.8 ms (91,218 tok/s)\n"}
+,{"stream_name":"stdout","time":801.996018931,"data":"  Step  5700/21520 | Epoch 0.7 | Train Loss: 3.8379 | LR: 6.97e-04 | GPU Step: 89.8 ms (91,229 tok/s)\n"}
+,{"stream_name":"stdout","time":811.014274751,"data":"  Step  5800/21520 | Epoch 0.7 | Train Loss: 3.5998 | LR: 6.93e-04 | GPU Step: 89.8 ms (91,218 tok/s)\n"}
+,{"stream_name":"stdout","time":820.021939194,"data":"  Step  5900/21520 | Epoch 0.7 | Train Loss: 3.7889 | LR: 6.89e-04 | GPU Step: 89.7 ms (91,313 tok/s)\n"}
+,{"stream_name":"stdout","time":829.03538866,"data":"  Step  6000/21520 | Epoch 0.7 | Train Loss: 3.7944 | LR: 6.85e-04 | GPU Step: 89.8 ms (91,265 tok/s)\n"}
+,{"stream_name":"stdout","time":829.035447333,"data":"\n"}
+,{"stream_name":"stdout","time":829.035452477,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":829.035456227,"data":"CHECKPOINT EVALUATION AT STEP 6000 / 21520 [FAST (~200k toks/lang)]\n"}
+,{"stream_name":"stdout","time":829.035460089,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":862.051810643,"data":"  Progress       : 49,152,000 tokens trained (0.7 epochs)\n"}
+,{"stream_name":"stdout","time":862.05186609,"data":"  Throughput     : 89.8 ms/step (91,265 tok/s) [Eval overhead: 33.0 s]\n"}
+,{"stream_name":"stdout","time":862.051872375,"data":"  Train Loss     : 3.7944 nats | Fixed Train BPB (Eval mode): 1.8056\n"}
+,{"stream_name":"stdout","time":862.051875699,"data":"  Mean Val BPB   : 1.6614\n"}
+,{"stream_name":"stdout","time":862.051878705,"data":"  Val/Train Gap  : -0.1442 BPB (Rule: \u003c 0.10)\n"}
+,{"stream_name":"stdout","time":862.051882187,"data":"  Alice BPB      : 2.9106 (Improving check)\n"}
+,{"stream_name":"stdout","time":862.051885203,"data":"  Learning Rate  : 6.8507e-04\n"}
+,{"stream_name":"stdout","time":862.051888442,"data":"\n"}
+,{"stream_name":"stdout","time":862.051891221,"data":"  Per-Language Val BPB:\n"}
+,{"stream_name":"stdout","time":862.051894088,"data":"    EN: 1.9579 bpb (Delta: -0.1357)\n"}
+,{"stream_name":"stdout","time":862.05189704,"data":"    ES: 1.8443 bpb (Delta: -0.0994)\n"}
+,{"stream_name":"stdout","time":862.051899936,"data":"    RU: 1.1491 bpb (Delta: -0.0796)\n"}
+,{"stream_name":"stdout","time":862.051903233,"data":"    FR: 1.8494 bpb (Delta: -0.0897)\n"}
+,{"stream_name":"stdout","time":862.051918388,"data":"    DE: 1.9713 bpb (Delta: -0.1151)\n"}
+,{"stream_name":"stdout","time":862.051923728,"data":"    JA: 1.9037 bpb (Delta: -0.0667)\n"}
+,{"stream_name":"stdout","time":862.051928541,"data":"    ZH: 2.5632 bpb (Delta: -0.0677)\n"}
+,{"stream_name":"stdout","time":862.05193337,"data":"    HI: 0.9562 bpb (Delta: -0.0373)\n"}
+,{"stream_name":"stdout","time":862.051938083,"data":"    BN: 0.9665 bpb (Delta: -0.0366)\n"}
+,{"stream_name":"stdout","time":862.051942275,"data":"    AR: 1.4523 bpb (Delta: -0.0487)\n"}
+,{"stream_name":"stdout","time":862.195326286,"data":"\n"}
+,{"stream_name":"stdout","time":862.195355422,"data":"  Sample Generation:\n"}
+,{"stream_name":"stdout","time":862.195362299,"data":"    \"In science and mathematics, the universe, and her family he held a human rights.\r\n"}
+,{"stream_name":"stdout","time":862.195367823,"data":"She is a black, with the exception, and\"\n"}
+,{"stream_name":"stdout","time":862.377882735,"data":"  [New Best Val BPB: 1.6614] Saved to /kaggle/working/checkpoint_best.pt\n"}
+,{"stream_name":"stdout","time":862.377916099,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":862.377922331,"data":"\n"}
+,{"stream_name":"stdout","time":871.378957738,"data":"  Step  6100/21520 | Epoch 0.7 | Train Loss: 3.7235 | LR: 6.81e-04 | GPU Step: 89.6 ms (91,390 tok/s)\n"}
+,{"stream_name":"stdout","time":880.438410235,"data":"  Step  6200/21520 | Epoch 0.7 | Train Loss: 3.2999 | LR: 6.77e-04 | GPU Step: 90.2 ms (90,787 tok/s)\n"}
+,{"stream_name":"stdout","time":889.57650254,"data":"  Step  6300/21520 | Epoch 0.7 | Train Loss: 4.0054 | LR: 6.73e-04 | GPU Step: 91.0 ms (90,012 tok/s)\n"}
+,{"stream_name":"stdout","time":898.707191615,"data":"  Step  6400/21520 | Epoch 0.8 | Train Loss: 4.0472 | LR: 6.69e-04 | GPU Step: 90.9 ms (90,079 tok/s)\n"}
+,{"stream_name":"stdout","time":907.764405042,"data":"  Step  6500/21520 | Epoch 0.8 | Train Loss: 3.8089 | LR: 6.65e-04 | GPU Step: 90.2 ms (90,815 tok/s)\n"}
+,{"stream_name":"stdout","time":916.786890263,"data":"  Step  6600/21520 | Epoch 0.8 | Train Loss: 4.1090 | LR: 6.60e-04 | GPU Step: 89.9 ms (91,163 tok/s)\n"}
+,{"stream_name":"stdout","time":925.784482877,"data":"  Step  6700/21520 | Epoch 0.8 | Train Loss: 3.7698 | LR: 6.56e-04 | GPU Step: 89.6 ms (91,415 tok/s)\n"}
+,{"stream_name":"stdout","time":934.768238617,"data":"  Step  6800/21520 | Epoch 0.8 | Train Loss: 3.8949 | LR: 6.52e-04 | GPU Step: 89.5 ms (91,560 tok/s)\n"}
+,{"stream_name":"stdout","time":943.742909537,"data":"  Step  6900/21520 | Epoch 0.8 | Train Loss: 3.7248 | LR: 6.47e-04 | GPU Step: 89.4 ms (91,650 tok/s)\n"}
+,{"stream_name":"stdout","time":952.714380422,"data":"  Step  7000/21520 | Epoch 0.8 | Train Loss: 3.7501 | LR: 6.43e-04 | GPU Step: 89.4 ms (91,682 tok/s)\n"}
+,{"stream_name":"stdout","time":961.696929999,"data":"  Step  7100/21520 | Epoch 0.8 | Train Loss: 3.6955 | LR: 6.39e-04 | GPU Step: 89.5 ms (91,579 tok/s)\n"}
+,{"stream_name":"stdout","time":970.701702447,"data":"  Step  7200/21520 | Epoch 0.9 | Train Loss: 3.7347 | LR: 6.34e-04 | GPU Step: 89.7 ms (91,345 tok/s)\n"}
+,{"stream_name":"stdout","time":979.726512156,"data":"  Step  7300/21520 | Epoch 0.9 | Train Loss: 3.6090 | LR: 6.30e-04 | GPU Step: 89.9 ms (91,140 tok/s)\n"}
+,{"stream_name":"stdout","time":988.758380521,"data":"  Step  7400/21520 | Epoch 0.9 | Train Loss: 3.7895 | LR: 6.25e-04 | GPU Step: 90.0 ms (91,069 tok/s)\n"}
+,{"stream_name":"stdout","time":997.793693731,"data":"  Step  7500/21520 | Epoch 0.9 | Train Loss: 3.7373 | LR: 6.20e-04 | GPU Step: 90.0 ms (91,036 tok/s)\n"}
+,{"stream_name":"stdout","time":1006.814848176,"data":"  Step  7600/21520 | Epoch 0.9 | Train Loss: 3.7677 | LR: 6.16e-04 | GPU Step: 89.8 ms (91,183 tok/s)\n"}
+,{"stream_name":"stdout","time":1015.827724586,"data":"  Step  7700/21520 | Epoch 0.9 | Train Loss: 3.6961 | LR: 6.11e-04 | GPU Step: 89.8 ms (91,260 tok/s)\n"}
+,{"stream_name":"stdout","time":1024.844125311,"data":"  Step  7800/21520 | Epoch 0.9 | Train Loss: 3.3235 | LR: 6.06e-04 | GPU Step: 89.8 ms (91,227 tok/s)\n"}
+,{"stream_name":"stdout","time":1033.857250846,"data":"  Step  7900/21520 | Epoch 0.9 | Train Loss: 3.8116 | LR: 6.01e-04 | GPU Step: 89.8 ms (91,260 tok/s)\n"}
+,{"stream_name":"stdout","time":1039.71284299,"data":"\n"}
+,{"stream_name":"stdout","time":1039.712879853,"data":"[EPOCH BOUNDARY CROSSED] Advanced to Epoch 1 (Re-seeded RNG: 1042)\n"}
+,{"stream_name":"stdout","time":1042.865651512,"data":"  Step  8000/21520 | Epoch 1.0 | Train Loss: 3.5575 | LR: 5.97e-04 | GPU Step: 89.7 ms (91,316 tok/s)\n"}
+,{"stream_name":"stdout","time":1042.865690795,"data":"\n"}
+,{"stream_name":"stdout","time":1042.865696767,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1042.865701578,"data":"CHECKPOINT EVALUATION AT STEP 8000 / 21520 [FAST (~200k toks/lang)]\n"}
+,{"stream_name":"stdout","time":1042.86570978,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1075.816188911,"data":"  Progress       : 65,536,000 tokens trained (1.0 epochs)\n"}
+,{"stream_name":"stdout","time":1075.81624183,"data":"  Throughput     : 89.7 ms/step (91,316 tok/s) [Eval overhead: 33.0 s]\n"}
+,{"stream_name":"stdout","time":1075.816246683,"data":"  Train Loss     : 3.5575 nats | Fixed Train BPB (Eval mode): 1.7491\n"}
+,{"stream_name":"stdout","time":1075.816249885,"data":"  Mean Val BPB   : 1.5957\n"}
+,{"stream_name":"stdout","time":1075.816252928,"data":"  Val/Train Gap  : -0.1533 BPB (Rule: \u003c 0.10)\n"}
+,{"stream_name":"stdout","time":1075.816256289,"data":"  Alice BPB      : 2.9177 (Improving check)\n"}
+,{"stream_name":"stdout","time":1075.816297383,"data":"  Learning Rate  : 5.9654e-04\n"}
+,{"stream_name":"stdout","time":1075.81630216,"data":"\n"}
+,{"stream_name":"stdout","time":1075.816305405,"data":"  Per-Language Val BPB:\n"}
+,{"stream_name":"stdout","time":1075.816311203,"data":"    EN: 1.8782 bpb (Delta: -0.0797)\n"}
+,{"stream_name":"stdout","time":1075.816330601,"data":"    ES: 1.7823 bpb (Delta: -0.0620)\n"}
+,{"stream_name":"stdout","time":1075.816334713,"data":"    RU: 1.1024 bpb (Delta: -0.0466)\n"}
+,{"stream_name":"stdout","time":1075.816338734,"data":"    FR: 1.7842 bpb (Delta: -0.0652)\n"}
+,{"stream_name":"stdout","time":1075.816342257,"data":"    DE: 1.8937 bpb (Delta: -0.0777)\n"}
+,{"stream_name":"stdout","time":1075.816345836,"data":"    JA: 1.8186 bpb (Delta: -0.0851)\n"}
+,{"stream_name":"stdout","time":1075.81634945,"data":"    ZH: 2.4345 bpb (Delta: -0.1287)\n"}
+,{"stream_name":"stdout","time":1075.816352737,"data":"    HI: 0.9334 bpb (Delta: -0.0228)\n"}
+,{"stream_name":"stdout","time":1075.816356026,"data":"    BN: 0.9393 bpb (Delta: -0.0272)\n"}
+,{"stream_name":"stdout","time":1075.816359404,"data":"    AR: 1.3908 bpb (Delta: -0.0615)\n"}
+,{"stream_name":"stdout","time":1075.963722069,"data":"\n"}
+,{"stream_name":"stdout","time":1075.963759532,"data":"  Sample Generation:\n"}
+,{"stream_name":"stdout","time":1075.96376397,"data":"    \"In science and mathematics, the universe coordinate as well as a whole.\r\n"}
+,{"stream_name":"stdout","time":1075.963768187,"data":"Patin was a private-sectorate product\"\n"}
+,{"stream_name":"stdout","time":1076.149251928,"data":"  [New Best Val BPB: 1.5957] Saved to /kaggle/working/checkpoint_best.pt\n"}
+,{"stream_name":"stdout","time":1076.149282945,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1076.149287837,"data":"\n"}
+,{"stream_name":"stdout","time":1085.151467779,"data":"  Step  8100/21520 | Epoch 1.0 | Train Loss: 3.6916 | LR: 5.92e-04 | GPU Step: 89.6 ms (91,379 tok/s)\n"}
+,{"stream_name":"stdout","time":1094.211706698,"data":"  Step  8200/21520 | Epoch 1.0 | Train Loss: 3.9822 | LR: 5.87e-04 | GPU Step: 90.2 ms (90,785 tok/s)\n"}
+,{"stream_name":"stdout","time":1103.3495499,"data":"  Step  8300/21520 | Epoch 1.0 | Train Loss: 3.8627 | LR: 5.82e-04 | GPU Step: 91.0 ms (90,002 tok/s)\n"}
+,{"stream_name":"stdout","time":1112.484372317,"data":"  Step  8400/21520 | Epoch 1.0 | Train Loss: 3.8798 | LR: 5.77e-04 | GPU Step: 91.0 ms (90,038 tok/s)\n"}
+,{"stream_name":"stdout","time":1121.538262256,"data":"  Step  8500/21520 | Epoch 1.0 | Train Loss: 3.4755 | LR: 5.72e-04 | GPU Step: 90.2 ms (90,848 tok/s)\n"}
+,{"stream_name":"stdout","time":1130.557728638,"data":"  Step  8600/21520 | Epoch 1.0 | Train Loss: 3.5390 | LR: 5.67e-04 | GPU Step: 89.8 ms (91,193 tok/s)\n"}
+,{"stream_name":"stdout","time":1139.544840444,"data":"  Step  8700/21520 | Epoch 1.0 | Train Loss: 3.5641 | LR: 5.62e-04 | GPU Step: 89.5 ms (91,525 tok/s)\n"}
+,{"stream_name":"stdout","time":1148.514199416,"data":"  Step  8800/21520 | Epoch 1.1 | Train Loss: 3.6131 | LR: 5.57e-04 | GPU Step: 89.3 ms (91,704 tok/s)\n"}
+,{"stream_name":"stdout","time":1157.489709306,"data":"  Step  8900/21520 | Epoch 1.1 | Train Loss: 3.9996 | LR: 5.52e-04 | GPU Step: 89.4 ms (91,646 tok/s)\n"}
+,{"stream_name":"stdout","time":1166.473201788,"data":"  Step  9000/21520 | Epoch 1.1 | Train Loss: 3.3624 | LR: 5.47e-04 | GPU Step: 89.5 ms (91,572 tok/s)\n"}
+,{"stream_name":"stdout","time":1175.467989403,"data":"  Step  9100/21520 | Epoch 1.1 | Train Loss: 3.5100 | LR: 5.41e-04 | GPU Step: 89.6 ms (91,448 tok/s)\n"}
+,{"stream_name":"stdout","time":1184.476217671,"data":"  Step  9200/21520 | Epoch 1.1 | Train Loss: 3.6736 | LR: 5.36e-04 | GPU Step: 89.7 ms (91,317 tok/s)\n"}
+,{"stream_name":"stdout","time":1193.495372247,"data":"  Step  9300/21520 | Epoch 1.1 | Train Loss: 3.5303 | LR: 5.31e-04 | GPU Step: 89.8 ms (91,199 tok/s)\n"}
+,{"stream_name":"stdout","time":1202.536458751,"data":"  Step  9400/21520 | Epoch 1.1 | Train Loss: 3.6931 | LR: 5.26e-04 | GPU Step: 90.0 ms (91,014 tok/s)\n"}
+,{"stream_name":"stdout","time":1211.586497393,"data":"  Step  9500/21520 | Epoch 1.1 | Train Loss: 3.7069 | LR: 5.21e-04 | GPU Step: 90.1 ms (90,946 tok/s)\n"}
+,{"stream_name":"stdout","time":1220.624729439,"data":"  Step  9600/21520 | Epoch 1.2 | Train Loss: 3.6364 | LR: 5.15e-04 | GPU Step: 90.0 ms (91,053 tok/s)\n"}
+,{"stream_name":"stdout","time":1229.655292751,"data":"  Step  9700/21520 | Epoch 1.2 | Train Loss: 3.5956 | LR: 5.10e-04 | GPU Step: 89.9 ms (91,133 tok/s)\n"}
+,{"stream_name":"stdout","time":1238.651429136,"data":"  Step  9800/21520 | Epoch 1.2 | Train Loss: 3.4151 | LR: 5.05e-04 | GPU Step: 89.6 ms (91,421 tok/s)\n"}
+,{"stream_name":"stdout","time":1247.653147071,"data":"  Step  9900/21520 | Epoch 1.2 | Train Loss: 3.4317 | LR: 4.99e-04 | GPU Step: 89.7 ms (91,357 tok/s)\n"}
+,{"stream_name":"stdout","time":1256.643288885,"data":"  Step 10000/21520 | Epoch 1.2 | Train Loss: 3.8691 | LR: 4.94e-04 | GPU Step: 89.6 ms (91,477 tok/s)\n"}
+,{"stream_name":"stdout","time":1256.643351267,"data":"\n"}
+,{"stream_name":"stdout","time":1256.643361708,"data":"================================================================================\n"}
+,{"stream_name":"stdout","time":1256.643365008,"data":"SEAM REACHED: STEP 10000. Performing Cross-Session Invariant Verification...\n"}
+,{"stream_name":"stdout","time":1256.643369212,"data":"================================================================================\n"}
+,{"stream_name":"stdout","time":1257.024592213,"data":"Seam Checkpoint Saved: /kaggle/working/stage6b_checkpoint_step_10000.pt (SHA-256: 273b28fa437e5537...)\n"}
+,{"stream_name":"stdout","time":1257.024627244,"data":"Seam LR Recorded: 4.941365e-04 (Warmup complete, cosine active)\n"}
+,{"stream_name":"stdout","time":1258.880538881,"data":"\n"}
+,{"stream_name":"stdout","time":1258.880585291,"data":"CROSS-SESSION CONTINUITY VERIFICATION (STEPS 10,001 -\u003e 10,010):\n"}
+,{"stream_name":"stdout","time":1258.880592871,"data":"  Step 10001 | Unint: 3.72771454 | Resumed: 3.72771454 | Diff: 0.00e+00 | Batch Hash: MATCH\n"}
+,{"stream_name":"stdout","time":1258.880598535,"data":"  Step 10002 | Unint: 3.77188540 | Resumed: 3.77190018 | Diff: 1.48e-05 | Batch Hash: MATCH\n"}
+,{"stream_name":"stdout","time":1258.880603685,"data":"  Step 10003 | Unint: 3.30392838 | Resumed: 3.30394030 | Diff: 1.19e-05 | Batch Hash: MATCH\n"}
+,{"stream_name":"stdout","time":1258.880608157,"data":"  Step 10004 | Unint: 3.93652415 | Resumed: 3.93655753 | Diff: 3.34e-05 | Batch Hash: MATCH\n"}
+,{"stream_name":"stdout","time":1258.880616239,"data":"  Step 10005 | Unint: 3.81149864 | Resumed: 3.81150723 | Diff: 8.58e-06 | Batch Hash: MATCH\n"}
+,{"stream_name":"stdout","time":1258.880620702,"data":"  Step 10006 | Unint: 3.88193893 | Resumed: 3.88184690 | Diff: 9.20e-05 | Batch Hash: MATCH\n"}
+,{"stream_name":"stdout","time":1258.880625144,"data":"  Step 10007 | Unint: 3.49150276 | Resumed: 3.49153614 | Diff: 3.34e-05 | Batch Hash: MATCH\n"}
+,{"stream_name":"stdout","time":1258.880631511,"data":"  Step 10008 | Unint: 3.66164112 | Resumed: 3.66166568 | Diff: 2.46e-05 | Batch Hash: MATCH\n"}
+,{"stream_name":"stdout","time":1258.88068455,"data":"  Step 10009 | Unint: 3.56035829 | Resumed: 3.56037569 | Diff: 1.74e-05 | Batch Hash: MATCH\n"}
+,{"stream_name":"stdout","time":1258.880693853,"data":"  Step 10010 | Unint: 3.77818131 | Resumed: 3.77818751 | Diff: 6.20e-06 | Batch Hash: MATCH\n"}
+,{"stream_name":"stdout","time":1258.880715498,"data":"\n"}
+,{"stream_name":"stdout","time":1258.880719192,"data":"Maximum Seam Loss Difference: 9.20e-05\n"}
+,{"stream_name":"stdout","time":1258.880722396,"data":"\u003e\u003e\u003e SEAM INVARIANT VERIFICATION: PASSED (Exact Continuity Within FP16 Atomic Accumulation Tolerance)\n"}
+,{"stream_name":"stdout","time":1258.919298651,"data":"Restored model and stream back to Step 10,000. Outer loop resuming to Step 10,001.\n"}
+,{"stream_name":"stdout","time":1258.919344033,"data":"================================================================================\n"}
+,{"stream_name":"stdout","time":1258.919351498,"data":"\n"}
+,{"stream_name":"stdout","time":1258.919355307,"data":"\n"}
+,{"stream_name":"stdout","time":1258.91935914,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1258.919362354,"data":"CHECKPOINT EVALUATION AT STEP 10000 / 21520 [FULL (1.5 MB/lang)]\n"}
+,{"stream_name":"stdout","time":1258.919365619,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1336.620455796,"data":"  Progress       : 81,920,000 tokens trained (1.2 epochs)\n"}
+,{"stream_name":"stdout","time":1336.62050421,"data":"  Throughput     : 89.6 ms/step (91,477 tok/s) [Eval overhead: 77.7 s]\n"}
+,{"stream_name":"stdout","time":1336.620690801,"data":"  Train Loss     : 3.8691 nats | Fixed Train BPB (Eval mode): 1.6983\n"}
+,{"stream_name":"stdout","time":1336.62070568,"data":"  Mean Val BPB   : 1.5185\n"}
+,{"stream_name":"stdout","time":1336.620708979,"data":"  Val/Train Gap  : -0.1798 BPB (Rule: \u003c 0.10)\n"}
+,{"stream_name":"stdout","time":1336.620726426,"data":"  Alice BPB      : 2.9001 (Improving check)\n"}
+,{"stream_name":"stdout","time":1336.620731635,"data":"  Learning Rate  : 4.9414e-04\n"}
+,{"stream_name":"stdout","time":1336.620736724,"data":"\n"}
+,{"stream_name":"stdout","time":1336.620740962,"data":"  Per-Language Val BPB:\n"}
+,{"stream_name":"stdout","time":1336.620746014,"data":"    EN: 1.7504 bpb (Delta: -0.1278)\n"}
+,{"stream_name":"stdout","time":1336.620751263,"data":"    ES: 1.6171 bpb (Delta: -0.1651)\n"}
+,{"stream_name":"stdout","time":1336.620756789,"data":"    RU: 1.0189 bpb (Delta: -0.0835)\n"}
+,{"stream_name":"stdout","time":1336.620761408,"data":"    FR: 1.7312 bpb (Delta: -0.0529)\n"}
+,{"stream_name":"stdout","time":1336.620765776,"data":"    DE: 1.8479 bpb (Delta: -0.0458)\n"}
+,{"stream_name":"stdout","time":1336.620770575,"data":"    JA: 1.7347 bpb (Delta: -0.0839)\n"}
+,{"stream_name":"stdout","time":1336.620774461,"data":"    ZH: 2.3320 bpb (Delta: -0.1025)\n"}
+,{"stream_name":"stdout","time":1336.62077894,"data":"    HI: 0.9178 bpb (Delta: -0.0156)\n"}
+,{"stream_name":"stdout","time":1336.620783485,"data":"    BN: 0.8984 bpb (Delta: -0.0410)\n"}
+,{"stream_name":"stdout","time":1336.620787743,"data":"    AR: 1.3368 bpb (Delta: -0.0539)\n"}
+,{"stream_name":"stdout","time":1336.763856103,"data":"\n"}
+,{"stream_name":"stdout","time":1336.76387995,"data":"  Sample Generation:\n"}
+,{"stream_name":"stdout","time":1336.763885329,"data":"    \"In science and mathematics, the universe minister of the University of California. The Eastern World War, the National Academy of Philosophical Forum, was established\"\n"}
+,{"stream_name":"stdout","time":1336.962937366,"data":"  [New Best Val BPB: 1.5185] Saved to /kaggle/working/checkpoint_best.pt\n"}
+,{"stream_name":"stdout","time":1336.962974992,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1336.962989865,"data":"\n"}
+,{"stream_name":"stdout","time":1346.011680899,"data":"  Step 10100/21520 | Epoch 1.2 | Train Loss: 3.7245 | LR: 4.89e-04 | GPU Step: 90.1 ms (90,886 tok/s)\n"}
+,{"stream_name":"stdout","time":1355.142351207,"data":"  Step 10200/21520 | Epoch 1.2 | Train Loss: 3.2877 | LR: 4.83e-04 | GPU Step: 91.0 ms (90,064 tok/s)\n"}
+,{"stream_name":"stdout","time":1364.286567918,"data":"  Step 10300/21520 | Epoch 1.2 | Train Loss: 3.5580 | LR: 4.78e-04 | GPU Step: 91.1 ms (89,928 tok/s)\n"}
+,{"stream_name":"stdout","time":1373.347889257,"data":"  Step 10400/21520 | Epoch 1.3 | Train Loss: 3.8234 | LR: 4.73e-04 | GPU Step: 90.3 ms (90,756 tok/s)\n"}
+,{"stream_name":"stdout","time":1382.373475271,"data":"  Step 10500/21520 | Epoch 1.3 | Train Loss: 3.5475 | LR: 4.67e-04 | GPU Step: 89.9 ms (91,115 tok/s)\n"}
+,{"stream_name":"stdout","time":1391.35046619,"data":"  Step 10600/21520 | Epoch 1.3 | Train Loss: 3.5320 | LR: 4.62e-04 | GPU Step: 89.4 ms (91,604 tok/s)\n"}
+,{"stream_name":"stdout","time":1400.306793719,"data":"  Step 10700/21520 | Epoch 1.3 | Train Loss: 3.6129 | LR: 4.57e-04 | GPU Step: 89.2 ms (91,815 tok/s)\n"}
+,{"stream_name":"stdout","time":1409.262496377,"data":"  Step 10800/21520 | Epoch 1.3 | Train Loss: 3.5748 | LR: 4.51e-04 | GPU Step: 89.2 ms (91,823 tok/s)\n"}
+,{"stream_name":"stdout","time":1418.221374312,"data":"  Step 10900/21520 | Epoch 1.3 | Train Loss: 3.5692 | LR: 4.46e-04 | GPU Step: 89.3 ms (91,787 tok/s)\n"}
+,{"stream_name":"stdout","time":1427.194637124,"data":"  Step 11000/21520 | Epoch 1.3 | Train Loss: 3.4048 | LR: 4.41e-04 | GPU Step: 89.4 ms (91,651 tok/s)\n"}
+,{"stream_name":"stdout","time":1436.186610422,"data":"  Step 11100/21520 | Epoch 1.3 | Train Loss: 3.2875 | LR: 4.35e-04 | GPU Step: 89.6 ms (91,459 tok/s)\n"}
+,{"stream_name":"stdout","time":1445.204617706,"data":"  Step 11200/21520 | Epoch 1.4 | Train Loss: 3.6306 | LR: 4.30e-04 | GPU Step: 89.8 ms (91,194 tok/s)\n"}
+,{"stream_name":"stdout","time":1454.227456822,"data":"  Step 11300/21520 | Epoch 1.4 | Train Loss: 3.5777 | LR: 4.24e-04 | GPU Step: 89.9 ms (91,142 tok/s)\n"}
+,{"stream_name":"stdout","time":1463.240459314,"data":"  Step 11400/21520 | Epoch 1.4 | Train Loss: 3.4775 | LR: 4.19e-04 | GPU Step: 89.8 ms (91,235 tok/s)\n"}
+,{"stream_name":"stdout","time":1472.256438905,"data":"  Step 11500/21520 | Epoch 1.4 | Train Loss: 3.2799 | LR: 4.14e-04 | GPU Step: 89.8 ms (91,216 tok/s)\n"}
+,{"stream_name":"stdout","time":1481.25155526,"data":"  Step 11600/21520 | Epoch 1.4 | Train Loss: 3.6297 | LR: 4.08e-04 | GPU Step: 89.6 ms (91,425 tok/s)\n"}
+,{"stream_name":"stdout","time":1490.245387256,"data":"  Step 11700/21520 | Epoch 1.4 | Train Loss: 3.6313 | LR: 4.03e-04 | GPU Step: 89.6 ms (91,436 tok/s)\n"}
+,{"stream_name":"stdout","time":1499.234472655,"data":"  Step 11800/21520 | Epoch 1.4 | Train Loss: 3.1964 | LR: 3.98e-04 | GPU Step: 89.5 ms (91,488 tok/s)\n"}
+,{"stream_name":"stdout","time":1508.219704556,"data":"  Step 11900/21520 | Epoch 1.4 | Train Loss: 3.5482 | LR: 3.92e-04 | GPU Step: 89.5 ms (91,524 tok/s)\n"}
+,{"stream_name":"stdout","time":1517.209561386,"data":"  Step 12000/21520 | Epoch 1.5 | Train Loss: 3.5081 | LR: 3.87e-04 | GPU Step: 89.6 ms (91,480 tok/s)\n"}
+,{"stream_name":"stdout","time":1517.209621756,"data":"\n"}
+,{"stream_name":"stdout","time":1517.209629547,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1517.20963548,"data":"CHECKPOINT EVALUATION AT STEP 12000 / 21520 [FAST (~200k toks/lang)]\n"}
+,{"stream_name":"stdout","time":1517.209640554,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1550.153078211,"data":"  Progress       : 98,304,000 tokens trained (1.5 epochs)\n"}
+,{"stream_name":"stdout","time":1550.153131227,"data":"  Throughput     : 89.6 ms/step (91,480 tok/s) [Eval overhead: 32.9 s]\n"}
+,{"stream_name":"stdout","time":1550.153136066,"data":"  Train Loss     : 3.5081 nats | Fixed Train BPB (Eval mode): 1.6581\n"}
+,{"stream_name":"stdout","time":1550.153139757,"data":"  Mean Val BPB   : 1.5158\n"}
+,{"stream_name":"stdout","time":1550.153142783,"data":"  Val/Train Gap  : -0.1423 BPB (Rule: \u003c 0.10)\n"}
+,{"stream_name":"stdout","time":1550.153146245,"data":"  Alice BPB      : 2.8458 (Improving check)\n"}
+,{"stream_name":"stdout","time":1550.153149852,"data":"  Learning Rate  : 3.8693e-04\n"}
+,{"stream_name":"stdout","time":1550.153153462,"data":"\n"}
+,{"stream_name":"stdout","time":1550.153156972,"data":"  Per-Language Val BPB:\n"}
+,{"stream_name":"stdout","time":1550.153160001,"data":"    EN: 1.7824 bpb (Delta: +0.0320)\n"}
+,{"stream_name":"stdout","time":1550.153163339,"data":"    ES: 1.6999 bpb (Delta: +0.0828)\n"}
+,{"stream_name":"stdout","time":1550.153166771,"data":"    RU: 1.0395 bpb (Delta: +0.0206)\n"}
+,{"stream_name":"stdout","time":1550.153169858,"data":"    FR: 1.7130 bpb (Delta: -0.0183)\n"}
+,{"stream_name":"stdout","time":1550.153173116,"data":"    DE: 1.8127 bpb (Delta: -0.0352)\n"}
+,{"stream_name":"stdout","time":1550.153176197,"data":"    JA: 1.7327 bpb (Delta: -0.0020)\n"}
+,{"stream_name":"stdout","time":1550.153179293,"data":"    ZH: 2.2978 bpb (Delta: -0.0341)\n"}
+,{"stream_name":"stdout","time":1550.153182568,"data":"    HI: 0.8770 bpb (Delta: -0.0408)\n"}
+,{"stream_name":"stdout","time":1550.15318568,"data":"    BN: 0.8739 bpb (Delta: -0.0244)\n"}
+,{"stream_name":"stdout","time":1550.153188905,"data":"    AR: 1.3292 bpb (Delta: -0.0076)\n"}
+,{"stream_name":"stdout","time":1550.298356163,"data":"\n"}
+,{"stream_name":"stdout","time":1550.298390047,"data":"  Sample Generation:\n"}
+,{"stream_name":"stdout","time":1550.298393943,"data":"    \"In science and mathematics, the universe of the Soviet Union, and the Gulfate College de la DDD, that is considered a\"\n"}
+,{"stream_name":"stdout","time":1550.479959076,"data":"  [New Best Val BPB: 1.5158] Saved to /kaggle/working/checkpoint_best.pt\n"}
+,{"stream_name":"stdout","time":1550.479983177,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1550.479987652,"data":"\n"}
+,{"stream_name":"stdout","time":1559.477098926,"data":"  Step 12100/21520 | Epoch 1.5 | Train Loss: 3.4268 | LR: 3.82e-04 | GPU Step: 89.6 ms (91,409 tok/s)\n"}
+,{"stream_name":"stdout","time":1568.529516762,"data":"  Step 12200/21520 | Epoch 1.5 | Train Loss: 3.1973 | LR: 3.76e-04 | GPU Step: 90.2 ms (90,846 tok/s)\n"}
+,{"stream_name":"stdout","time":1577.663200659,"data":"  Step 12300/21520 | Epoch 1.5 | Train Loss: 3.3038 | LR: 3.71e-04 | GPU Step: 91.0 ms (90,036 tok/s)\n"}
+,{"stream_name":"stdout","time":1586.790194165,"data":"  Step 12400/21520 | Epoch 1.5 | Train Loss: 3.5456 | LR: 3.66e-04 | GPU Step: 90.9 ms (90,100 tok/s)\n"}
+,{"stream_name":"stdout","time":1595.83267824,"data":"  Step 12500/21520 | Epoch 1.5 | Train Loss: 3.4548 | LR: 3.60e-04 | GPU Step: 90.1 ms (90,943 tok/s)\n"}
+,{"stream_name":"stdout","time":1604.845480721,"data":"  Step 12600/21520 | Epoch 1.5 | Train Loss: 3.4366 | LR: 3.55e-04 | GPU Step: 89.8 ms (91,246 tok/s)\n"}
+,{"stream_name":"stdout","time":1613.828790229,"data":"  Step 12700/21520 | Epoch 1.5 | Train Loss: 3.4314 | LR: 3.50e-04 | GPU Step: 89.5 ms (91,550 tok/s)\n"}
+,{"stream_name":"stdout","time":1622.79447903,"data":"  Step 12800/21520 | Epoch 1.6 | Train Loss: 3.3524 | LR: 3.45e-04 | GPU Step: 89.3 ms (91,729 tok/s)\n"}
+,{"stream_name":"stdout","time":1631.749228709,"data":"  Step 12900/21520 | Epoch 1.6 | Train Loss: 3.2397 | LR: 3.40e-04 | GPU Step: 89.2 ms (91,831 tok/s)\n"}
+,{"stream_name":"stdout","time":1640.713955102,"data":"  Step 13000/21520 | Epoch 1.6 | Train Loss: 3.6492 | LR: 3.35e-04 | GPU Step: 89.3 ms (91,729 tok/s)\n"}
+,{"stream_name":"stdout","time":1649.69448771,"data":"  Step 13100/21520 | Epoch 1.6 | Train Loss: 3.3935 | LR: 3.29e-04 | GPU Step: 89.5 ms (91,566 tok/s)\n"}
+,{"stream_name":"stdout","time":1658.696382082,"data":"  Step 13200/21520 | Epoch 1.6 | Train Loss: 2.9183 | LR: 3.24e-04 | GPU Step: 89.7 ms (91,350 tok/s)\n"}
+,{"stream_name":"stdout","time":1667.708812443,"data":"  Step 13300/21520 | Epoch 1.6 | Train Loss: 3.5849 | LR: 3.19e-04 | GPU Step: 89.8 ms (91,247 tok/s)\n"}
+,{"stream_name":"stdout","time":1676.729961455,"data":"  Step 13400/21520 | Epoch 1.6 | Train Loss: 2.9763 | LR: 3.14e-04 | GPU Step: 89.9 ms (91,164 tok/s)\n"}
+,{"stream_name":"stdout","time":1685.743497304,"data":"  Step 13500/21520 | Epoch 1.6 | Train Loss: 3.5824 | LR: 3.09e-04 | GPU Step: 89.8 ms (91,243 tok/s)\n"}
+,{"stream_name":"stdout","time":1694.750865513,"data":"  Step 13600/21520 | Epoch 1.7 | Train Loss: 3.9599 | LR: 3.04e-04 | GPU Step: 89.7 ms (91,299 tok/s)\n"}
+,{"stream_name":"stdout","time":1703.756528454,"data":"  Step 13700/21520 | Epoch 1.7 | Train Loss: 3.8872 | LR: 2.99e-04 | GPU Step: 89.7 ms (91,317 tok/s)\n"}
+,{"stream_name":"stdout","time":1712.758949291,"data":"  Step 13800/21520 | Epoch 1.7 | Train Loss: 3.3672 | LR: 2.94e-04 | GPU Step: 89.7 ms (91,353 tok/s)\n"}
+,{"stream_name":"stdout","time":1721.756373585,"data":"  Step 13900/21520 | Epoch 1.7 | Train Loss: 3.7829 | LR: 2.89e-04 | GPU Step: 89.6 ms (91,403 tok/s)\n"}
+,{"stream_name":"stdout","time":1730.751990098,"data":"  Step 14000/21520 | Epoch 1.7 | Train Loss: 3.7139 | LR: 2.84e-04 | GPU Step: 89.6 ms (91,416 tok/s)\n"}
+,{"stream_name":"stdout","time":1730.75203262,"data":"\n"}
+,{"stream_name":"stdout","time":1730.752037159,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1730.752040596,"data":"CHECKPOINT EVALUATION AT STEP 14000 / 21520 [FAST (~200k toks/lang)]\n"}
+,{"stream_name":"stdout","time":1730.75205988,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1763.986029006,"data":"  Progress       : 114,688,000 tokens trained (1.7 epochs)\n"}
+,{"stream_name":"stdout","time":1763.986078968,"data":"  Throughput     : 89.6 ms/step (91,416 tok/s) [Eval overhead: 33.2 s]\n"}
+,{"stream_name":"stdout","time":1763.986087593,"data":"  Train Loss     : 3.7139 nats | Fixed Train BPB (Eval mode): 1.6263\n"}
+,{"stream_name":"stdout","time":1763.98609242,"data":"  Mean Val BPB   : 1.4901\n"}
+,{"stream_name":"stdout","time":1763.986097141,"data":"  Val/Train Gap  : -0.1362 BPB (Rule: \u003c 0.10)\n"}
+,{"stream_name":"stdout","time":1763.986102272,"data":"  Alice BPB      : 2.8496 (Improving check)\n"}
+,{"stream_name":"stdout","time":1763.986107144,"data":"  Learning Rate  : 2.8443e-04\n"}
+,{"stream_name":"stdout","time":1763.986112207,"data":"\n"}
+,{"stream_name":"stdout","time":1763.986116389,"data":"  Per-Language Val BPB:\n"}
+,{"stream_name":"stdout","time":1763.986124043,"data":"    EN: 1.7497 bpb (Delta: -0.0327)\n"}
+,{"stream_name":"stdout","time":1763.986128932,"data":"    ES: 1.6711 bpb (Delta: -0.0288)\n"}
+,{"stream_name":"stdout","time":1763.986133771,"data":"    RU: 1.0092 bpb (Delta: -0.0303)\n"}
+,{"stream_name":"stdout","time":1763.986138492,"data":"    FR: 1.6912 bpb (Delta: -0.0217)\n"}
+,{"stream_name":"stdout","time":1763.986153928,"data":"    DE: 1.7837 bpb (Delta: -0.0290)\n"}
+,{"stream_name":"stdout","time":1763.986260768,"data":"    JA: 1.7088 bpb (Delta: -0.0239)\n"}
+,{"stream_name":"stdout","time":1763.986320034,"data":"    ZH: 2.2627 bpb (Delta: -0.0351)\n"}
+,{"stream_name":"stdout","time":1763.986329105,"data":"    HI: 0.8540 bpb (Delta: -0.0230)\n"}
+,{"stream_name":"stdout","time":1763.98633319,"data":"    BN: 0.8573 bpb (Delta: -0.0166)\n"}
+,{"stream_name":"stdout","time":1763.986336842,"data":"    AR: 1.3129 bpb (Delta: -0.0163)\n"}
+,{"stream_name":"stdout","time":1764.128669596,"data":"\n"}
+,{"stream_name":"stdout","time":1764.128705582,"data":"  Sample Generation:\n"}
+,{"stream_name":"stdout","time":1764.128710545,"data":"    \"In science and mathematics, the universe rights, and the teacher (when notes that a child).\r\n"}
+,{"stream_name":"stdout","time":1764.128714665,"data":"A authentic, the human\"\n"}
+,{"stream_name":"stdout","time":1764.310391252,"data":"  [New Best Val BPB: 1.4901] Saved to /kaggle/working/checkpoint_best.pt\n"}
+,{"stream_name":"stdout","time":1764.310439768,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1764.310445495,"data":"\n"}
+,{"stream_name":"stdout","time":1773.301564428,"data":"  Step 14100/21520 | Epoch 1.7 | Train Loss: 3.5659 | LR: 2.80e-04 | GPU Step: 89.6 ms (91,469 tok/s)\n"}
+,{"stream_name":"stdout","time":1782.363679142,"data":"  Step 14200/21520 | Epoch 1.7 | Train Loss: 3.5065 | LR: 2.75e-04 | GPU Step: 90.3 ms (90,762 tok/s)\n"}
+,{"stream_name":"stdout","time":1791.492729873,"data":"  Step 14300/21520 | Epoch 1.7 | Train Loss: 3.7424 | LR: 2.70e-04 | GPU Step: 90.9 ms (90,087 tok/s)\n"}
+,{"stream_name":"stdout","time":1800.60240241,"data":"  Step 14400/21520 | Epoch 1.8 | Train Loss: 3.6829 | LR: 2.65e-04 | GPU Step: 90.7 ms (90,277 tok/s)\n"}
+,{"stream_name":"stdout","time":1809.644492432,"data":"  Step 14500/21520 | Epoch 1.8 | Train Loss: 3.2888 | LR: 2.61e-04 | GPU Step: 90.1 ms (90,947 tok/s)\n"}
+,{"stream_name":"stdout","time":1818.654785802,"data":"  Step 14600/21520 | Epoch 1.8 | Train Loss: 3.3391 | LR: 2.56e-04 | GPU Step: 89.8 ms (91,271 tok/s)\n"}
+,{"stream_name":"stdout","time":1827.634292827,"data":"  Step 14700/21520 | Epoch 1.8 | Train Loss: 3.6647 | LR: 2.51e-04 | GPU Step: 89.5 ms (91,576 tok/s)\n"}
+,{"stream_name":"stdout","time":1836.614243148,"data":"  Step 14800/21520 | Epoch 1.8 | Train Loss: 3.4027 | LR: 2.47e-04 | GPU Step: 89.4 ms (91,595 tok/s)\n"}
+,{"stream_name":"stdout","time":1845.603446073,"data":"  Step 14900/21520 | Epoch 1.8 | Train Loss: 3.5044 | LR: 2.42e-04 | GPU Step: 89.5 ms (91,547 tok/s)\n"}
+,{"stream_name":"stdout","time":1854.579412109,"data":"  Step 15000/21520 | Epoch 1.8 | Train Loss: 3.4477 | LR: 2.38e-04 | GPU Step: 89.4 ms (91,640 tok/s)\n"}
+,{"stream_name":"stdout","time":1863.56625846,"data":"  Step 15100/21520 | Epoch 1.8 | Train Loss: 3.2875 | LR: 2.33e-04 | GPU Step: 89.5 ms (91,531 tok/s)\n"}
+,{"stream_name":"stdout","time":1872.571182465,"data":"  Step 15200/21520 | Epoch 1.9 | Train Loss: 3.2422 | LR: 2.29e-04 | GPU Step: 89.7 ms (91,343 tok/s)\n"}
+,{"stream_name":"stdout","time":1881.598247165,"data":"  Step 15300/21520 | Epoch 1.9 | Train Loss: 3.5193 | LR: 2.25e-04 | GPU Step: 89.9 ms (91,124 tok/s)\n"}
+,{"stream_name":"stdout","time":1890.6312732,"data":"  Step 15400/21520 | Epoch 1.9 | Train Loss: 3.6183 | LR: 2.20e-04 | GPU Step: 90.0 ms (91,059 tok/s)\n"}
+,{"stream_name":"stdout","time":1899.664250133,"data":"  Step 15500/21520 | Epoch 1.9 | Train Loss: 3.4704 | LR: 2.16e-04 | GPU Step: 90.0 ms (91,059 tok/s)\n"}
+,{"stream_name":"stdout","time":1908.684543859,"data":"  Step 15600/21520 | Epoch 1.9 | Train Loss: 3.2489 | LR: 2.12e-04 | GPU Step: 89.8 ms (91,192 tok/s)\n"}
+,{"stream_name":"stdout","time":1917.698155753,"data":"  Step 15700/21520 | Epoch 1.9 | Train Loss: 3.1437 | LR: 2.08e-04 | GPU Step: 89.8 ms (91,249 tok/s)\n"}
+,{"stream_name":"stdout","time":1926.712745744,"data":"  Step 15800/21520 | Epoch 1.9 | Train Loss: 3.4769 | LR: 2.04e-04 | GPU Step: 89.8 ms (91,248 tok/s)\n"}
+,{"stream_name":"stdout","time":1935.71698401,"data":"  Step 15900/21520 | Epoch 1.9 | Train Loss: 3.6947 | LR: 2.00e-04 | GPU Step: 89.7 ms (91,354 tok/s)\n"}
+,{"stream_name":"stdout","time":1938.41986758,"data":"\n"}
+,{"stream_name":"stdout","time":1938.419916499,"data":"[EPOCH BOUNDARY CROSSED] Advanced to Epoch 2 (Re-seeded RNG: 2042)\n"}
+,{"stream_name":"stdout","time":1944.728270005,"data":"  Step 16000/21520 | Epoch 2.0 | Train Loss: 3.2846 | LR: 1.96e-04 | GPU Step: 89.7 ms (91,292 tok/s)\n"}
+,{"stream_name":"stdout","time":1944.728339304,"data":"\n"}
+,{"stream_name":"stdout","time":1944.728347745,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1944.728352781,"data":"CHECKPOINT EVALUATION AT STEP 16000 / 21520 [FAST (~200k toks/lang)]\n"}
+,{"stream_name":"stdout","time":1944.728357438,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1977.895482991,"data":"  Progress       : 131,072,000 tokens trained (2.0 epochs)\n"}
+,{"stream_name":"stdout","time":1977.895534304,"data":"  Throughput     : 89.7 ms/step (91,292 tok/s) [Eval overhead: 33.2 s]\n"}
+,{"stream_name":"stdout","time":1977.895541743,"data":"  Train Loss     : 3.2846 nats | Fixed Train BPB (Eval mode): 1.6024\n"}
+,{"stream_name":"stdout","time":1977.895547465,"data":"  Mean Val BPB   : 1.4704\n"}
+,{"stream_name":"stdout","time":1977.89555315,"data":"  Val/Train Gap  : -0.1320 BPB (Rule: \u003c 0.10)\n"}
+,{"stream_name":"stdout","time":1977.895558544,"data":"  Alice BPB      : 2.8341 (Improving check)\n"}
+,{"stream_name":"stdout","time":1977.895563,"data":"  Learning Rate  : 1.9572e-04\n"}
+,{"stream_name":"stdout","time":1977.895568127,"data":"\n"}
+,{"stream_name":"stdout","time":1977.895576027,"data":"  Per-Language Val BPB:\n"}
+,{"stream_name":"stdout","time":1977.895580385,"data":"    EN: 1.7256 bpb (Delta: -0.0240)\n"}
+,{"stream_name":"stdout","time":1977.895589936,"data":"    ES: 1.6519 bpb (Delta: -0.0192)\n"}
+,{"stream_name":"stdout","time":1977.895595314,"data":"    RU: 0.9971 bpb (Delta: -0.0122)\n"}
+,{"stream_name":"stdout","time":1977.895599814,"data":"    FR: 1.6679 bpb (Delta: -0.0233)\n"}
+,{"stream_name":"stdout","time":1977.89560442,"data":"    DE: 1.7580 bpb (Delta: -0.0257)\n"}
+,{"stream_name":"stdout","time":1977.895608576,"data":"    JA: 1.6892 bpb (Delta: -0.0196)\n"}
+,{"stream_name":"stdout","time":1977.895613434,"data":"    ZH: 2.2368 bpb (Delta: -0.0260)\n"}
+,{"stream_name":"stdout","time":1977.895618025,"data":"    HI: 0.8402 bpb (Delta: -0.0138)\n"}
+,{"stream_name":"stdout","time":1977.895632998,"data":"    BN: 0.8441 bpb (Delta: -0.0132)\n"}
+,{"stream_name":"stdout","time":1977.895637796,"data":"    AR: 1.2933 bpb (Delta: -0.0196)\n"}
+,{"stream_name":"stdout","time":1978.038109026,"data":"\n"}
+,{"stream_name":"stdout","time":1978.038141266,"data":"  Sample Generation:\n"}
+,{"stream_name":"stdout","time":1978.038147272,"data":"    \"In science and mathematics, the universe is the first term for everyone years as the first public media.\r\n"}
+,{"stream_name":"stdout","time":1978.038152365,"data":"In 2015, the UK's web\"\n"}
+,{"stream_name":"stdout","time":1978.225595253,"data":"  [New Best Val BPB: 1.4704] Saved to /kaggle/working/checkpoint_best.pt\n"}
+,{"stream_name":"stdout","time":1978.22562407,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":1978.225640688,"data":"\n"}
+,{"stream_name":"stdout","time":1987.226800622,"data":"  Step 16100/21520 | Epoch 2.0 | Train Loss: 3.3532 | LR: 1.92e-04 | GPU Step: 89.6 ms (91,386 tok/s)\n"}
+,{"stream_name":"stdout","time":1996.283147069,"data":"  Step 16200/21520 | Epoch 2.0 | Train Loss: 3.6100 | LR: 1.88e-04 | GPU Step: 90.2 ms (90,822 tok/s)\n"}
+,{"stream_name":"stdout","time":2005.406745746,"data":"  Step 16300/21520 | Epoch 2.0 | Train Loss: 3.5299 | LR: 1.84e-04 | GPU Step: 90.9 ms (90,156 tok/s)\n"}
+,{"stream_name":"stdout","time":2014.522856179,"data":"  Step 16400/21520 | Epoch 2.0 | Train Loss: 3.2707 | LR: 1.80e-04 | GPU Step: 90.8 ms (90,229 tok/s)\n"}
+,{"stream_name":"stdout","time":2023.57788975,"data":"  Step 16500/21520 | Epoch 2.0 | Train Loss: 3.4561 | LR: 1.77e-04 | GPU Step: 90.2 ms (90,834 tok/s)\n"}
+,{"stream_name":"stdout","time":2032.607056836,"data":"  Step 16600/21520 | Epoch 2.0 | Train Loss: 3.2845 | LR: 1.73e-04 | GPU Step: 89.9 ms (91,101 tok/s)\n"}
+,{"stream_name":"stdout","time":2041.601767517,"data":"  Step 16700/21520 | Epoch 2.0 | Train Loss: 3.4767 | LR: 1.69e-04 | GPU Step: 89.6 ms (91,455 tok/s)\n"}
+,{"stream_name":"stdout","time":2050.576974486,"data":"  Step 16800/21520 | Epoch 2.1 | Train Loss: 3.2282 | LR: 1.66e-04 | GPU Step: 89.4 ms (91,642 tok/s)\n"}
+,{"stream_name":"stdout","time":2059.546322157,"data":"  Step 16900/21520 | Epoch 2.1 | Train Loss: 3.2450 | LR: 1.62e-04 | GPU Step: 89.3 ms (91,708 tok/s)\n"}
+,{"stream_name":"stdout","time":2068.516119713,"data":"  Step 17000/21520 | Epoch 2.1 | Train Loss: 3.3480 | LR: 1.59e-04 | GPU Step: 89.3 ms (91,709 tok/s)\n"}
+,{"stream_name":"stdout","time":2077.494725255,"data":"  Step 17100/21520 | Epoch 2.1 | Train Loss: 3.7244 | LR: 1.56e-04 | GPU Step: 89.4 ms (91,615 tok/s)\n"}
+,{"stream_name":"stdout","time":2086.494266017,"data":"  Step 17200/21520 | Epoch 2.1 | Train Loss: 3.3574 | LR: 1.52e-04 | GPU Step: 89.6 ms (91,396 tok/s)\n"}
+,{"stream_name":"stdout","time":2095.521883349,"data":"  Step 17300/21520 | Epoch 2.1 | Train Loss: 3.4024 | LR: 1.49e-04 | GPU Step: 89.9 ms (91,122 tok/s)\n"}
+,{"stream_name":"stdout","time":2104.561531799,"data":"  Step 17400/21520 | Epoch 2.1 | Train Loss: 3.2496 | LR: 1.46e-04 | GPU Step: 90.0 ms (90,998 tok/s)\n"}
+,{"stream_name":"stdout","time":2113.58167616,"data":"  Step 17500/21520 | Epoch 2.1 | Train Loss: 3.1996 | LR: 1.43e-04 | GPU Step: 89.8 ms (91,189 tok/s)\n"}
+,{"stream_name":"stdout","time":2122.602036934,"data":"  Step 17600/21520 | Epoch 2.2 | Train Loss: 3.2450 | LR: 1.40e-04 | GPU Step: 89.8 ms (91,186 tok/s)\n"}
+,{"stream_name":"stdout","time":2131.612401415,"data":"  Step 17700/21520 | Epoch 2.2 | Train Loss: 3.4135 | LR: 1.37e-04 | GPU Step: 89.8 ms (91,276 tok/s)\n"}
+,{"stream_name":"stdout","time":2140.613188372,"data":"  Step 17800/21520 | Epoch 2.2 | Train Loss: 3.5679 | LR: 1.34e-04 | GPU Step: 89.7 ms (91,375 tok/s)\n"}
+,{"stream_name":"stdout","time":2149.618875544,"data":"  Step 17900/21520 | Epoch 2.2 | Train Loss: 3.2879 | LR: 1.31e-04 | GPU Step: 89.7 ms (91,335 tok/s)\n"}
+,{"stream_name":"stdout","time":2158.621729063,"data":"  Step 18000/21520 | Epoch 2.2 | Train Loss: 3.1734 | LR: 1.29e-04 | GPU Step: 89.7 ms (91,360 tok/s)\n"}
+,{"stream_name":"stdout","time":2158.621814982,"data":"\n"}
+,{"stream_name":"stdout","time":2158.621823121,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":2158.621828131,"data":"CHECKPOINT EVALUATION AT STEP 18000 / 21520 [FAST (~200k toks/lang)]\n"}
+,{"stream_name":"stdout","time":2158.62183287,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":2191.684405852,"data":"  Progress       : 147,456,000 tokens trained (2.2 epochs)\n"}
+,{"stream_name":"stdout","time":2191.684465693,"data":"  Throughput     : 89.7 ms/step (91,360 tok/s) [Eval overhead: 33.1 s]\n"}
+,{"stream_name":"stdout","time":2191.684470885,"data":"  Train Loss     : 3.1734 nats | Fixed Train BPB (Eval mode): 1.5850\n"}
+,{"stream_name":"stdout","time":2191.684474299,"data":"  Mean Val BPB   : 1.4568\n"}
+,{"stream_name":"stdout","time":2191.684477732,"data":"  Val/Train Gap  : -0.1282 BPB (Rule: \u003c 0.10)\n"}
+,{"stream_name":"stdout","time":2191.684481033,"data":"  Alice BPB      : 2.8105 (Improving check)\n"}
+,{"stream_name":"stdout","time":2191.684484373,"data":"  Learning Rate  : 1.2868e-04\n"}
+,{"stream_name":"stdout","time":2191.684487701,"data":"\n"}
+,{"stream_name":"stdout","time":2191.684491605,"data":"  Per-Language Val BPB:\n"}
+,{"stream_name":"stdout","time":2191.684494777,"data":"    EN: 1.7078 bpb (Delta: -0.0178)\n"}
+,{"stream_name":"stdout","time":2191.684498079,"data":"    ES: 1.6360 bpb (Delta: -0.0158)\n"}
+,{"stream_name":"stdout","time":2191.684501186,"data":"    RU: 0.9917 bpb (Delta: -0.0054)\n"}
+,{"stream_name":"stdout","time":2191.684504476,"data":"    FR: 1.6523 bpb (Delta: -0.0156)\n"}
+,{"stream_name":"stdout","time":2191.684507527,"data":"    DE: 1.7425 bpb (Delta: -0.0155)\n"}
+,{"stream_name":"stdout","time":2191.684510778,"data":"    JA: 1.6723 bpb (Delta: -0.0169)\n"}
+,{"stream_name":"stdout","time":2191.684513932,"data":"    ZH: 2.2175 bpb (Delta: -0.0193)\n"}
+,{"stream_name":"stdout","time":2191.684517259,"data":"    HI: 0.8322 bpb (Delta: -0.0080)\n"}
+,{"stream_name":"stdout","time":2191.684520532,"data":"    BN: 0.8331 bpb (Delta: -0.0110)\n"}
+,{"stream_name":"stdout","time":2191.684524042,"data":"    AR: 1.2826 bpb (Delta: -0.0108)\n"}
+,{"stream_name":"stdout","time":2191.824507009,"data":"\n"}
+,{"stream_name":"stdout","time":2191.824549327,"data":"  Sample Generation:\n"}
+,{"stream_name":"stdout","time":2191.824553595,"data":"    \"In science and mathematics, the universe in the world's lowest personal interest, is not a majority of remote. The study of\"\n"}
+,{"stream_name":"stdout","time":2192.008933472,"data":"  [New Best Val BPB: 1.4568] Saved to /kaggle/working/checkpoint_best.pt\n"}
+,{"stream_name":"stdout","time":2192.008956143,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":2192.008960939,"data":"\n"}
+,{"stream_name":"stdout","time":2201.00022327,"data":"  Step 18100/21520 | Epoch 2.2 | Train Loss: 3.3941 | LR: 1.26e-04 | GPU Step: 89.6 ms (91,479 tok/s)\n"}
+,{"stream_name":"stdout","time":2210.055326977,"data":"  Step 18200/21520 | Epoch 2.2 | Train Loss: 3.3988 | LR: 1.23e-04 | GPU Step: 90.2 ms (90,841 tok/s)\n"}
+,{"stream_name":"stdout","time":2219.173597612,"data":"  Step 18300/21520 | Epoch 2.2 | Train Loss: 3.2639 | LR: 1.21e-04 | GPU Step: 90.8 ms (90,201 tok/s)\n"}
+,{"stream_name":"stdout","time":2228.295259469,"data":"  Step 18400/21520 | Epoch 2.3 | Train Loss: 3.4478 | LR: 1.18e-04 | GPU Step: 90.9 ms (90,166 tok/s)\n"}
+,{"stream_name":"stdout","time":2237.366507362,"data":"  Step 18500/21520 | Epoch 2.3 | Train Loss: 3.0941 | LR: 1.16e-04 | GPU Step: 90.3 ms (90,676 tok/s)\n"}
+,{"stream_name":"stdout","time":2246.392758992,"data":"  Step 18600/21520 | Epoch 2.3 | Train Loss: 3.6897 | LR: 1.14e-04 | GPU Step: 89.9 ms (91,135 tok/s)\n"}
+,{"stream_name":"stdout","time":2255.401218369,"data":"  Step 18700/21520 | Epoch 2.3 | Train Loss: 3.4502 | LR: 1.12e-04 | GPU Step: 89.7 ms (91,356 tok/s)\n"}
+,{"stream_name":"stdout","time":2264.388846917,"data":"  Step 18800/21520 | Epoch 2.3 | Train Loss: 3.5413 | LR: 1.09e-04 | GPU Step: 89.5 ms (91,566 tok/s)\n"}
+,{"stream_name":"stdout","time":2273.384155301,"data":"  Step 18900/21520 | Epoch 2.3 | Train Loss: 3.3979 | LR: 1.07e-04 | GPU Step: 89.5 ms (91,497 tok/s)\n"}
+,{"stream_name":"stdout","time":2282.364292909,"data":"  Step 19000/21520 | Epoch 2.3 | Train Loss: 3.3659 | LR: 1.05e-04 | GPU Step: 89.4 ms (91,616 tok/s)\n"}
+,{"stream_name":"stdout","time":2291.344901571,"data":"  Step 19100/21520 | Epoch 2.3 | Train Loss: 3.2075 | LR: 1.03e-04 | GPU Step: 89.5 ms (91,572 tok/s)\n"}
+,{"stream_name":"stdout","time":2300.349906957,"data":"  Step 19200/21520 | Epoch 2.4 | Train Loss: 3.4676 | LR: 1.01e-04 | GPU Step: 89.7 ms (91,320 tok/s)\n"}
+,{"stream_name":"stdout","time":2309.371415475,"data":"  Step 19300/21520 | Epoch 2.4 | Train Loss: 3.2620 | LR: 9.96e-05 | GPU Step: 89.9 ms (91,154 tok/s)\n"}
+,{"stream_name":"stdout","time":2318.392876596,"data":"  Step 19400/21520 | Epoch 2.4 | Train Loss: 3.2668 | LR: 9.79e-05 | GPU Step: 89.9 ms (91,147 tok/s)\n"}
+,{"stream_name":"stdout","time":2327.408965552,"data":"  Step 19500/21520 | Epoch 2.4 | Train Loss: 3.4714 | LR: 9.63e-05 | GPU Step: 89.8 ms (91,202 tok/s)\n"}
+,{"stream_name":"stdout","time":2336.414369819,"data":"  Step 19600/21520 | Epoch 2.4 | Train Loss: 2.9593 | LR: 9.47e-05 | GPU Step: 89.7 ms (91,318 tok/s)\n"}
+,{"stream_name":"stdout","time":2345.415293865,"data":"  Step 19700/21520 | Epoch 2.4 | Train Loss: 3.5061 | LR: 9.32e-05 | GPU Step: 89.7 ms (91,366 tok/s)\n"}
+,{"stream_name":"stdout","time":2354.406759977,"data":"  Step 19800/21520 | Epoch 2.4 | Train Loss: 3.4399 | LR: 9.18e-05 | GPU Step: 89.6 ms (91,455 tok/s)\n"}
+,{"stream_name":"stdout","time":2363.399945375,"data":"  Step 19900/21520 | Epoch 2.4 | Train Loss: 3.4489 | LR: 9.05e-05 | GPU Step: 89.6 ms (91,438 tok/s)\n"}
+,{"stream_name":"stdout","time":2372.38684828,"data":"  Step 20000/21520 | Epoch 2.5 | Train Loss: 3.3102 | LR: 8.92e-05 | GPU Step: 89.5 ms (91,507 tok/s)\n"}
+,{"stream_name":"stdout","time":2372.386916955,"data":"\n"}
+,{"stream_name":"stdout","time":2372.386924542,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":2372.386929884,"data":"CHECKPOINT EVALUATION AT STEP 20000 / 21520 [FAST (~200k toks/lang)]\n"}
+,{"stream_name":"stdout","time":2372.386934787,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":2405.393467829,"data":"  Progress       : 163,840,000 tokens trained (2.5 epochs)\n"}
+,{"stream_name":"stdout","time":2405.393521203,"data":"  Throughput     : 89.5 ms/step (91,507 tok/s) [Eval overhead: 33.0 s]\n"}
+,{"stream_name":"stdout","time":2405.393528088,"data":"  Train Loss     : 3.3102 nats | Fixed Train BPB (Eval mode): 1.5740\n"}
+,{"stream_name":"stdout","time":2405.393533938,"data":"  Mean Val BPB   : 1.4475\n"}
+,{"stream_name":"stdout","time":2405.393539352,"data":"  Val/Train Gap  : -0.1265 BPB (Rule: \u003c 0.10)\n"}
+,{"stream_name":"stdout","time":2405.393545083,"data":"  Alice BPB      : 2.8010 (Improving check)\n"}
+,{"stream_name":"stdout","time":2405.393549963,"data":"  Learning Rate  : 8.9250e-05\n"}
+,{"stream_name":"stdout","time":2405.393554276,"data":"\n"}
+,{"stream_name":"stdout","time":2405.393558442,"data":"  Per-Language Val BPB:\n"}
+,{"stream_name":"stdout","time":2405.393565891,"data":"    EN: 1.6961 bpb (Delta: -0.0117)\n"}
+,{"stream_name":"stdout","time":2405.393570348,"data":"    ES: 1.6254 bpb (Delta: -0.0106)\n"}
+,{"stream_name":"stdout","time":2405.393578183,"data":"    RU: 0.9872 bpb (Delta: -0.0045)\n"}
+,{"stream_name":"stdout","time":2405.39358116,"data":"    FR: 1.6430 bpb (Delta: -0.0094)\n"}
+,{"stream_name":"stdout","time":2405.393584057,"data":"    DE: 1.7335 bpb (Delta: -0.0091)\n"}
+,{"stream_name":"stdout","time":2405.393616259,"data":"    JA: 1.6624 bpb (Delta: -0.0099)\n"}
+,{"stream_name":"stdout","time":2405.393620866,"data":"    ZH: 2.2023 bpb (Delta: -0.0152)\n"}
+,{"stream_name":"stdout","time":2405.393624616,"data":"    HI: 0.8243 bpb (Delta: -0.0079)\n"}
+,{"stream_name":"stdout","time":2405.393627494,"data":"    BN: 0.8256 bpb (Delta: -0.0075)\n"}
+,{"stream_name":"stdout","time":2405.39363049,"data":"    AR: 1.2749 bpb (Delta: -0.0076)\n"}
+,{"stream_name":"stdout","time":2405.534054995,"data":"\n"}
+,{"stream_name":"stdout","time":2405.534089969,"data":"  Sample Generation:\n"}
+,{"stream_name":"stdout","time":2405.534096224,"data":"    \"In science and mathematics, the universe of Judge, and the United States is a corner of the core. The process of phrase\"\n"}
+,{"stream_name":"stdout","time":2405.725917852,"data":"  [New Best Val BPB: 1.4475] Saved to /kaggle/working/checkpoint_best.pt\n"}
+,{"stream_name":"stdout","time":2405.725943954,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":2405.725948956,"data":"\n"}
+,{"stream_name":"stdout","time":2414.724104647,"data":"  Step 20100/21520 | Epoch 2.5 | Train Loss: 2.8957 | LR: 8.81e-05 | GPU Step: 89.6 ms (91,404 tok/s)\n"}
+,{"stream_name":"stdout","time":2423.778104744,"data":"  Step 20200/21520 | Epoch 2.5 | Train Loss: 3.2537 | LR: 8.70e-05 | GPU Step: 90.2 ms (90,826 tok/s)\n"}
+,{"stream_name":"stdout","time":2432.88627367,"data":"  Step 20300/21520 | Epoch 2.5 | Train Loss: 3.5181 | LR: 8.60e-05 | GPU Step: 90.7 ms (90,282 tok/s)\n"}
+,{"stream_name":"stdout","time":2441.985232019,"data":"  Step 20400/21520 | Epoch 2.5 | Train Loss: 3.4751 | LR: 8.50e-05 | GPU Step: 90.6 ms (90,374 tok/s)\n"}
+,{"stream_name":"stdout","time":2451.023110131,"data":"  Step 20500/21520 | Epoch 2.5 | Train Loss: 3.4872 | LR: 8.42e-05 | GPU Step: 90.0 ms (90,988 tok/s)\n"}
+,{"stream_name":"stdout","time":2460.033284704,"data":"  Step 20600/21520 | Epoch 2.5 | Train Loss: 3.2355 | LR: 8.34e-05 | GPU Step: 89.8 ms (91,267 tok/s)\n"}
+,{"stream_name":"stdout","time":2469.01781934,"data":"  Step 20700/21520 | Epoch 2.5 | Train Loss: 3.3589 | LR: 8.27e-05 | GPU Step: 89.5 ms (91,542 tok/s)\n"}
+,{"stream_name":"stdout","time":2477.977812325,"data":"  Step 20800/21520 | Epoch 2.6 | Train Loss: 3.2424 | LR: 8.21e-05 | GPU Step: 89.3 ms (91,774 tok/s)\n"}
+,{"stream_name":"stdout","time":2486.937860839,"data":"  Step 20900/21520 | Epoch 2.6 | Train Loss: 3.1169 | LR: 8.15e-05 | GPU Step: 89.3 ms (91,777 tok/s)\n"}
+,{"stream_name":"stdout","time":2495.903221685,"data":"  Step 21000/21520 | Epoch 2.6 | Train Loss: 3.0178 | LR: 8.11e-05 | GPU Step: 89.3 ms (91,724 tok/s)\n"}
+,{"stream_name":"stdout","time":2504.877797957,"data":"  Step 21100/21520 | Epoch 2.6 | Train Loss: 3.3112 | LR: 8.07e-05 | GPU Step: 89.4 ms (91,628 tok/s)\n"}
+,{"stream_name":"stdout","time":2513.873422226,"data":"  Step 21200/21520 | Epoch 2.6 | Train Loss: 3.5004 | LR: 8.04e-05 | GPU Step: 89.6 ms (91,432 tok/s)\n"}
+,{"stream_name":"stdout","time":2522.881146042,"data":"  Step 21300/21520 | Epoch 2.6 | Train Loss: 3.3892 | LR: 8.02e-05 | GPU Step: 89.7 ms (91,288 tok/s)\n"}
+,{"stream_name":"stdout","time":2531.903950362,"data":"  Step 21400/21520 | Epoch 2.6 | Train Loss: 3.3272 | LR: 8.01e-05 | GPU Step: 89.9 ms (91,139 tok/s)\n"}
+,{"stream_name":"stdout","time":2540.91841926,"data":"  Step 21500/21520 | Epoch 2.6 | Train Loss: 3.4582 | LR: 8.00e-05 | GPU Step: 89.8 ms (91,222 tok/s)\n"}
+,{"stream_name":"stdout","time":2542.720054326,"data":"\n"}
+,{"stream_name":"stdout","time":2542.720100101,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":2542.720108435,"data":"CHECKPOINT EVALUATION AT STEP 21520 / 21520 [FULL (1.5 MB/lang)]\n"}
+,{"stream_name":"stdout","time":2542.720129432,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":2620.90121468,"data":"  Progress       : 176,291,840 tokens trained (2.7 epochs)\n"}
+,{"stream_name":"stdout","time":2620.901271427,"data":"  Throughput     : 89.8 ms/step (91,230 tok/s) [Eval overhead: 78.2 s]\n"}
+,{"stream_name":"stdout","time":2620.901279691,"data":"  Train Loss     : 3.0182 nats | Fixed Train BPB (Eval mode): 1.5699\n"}
+,{"stream_name":"stdout","time":2620.90128576,"data":"  Mean Val BPB   : 1.4175\n"}
+,{"stream_name":"stdout","time":2620.901291319,"data":"  Val/Train Gap  : -0.1524 BPB (Rule: \u003c 0.10)\n"}
+,{"stream_name":"stdout","time":2620.901297132,"data":"  Alice BPB      : 2.8057 (Improving check)\n"}
+,{"stream_name":"stdout","time":2620.901319292,"data":"  Learning Rate  : 8.0000e-05\n"}
+,{"stream_name":"stdout","time":2620.901326811,"data":"\n"}
+,{"stream_name":"stdout","time":2620.901331869,"data":"  Per-Language Val BPB:\n"}
+,{"stream_name":"stdout","time":2620.901507135,"data":"    EN: 1.6376 bpb (Delta: -0.0585)\n"}
+,{"stream_name":"stdout","time":2620.901512766,"data":"    ES: 1.5199 bpb (Delta: -0.1055)\n"}
+,{"stream_name":"stdout","time":2620.901515877,"data":"    RU: 0.9308 bpb (Delta: -0.0564)\n"}
+,{"stream_name":"stdout","time":2620.901518779,"data":"    FR: 1.6299 bpb (Delta: -0.0131)\n"}
+,{"stream_name":"stdout","time":2620.901521878,"data":"    DE: 1.7318 bpb (Delta: -0.0016)\n"}
+,{"stream_name":"stdout","time":2620.90152488,"data":"    JA: 1.6320 bpb (Delta: -0.0304)\n"}
+,{"stream_name":"stdout","time":2620.901527739,"data":"    ZH: 2.1881 bpb (Delta: -0.0142)\n"}
+,{"stream_name":"stdout","time":2620.901530703,"data":"    HI: 0.8315 bpb (Delta: +0.0072)\n"}
+,{"stream_name":"stdout","time":2620.901533519,"data":"    BN: 0.8181 bpb (Delta: -0.0075)\n"}
+,{"stream_name":"stdout","time":2620.901536369,"data":"    AR: 1.2553 bpb (Delta: -0.0197)\n"}
+,{"stream_name":"stdout","time":2621.050257815,"data":"\n"}
+,{"stream_name":"stdout","time":2621.050294708,"data":"  Sample Generation:\n"}
+,{"stream_name":"stdout","time":2621.05030164,"data":"    \"In science and mathematics, the universe of the university\r\n"}
+,{"stream_name":"stdout","time":2621.050321088,"data":"Project and Corner of the University of American Arts\r\n"}
+,{"stream_name":"stdout","time":2621.050325871,"data":"Southern Well\"\n"}
+,{"stream_name":"stdout","time":2621.236064839,"data":"  [New Best Val BPB: 1.4175] Saved to /kaggle/working/checkpoint_best.pt\n"}
+,{"stream_name":"stdout","time":2621.236089022,"data":"===========================================================================\n"}
+,{"stream_name":"stdout","time":2621.236094829,"data":"\n"}
+,{"stream_name":"stdout","time":2622.665905515,"data":"\n"}
+,{"stream_name":"stdout","time":2622.665933173,"data":"Run Metadata \u0026 Checkpoint Ledger saved to: /kaggle/working/stage6b_run_metadata.json\n"}
+,{"stream_name":"stdout","time":2622.665939309,"data":"Per-Checkpoint Metrics CSV saved to: /kaggle/working/stage6b_metrics.csv\n"}
+,{"stream_name":"stdout","time":2622.6659437,"data":"STAGE 6b EXECUTION FINISHED.\n"}
+,{"stream_name":"stdout","time":2622.665947887,"data":"================================================================================\n"}
+,{"stream_name":"stderr","time":2628.871200951,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":2628.871240795,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":2629.176607737,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":2629.176647309,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":2630.081061362,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":2631.309753607,"data":"[NbConvertApp] Writing 451423 bytes to __results__.html\n"}
+]
