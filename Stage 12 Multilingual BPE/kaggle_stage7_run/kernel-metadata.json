@@ -1,0 +1,16 @@
+{
+  "id": "tijildas/ebrain-stage7-single-epoch-pretraining",
+  "title": "ebrain-stage7-single-epoch-pretraining",
+  "code_file": "kaggle_stage7_pretraining.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "true",
+  "dataset_sources": [
+    "tijildas/ebrain-multilingual-v3-certified"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}

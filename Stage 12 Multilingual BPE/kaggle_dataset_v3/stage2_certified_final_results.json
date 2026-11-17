@@ -1,0 +1,732 @@
+{
+  "en": {
+    "lang": "en",
+    "wiki_mb": 14.711228370666504,
+    "news_mb": 11.329072952270508,
+    "tr_mb": 22.435094833374023,
+    "va_mb": 1.7980680465698242,
+    "te_mb": 1.807138442993164,
+    "purity": 99.1971259670223,
+    "floor": 0.4759069666086862,
+    "ceiling": 0.9518139332173724,
+    "val_ov": 0.39407293445807634,
+    "test_ov": 0.32820036255832674,
+    "dup_rate": 3.909858783159559,
+    "doc_id_overlap": 0,
+    "hash_ok": true,
+    "pass_purity": true,
+    "pass_size": true,
+    "pass_val_ov": true,
+    "pass_test_ov": true,
+    "status": "PASS",
+    "sha256": {
+      "train": "93d33bb65a6b7ad34b8f7da0e6f3e33cd72409f57c4ce0842d0140824a828581",
+      "val": "5aa81faf032ea2dd940ec48277fac9ae2c75729834225a796221be066b7d74e1",
+      "test": "04a141810d5609a72057d24e598f56c9ebf0592172e9c0f6accfb1b65d795a66"
+    },
+    "top_10_overlap": [
+      [
+        "military operations of the syrian civil war involving",
+        5
+      ],
+      [
+        "the church of jesus christ of latter day",
+        5
+      ],
+      [
+        "church of jesus christ of latter day saints",
+        5
+      ],
+      [
+        "of the church of jesus christ of latter",
+        4
+      ],
+      [
+        "american men s basketball players basketball players from",
+        4
+      ],
+      [
+        "orchid is a species of orchid endemic to",
+        3
+      ],
+      [
+        "by the western australian government department of parks",
+        3
+      ],
+      [
+        "the western australian government department of parks and",
+        3
+      ],
+      [
+        "western australian government department of parks and wildlife",
+        3
+      ],
+      [
+        "was elected a fellow of the royal society",
+        3
+      ]
+    ],
+    "samples_3": [
+      "Gull Harbour (former names States Harbour, Great Harbour) is the 1.3 km wide bay indenting for 2.8 km the east coast of Weddell Island in the Falkland Islands. It is entered north of Gull Point and south of Mark Point, and is centred at . The princip",
+      "Ella Eaton Kellogg (April 7, 1853 – June 14, 1920) was an American dietitian known for her work on home economics and vegetarian cooking. She was educated at Alfred University (B.A. 1872, A.M. 1875); and the American School Household Economics (1909)",
+      "Lady Catherine Manning is a British writer, who has written five mystery novels under the pseudonym Elizabeth Ironside. Catherine Manning is the daughter of a general practitioner doctor, and grew up in a Northamptonshire village. She was educated at"
+    ]
+  },
+  "es": {
+    "lang": "es",
+    "wiki_mb": 14.741365432739258,
+    "news_mb": 11.308626174926758,
+    "tr_mb": 22.4490966796875,
+    "va_mb": 1.7991952896118164,
+    "te_mb": 1.8016996383666992,
+    "purity": 99.97394427185749,
+    "floor": 0.4392116914155859,
+    "ceiling": 0.8784233828311718,
+    "val_ov": 0.2647416768084291,
+    "test_ov": 0.39859382196142623,
+    "dup_rate": 3.6021367677728566,
+    "doc_id_overlap": 0,
+    "hash_ok": true,
+    "pass_purity": true,
+    "pass_size": true,
+    "pass_val_ov": true,
+    "pass_test_ov": true,
+    "status": "PASS",
+    "sha256": {
+      "train": "dd855c1dd8ed3e51fb4d93145f2cd411ae37c231550c26d32c6c4b4de4d09ab7",
+      "val": "76d96d5fa9946b10eb4fddb14e4d69ea2f232e145ba1c70e1634a0be6c0906fa",
+      "test": "67de97c05e2d8e7def3ccf0a45d9891521e02c6eb8074996c3b2ed0b9cce4c9a"
+    },
+    "top_10_overlap": [
+      [
+        "huertos experimentales wolfskill floración polinización y cuaje en",
+        6
+      ],
+      [
+        "experimentales wolfskill floración polinización y cuaje en árboles",
+        6
+      ],
+      [
+        "wolfskill floración polinización y cuaje en árboles frutales",
+        6
+      ],
+      [
+        "archivo infojardin com tema higo cuello de dama",
+        6
+      ],
+      [
+        "el huerto urbano net frutales variedades de higueras",
+        6
+      ],
+      [
+        "interempresas net horticola articulos 161722 variedades de higuera",
+        6
+      ],
+      [
+        "net horticola articulos 161722 variedades de higuera interesantes",
+        6
+      ],
+      [
+        "horticola articulos 161722 variedades de higuera interesantes para",
+        6
+      ],
+      [
+        "articulos 161722 variedades de higuera interesantes para el",
+        6
+      ],
+      [
+        "161722 variedades de higuera interesantes para el consumo",
+        6
+      ]
+    ],
+    "samples_3": [
+      "La conquista del Imperio nanda gobernado por Dhana Nanda por una fuerza mandada por  Chandragupta Maurya entre 321 y 320 a. C. llevó a la formación del Imperio maurya. La historia de las principales figuras involucradas y del conflicto mismo es obscu",
+      "WWE Raw 25 Years (traducible al español como WWE Raw 25 años) fue un especial de televisión que se transmitió en vivo el 22 de enero de 2018, transmitido en el canal televisivo estadounidense USA Network como el 25° aniversario del show insignia de W",
+      "Luciana Fernández López (9 de noviembre de 1992 en Huánuco, Perú) es una modelo y exreina de belleza peruana, quién fue Miss Huánuco 2012 y representó a dicho país en el certamen de Reina Mundial del Banano 2018. Nació en la ciudad de Huánuco, ubicad"
+    ]
+  },
+  "ru": {
+    "lang": "ru",
+    "wiki_mb": 13.299524307250977,
+    "news_mb": 11.395721435546875,
+    "tr_mb": 21.249794960021973,
+    "va_mb": 1.6441059112548828,
+    "te_mb": 1.801344871520996,
+    "purity": 99.74003192584644,
+    "floor": 0.28327438686004425,
+    "ceiling": 0.5665487737200885,
+    "val_ov": 0.352320806371329,
+    "test_ov": 0.06308343315636894,
+    "dup_rate": 2.637208075717179,
+    "doc_id_overlap": 0,
+    "hash_ok": true,
+    "pass_purity": true,
+    "pass_size": true,
+    "pass_val_ov": true,
+    "pass_test_ov": true,
+    "status": "PASS",
+    "sha256": {
+      "train": "0cbd19ce60ccedf48ca11527130fcd51c4c435df769d2e889ca45c073e35403a",
+      "val": "19e1f02f1e938d9ca74bcefd357a0fd8cd5688d4d630bc0cf07d181fd6f8a42a",
+      "test": "02943ce2e0036f887ddc19ac4d480f8028d99bbe84cc84c96f8e147f5590bad0"
+    },
+    "top_10_overlap": [
+      [
+        "км от устья по левому берегу реки впадает",
+        15
+      ],
+      [
+        "от устья по левому берегу реки впадает река",
+        15
+      ],
+      [
+        "км от устья по правому берегу реки впадает",
+        10
+      ],
+      [
+        "от устья по правому берегу реки впадает река",
+        10
+      ],
+      [
+        "как административно территориальные единицы были преобразованы в сельские",
+        7
+      ],
+      [
+        "административно территориальные единицы были преобразованы в сельские округа",
+        7
+      ],
+      [
+        "сельское поселение код водного объекта в государственном водном",
+        5
+      ],
+      [
+        "поселение код водного объекта в государственном водном реестре",
+        5
+      ],
+      [
+        "метров код водного объекта в государственном водном реестре",
+        4
+      ],
+      [
+        "мм приходится на весеннее половодье общая минерализация от",
+        3
+      ]
+    ],
+    "samples_3": [
+      "Райму́ндо Ферре́йра Ра́мос Жу́ниор (; 17 марта 1970, Фейра-ди-Сантана), более известный как Жу́ниор Байа́но () — бразильский футболист, выступавший на позиции центрального защитника. Жуниор Байано начал свою карьеру в клубе «Фламенго». 11 декабря 198",
+      "Ункор — река в Богородском районе Нижегородской области России. Устье реки находится в 75 км по правому берегу реки Кудьмы. Длина реки составляет 37 км, площадь водосборного бассейна — 254 км². Исток реки у села Оранки в 25 км к юго-востоку от Богоро",
+      "Арон Фреш, Даниэлла Моне, Ноа Манк и Джефф Сатрен Джим Керри появились в конце шоу в гигантском воздушном шаре. Сначала идет фильм а потом герой который появился в шоу Кунг-фу панда 2 и Кунг-фу панда: Удивительные легенды — По Пингвины из Мадагаскара"
+    ]
+  },
+  "fr": {
+    "lang": "fr",
+    "wiki_mb": 26.150599479675293,
+    "news_mb": 0.0,
+    "tr_mb": 22.522037506103516,
+    "va_mb": 1.8273820877075195,
+    "te_mb": 1.8011798858642578,
+    "purity": 99.96605272807128,
+    "floor": 0.2,
+    "ceiling": 0.4,
+    "val_ov": 0.3505547725481604,
+    "test_ov": 0.36629672684398606,
+    "dup_rate": 2.0936782356254624,
+    "doc_id_overlap": 0,
+    "hash_ok": true,
+    "pass_purity": true,
+    "pass_size": true,
+    "pass_val_ov": true,
+    "pass_test_ov": true,
+    "status": "PASS",
+    "sha256": {
+      "train": "f86487223c6a3e9bdc022317eea44449d8ed0e6a5e0b9fd66f31888a86766d66",
+      "val": "acdc44b8f8f254dd6379a711ad1667a94eb8c0deb2b858039bb857a5b034cfe4",
+      "test": "ca3a1ba3a4168b3b86cd4aa34dd9fbdece1a49a93d2cdc7103c18c63cd467cb4"
+    },
+    "top_10_overlap": [
+      [
+        "membre de l académie royale des sciences de",
+        3
+      ],
+      [
+        "membre de l académie allemande des sciences leopoldina",
+        3
+      ],
+      [
+        "site construit à protéger dans le canton de",
+        3
+      ],
+      [
+        "construit à protéger dans le canton de berne",
+        3
+      ],
+      [
+        "ayant son siège en italie entreprise ayant son",
+        3
+      ],
+      [
+        "son siège en italie entreprise ayant son siège",
+        3
+      ],
+      [
+        "de l organisation mondiale de la santé oms",
+        2
+      ],
+      [
+        "la ville est reliée par le transport aérien",
+        2
+      ],
+      [
+        "ville est reliée par le transport aérien avec",
+        2
+      ],
+      [
+        "est reliée par le transport aérien avec l",
+        2
+      ]
+    ],
+    "samples_3": [
+      "Modène (en ) est une ville italienne, chef-lieu de la province du même nom située en Émilie-Romagne. Avec ses environs  (2022), Modène est la  d’Italie en population.  Modène et ses alentours sont souvent considérés comme lieux de pèlerinage de la ga",
+      "Louise Eugénie Alexandrine Marie David, plus connue sous le nom d’Alexandra David-Néel, née le  à Saint-Mandé, morte à 100 ans le  à Digne-les-Bains, est une orientaliste, tibétologue, chanteuse d'opéra et féministe, journaliste et anarchiste, écriva",
+      "The Offspring, ou simplement Offspring, est un groupe de punk rock américain, originaire du Comté d'Orange, en Californie. Constitué en 1984, le groupe est actuellement formé de Bryan \"Dexter\" Holland au chant et à la guitare rythmique, Todd Morse à "
+    ]
+  },
+  "de": {
+    "lang": "de",
+    "wiki_mb": 26.11699676513672,
+    "news_mb": 0.0,
+    "tr_mb": 22.504629135131836,
+    "va_mb": 1.8073711395263672,
+    "te_mb": 1.8049964904785156,
+    "purity": 99.98041792666751,
+    "floor": 0.2,
+    "ceiling": 0.4,
+    "val_ov": 0.1417998873370758,
+    "test_ov": 0.20569528486090435,
+    "dup_rate": 0.8224006265909578,
+    "doc_id_overlap": 0,
+    "hash_ok": true,
+    "pass_purity": true,
+    "pass_size": true,
+    "pass_val_ov": true,
+    "pass_test_ov": true,
+    "status": "PASS",
+    "sha256": {
+      "train": "2b2f548ae498f51e9749106a6fc725ab2373879f8ef67ec5fcd6d53d9ced610d",
+      "val": "4df7192098389db4c7754d640e064dbd5bd8e9bf38bfd4e01caced95201c8751",
+      "test": "0ae62f106f62665efba3508b8f75b3c449f95cf1b59046358669e0a63ba378fb"
+    },
+    "top_10_overlap": [
+      [
+        "in basler zeitschrift für geschichte und altertumskunde bd",
+        4
+      ],
+      [
+        "emigrant aus dem deutschen reich zur zeit des",
+        3
+      ],
+      [
+        "aus dem deutschen reich zur zeit des nationalsozialismus",
+        3
+      ],
+      [
+        "die ratsmitglieder werden durch eine kommunalwahl für jeweils",
+        3
+      ],
+      [
+        "ratsmitglieder werden durch eine kommunalwahl für jeweils fünf",
+        3
+      ],
+      [
+        "werden durch eine kommunalwahl für jeweils fünf jahre",
+        3
+      ],
+      [
+        "durch eine kommunalwahl für jeweils fünf jahre gewählt",
+        3
+      ],
+      [
+        "knight commander des order of the british empire",
+        2
+      ],
+      [
+        "mitglied der bayerischen akademie der schönen künste mitglied",
+        2
+      ],
+      [
+        "der bayerischen akademie der schönen künste mitglied der",
+        2
+      ]
+    ],
+    "samples_3": [
+      "Sichuan (), nach Brechts Theaterstück Sezuan, Lessing Othmer Sitschuan, Stange Ssetschuan, Duden Szechuan, selten Szetschuan (veraltet Post Szechwan, Yale Szchwan, Falschschreibung Sechuan), ist eine Provinz der Volksrepublik China im Südwesten des L",
+      "Der Indian Pacific ist ein Fern­zug in Australien, der Perth an der Westküste und dem Indischen Ozean mit Sydney am Pazifik an der Ostküste verbindet. Die planmäßige Fahrzeit für die 4352 Kilometer lange Strecke beträgt rund 65 Stunden.  Die Verbindu",
+      "9. Februar: In Sutri führen König Heinrich V. und Papst Paschalis II. geheime Verhandlungen zur Beendigung des Investiturstreits. Beide einigen sich auf die iuramentum Sutrinum genannte radikale Lösung. Der Vergleich von Sutri sieht vor, dass der deu"
+    ]
+  },
+  "ja": {
+    "lang": "ja",
+    "wiki_mb": 23.87748146057129,
+    "news_mb": 0.0,
+    "tr_mb": 20.746766090393066,
+    "va_mb": 1.588505744934082,
+    "te_mb": 1.5422096252441406,
+    "purity": 99.32910222918811,
+    "floor": 4.874030586645701,
+    "ceiling": 9.748061173291402,
+    "val_ov": 5.084752172696262,
+    "test_ov": 4.939401840638912,
+    "dup_rate": 0.2078475108993172,
+    "doc_id_overlap": 0,
+    "hash_ok": true,
+    "pass_purity": true,
+    "pass_size": true,
+    "pass_val_ov": true,
+    "pass_test_ov": true,
+    "status": "PASS",
+    "sha256": {
+      "train": "f6a7cfa55506ad3bb7cbca8e3463062dfbd4358d25e1166a504499a4ce65239f",
+      "val": "9107ccd6a7ec935892b38f4ec0c5062a7ee13206bb69113df7301352dd65c2aa",
+      "test": "5121c8166c43806a60305cedda371fff861b254124c627f7b808ccabb5b1ddb9"
+    },
+    "top_10_overlap": [
+      [
+        "ドストエフスキー",
+        25
+      ],
+      [
+        "カンヌ国際映画祭",
+        24
+      ],
+      [
+        "ドキュメンタリー",
+        21
+      ],
+      [
+        "日暮里舎人ライナ",
+        18
+      ],
+      [
+        "暮里舎人ライナー",
+        18
+      ],
+      [
+        "エンタテインメン",
+        16
+      ],
+      [
+        "ンタテインメント",
+        16
+      ],
+      [
+        "回カンヌ国際映画",
+        15
+      ],
+      [
+        "は大日本帝国憲法",
+        15
+      ],
+      [
+        "テイエムオペラオ",
+        14
+      ]
+    ],
+    "samples_3": [
+      "サラブレッド（）とは、18世紀初頭にイギリスでアラブ馬やハンター（狩猟に用いられたイギリス在来の品種）等から競走用に品種改良された軽種馬である。 語源は  [ 完璧な、徹底的な ] +  [ 品種 ] で人為的に完全管理された血統を意味する。ここから「名家の出」「名門の出」の比喩としても用いられる。 体高（肩までの高さ）は160-170cmほど、体重は450〜500kgが標準的。頭は小さく、四肢は長く、胸や臀部の筋肉は発達しており、速く走ることに向いている。一方でケガや病気をしやすく、物音や閃光",
+      "テオドール・エードラー・フォン・レルヒ（, 1869年8月31日 - 1945年12月24日）は、オーストリア＝ハンガリー帝国の軍人。最終階級は陸軍少将。日本で初めて、本格的なスキー指導をおこなった人物である。 訪日時は少佐で、少佐の時にスキーを日本に伝えたため、日本国内では一般的には「レルヒ少佐」と呼ばれる。後に中佐に昇格したあと日本各地を回ったため、北海道などでは「レルヒ中佐」と呼ばれる。 西ドイツで国防相、追放者・難民・戦災者相、ドイツ連邦議会議長を務めたカイ＝ウヴェ・フォン・ハッセルは母",
+      "距離（きょり、）とは、ある2点間に対して測定した長さの量をいう。本項では日常生活および高校数学の範囲内で使われている距離について触れる。大学以上で扱うより専門的・抽象的な距離については距離空間を参照。 時間、質量とともに最も基本的な計量単位の一つであるが、計量法や国際単位系（SI)第9版（2019年）においては、「距離」（）の語は用いられず、「長さ」（）（国際単位系における公式言語であるフランス語では ）の語が用いられる。天文単位と海里は、国際単位系第8版（2006年）では、「距離（）の単位」と"
+    ]
+  },
+  "zh": {
+    "lang": "zh",
+    "wiki_mb": 25.58356475830078,
+    "news_mb": 0.0,
+    "tr_mb": 22.05690288543701,
+    "va_mb": 1.774794578552246,
+    "te_mb": 1.7518672943115234,
+    "purity": 99.18178822075598,
+    "floor": 0.8422802578024552,
+    "ceiling": 1.6845605156049104,
+    "val_ov": 1.22281792321809,
+    "test_ov": 1.5084908705235016,
+    "dup_rate": 0.12358362740281237,
+    "doc_id_overlap": 0,
+    "hash_ok": true,
+    "pass_purity": true,
+    "pass_size": true,
+    "pass_val_ov": true,
+    "pass_test_ov": true,
+    "status": "PASS",
+    "sha256": {
+      "train": "e1f9a297131064fd4add0f1c59027ad2f55f4c71dacbfa9fc8cbd02706b75218",
+      "val": "ef78fe771addfda69d418685fd8a8277ddfdbaf9d05d4e9ceac9ac7760662279",
+      "test": "f581ddf1af73f5c547b863154be348a5f3a87412c1cdf476e9f5fd0c2c0e7eaf"
+    },
+    "top_10_overlap": [
+      [
+        "2008年10月",
+        28
+      ],
+      [
+        "委员会第一次会议",
+        13
+      ],
+      [
+        "008年10月3",
+        11
+      ],
+      [
+        "20052006",
+        10
+      ],
+      [
+        "2008年12月",
+        10
+      ],
+      [
+        "2022年12月",
+        9
+      ],
+      [
+        "中国人民政治协商",
+        9
+      ],
+      [
+        "国人民政治协商会",
+        9
+      ],
+      [
+        "人民政治协商会议",
+        9
+      ],
+      [
+        "2010年11月",
+        9
+      ]
+    ],
+    "samples_3": [
+      "关中话一般指关中地区的方言，属於中原官话关中片或秦陇片，以西安地区发音为代表。陕西人一般稱呼的「陕西话」不等於关中话，例如晉語區的陕北话和西南官話區的陕南话就與關中話不同，一般可以从讲话者的口音判断讲话者来自何处。 除開陝北陝南，陝西話又可分为秦陇片的西府话和关中片的东府话。西府话分布在西安以西的宝鸡，甘肃天水、庆阳、平凉、陇南（部分地區）和宁夏固原南部；东府话主要分布在渭南市、西安市、铜川市、咸阳市、商洛市等地区。在西安等较大的城市中普通话普及很广，尤其是年轻一代，在日常交流中大多使用普通话或",
+      "棘皮动物（）是一類海洋無脊椎動物。成體有辐射對稱（通常為五輻射對稱）的特徵。現存的棘皮動物包括海星、海膽、蛇尾、海參以及海百合。從潮間帶到深海帶，成年棘皮動物在幾乎所有深度的海床上都能找到。該門包含約7000種現存物種，是後口動物的第二大類群，僅次於脊索動物。棘皮動物是純海生動物中最大的一個類群。 絕大多數棘皮動物出現於寒武紀初期。一種早期的棘皮動物海扁果擁有用於濾食的，與脊索動物和半索動物所擁有的外鰓類似。棘皮動物在生態學和地質學上都很重要。大多數棘皮動物能夠進行無性繁殖，並能再生組織、器官和",
+      "李大同（），男，四川南充人，中华人民共和国记者、编辑，前《中國青年報》記者，《冰點》周刊創刊編輯。妻子江菲亦為《中國青年報》資深記者，育有一子。 1979年7月起任《中國青年報》駐內蒙古記者，歷任報社內學校教育部、科學部主任、高級编辑。 1989年六四事件發生前夕曾聯同1013名記者在報社與中共中央政治局常委胡啟立對話（1989年5月11日），後被撤消職務並調至報社內新聞研究所賦閒至1994年。 1995年元月，李大同創辦《冰點》特稿版，每次以整版規模詳細報道人物或事件，為中國新聞界獨有，深受讀"
+    ]
+  },
+  "hi": {
+    "lang": "hi",
+    "wiki_mb": 23.575650215148926,
+    "news_mb": 0.0,
+    "tr_mb": 20.632821083068848,
+    "va_mb": 1.482649803161621,
+    "te_mb": 1.460179328918457,
+    "purity": 99.87872421968392,
+    "floor": 3.287160011415274,
+    "ceiling": 6.574320022830548,
+    "val_ov": 2.679042919314602,
+    "test_ov": 2.685079170041051,
+    "dup_rate": 1.0688341074193142,
+    "doc_id_overlap": 0,
+    "hash_ok": true,
+    "pass_purity": true,
+    "pass_size": true,
+    "pass_val_ov": true,
+    "pass_test_ov": true,
+    "status": "PASS",
+    "sha256": {
+      "train": "3ccf789dde8b15014a9de024f9e47ffbe386e72866cdb9bee6cc09d013fe2840",
+      "val": "0630d0b444d8c8afbbd64339345725b40502ba803ae5f33c5bf779b4a101b1c5",
+      "test": "ee67b8431623902b90023d901bd13a06ee73029f2811ee8ed7a79345ee0448df"
+    },
+    "top_10_overlap": [
+      [
+        "ल यन अम र क ड लर क",
+        12
+      ],
+      [
+        "र जकमल प रक शन नय द ल",
+        11
+      ],
+      [
+        "जकमल प रक शन नय द ल ल",
+        11
+      ],
+      [
+        "ब ल यन अम र क ड लर",
+        10
+      ],
+      [
+        "क र यक रम क द र न",
+        9
+      ],
+      [
+        "म ल यन अम र क ड लर",
+        8
+      ],
+      [
+        "त य र क य ज त ह",
+        8
+      ],
+      [
+        "म हम मद ब न क स म",
+        8
+      ],
+      [
+        "र ष ट र य रक ष अक",
+        7
+      ],
+      [
+        "ष ट र य रक ष अक दम",
+        7
+      ]
+    ],
+    "samples_3": [
+      "भारत के इतिहास की महत्वपूर्ण घटनाएं तिथिक्रम में। सिंधु घाटी सभ्यता का काल : (3300-1700 ईस्वी पूर्व के बीच) : हड़प्पा काल : (1700-1300 ईस्वी पूर्व के बीच) : आर्य सभ्यता का काल : (1500-500 ईस्वी पूर्व के बीच) बौद्ध काल : (563-320 ईस्वी पूर्व के बीच) :",
+      "न्यायपालिका किसी भी जनतंत्र के तीन प्रमुख अंगों में से एक है। अन्य दो अंग हैं - कार्यपालिका और विधायिका। न्यायपालिका, संप्रभुतासम्पन्न राज्य की तरफ से कानून का सही अर्थ निकालती है एवं कानून के अनुसार न चलने वालों पर दण्ड निर्धारित करती है। इस प्रकार ",
+      "नई दिल्ली से उत्तर में 43 किमी दूर स्थित इस नगर की स्थापना संभवतः लगभग 1500 ई.पू. में आरंभिक आर्यों ने की थी। यमुना नदी के तट पर यह शहर फला-फूला, जो अब 15 किमी पूर्व की ओर स्थानांतरित हो गई है। हिन्दू महाकाव्य महाभारत में इसका 'स्वर्णप्रस्थ' के रूप म"
+    ]
+  },
+  "bn": {
+    "lang": "bn",
+    "wiki_mb": 22.687039375305176,
+    "news_mb": 0.0,
+    "tr_mb": 20.50716209411621,
+    "va_mb": 1.0826425552368164,
+    "te_mb": 1.0972347259521484,
+    "purity": 99.83199786821345,
+    "floor": 7.701716367310582,
+    "ceiling": 15.403432734621164,
+    "val_ov": 4.313076348183789,
+    "test_ov": 4.2840013080920025,
+    "dup_rate": 5.661524431947718,
+    "doc_id_overlap": 0,
+    "hash_ok": true,
+    "pass_purity": true,
+    "pass_size": true,
+    "pass_val_ov": true,
+    "pass_test_ov": true,
+    "status": "PASS",
+    "sha256": {
+      "train": "82c0c3438fc5656c4e0b87c58d5902aeb50c6ca0c6749e0b130d8ef1afc09ba3",
+      "val": "a3ad3fa3a368278189dc8fbc42077102d345aa854f5923c2f503918859ffb655",
+      "test": "79f118af9a4b45941c7d73115e1735c626d6a7eb9a753b4a084f99e8e5160311"
+    },
+    "top_10_overlap": [
+      [
+        "ক ম প ন গঞ জ উপজ ল",
+        21
+      ],
+      [
+        "ব ল দ শ র ন য খ",
+        14
+      ],
+      [
+        "ল দ শ র ন য খ ল",
+        14
+      ],
+      [
+        "দ শ র ন য খ ল জ",
+        14
+      ],
+      [
+        "শ র ন য খ ল জ ল",
+        14
+      ],
+      [
+        "র ন য খ ল জ ল র",
+        14
+      ],
+      [
+        "ন য খ ল জ ল র অন",
+        14
+      ],
+      [
+        "য খ ল জ ল র অন তর",
+        14
+      ],
+      [
+        "খ ল জ ল র অন তর গত",
+        14
+      ],
+      [
+        "ইউন য ন র অবস থ ন এ",
+        14
+      ]
+    ],
+    "samples_3": [
+      "এটি সেন্ট সিলভেস্টার'স ডে, নববর্ষের প্রাক্কালে বা পুরানো বছরের শেষ দিবস/রাত্রি নামেও পরিচিত যার পরের দিনটি হল নববর্ষের দিন। এটি বছরের শেষ দিন; পরের দিন ১ জানুয়ারি, যা পরের বছরের প্রথম দিন। একই সাথে এটি বছরের চতুর্থ এবং শেষ প্রান্তিকের শেষ দিন। ৪০৬ -",
+      "বারাসত সদর মহকুমা পশ্চিমবঙ্গের উত্তর চব্বিশ পরগনা জেলার একটি মহকুমা। এই মহকুমা পাঁচটি পৌরসভা (বারাসত, হাবরা, অশোকনগর কল্যাণগড়, মধ্যমগ্রাম ও গোবরডাঙা), ছয়টি ব্লক (বারাসত-১, বারাসত-২, আমডাঙা, দেগঙ্গা, হাবরা-১ ও হাবরা-২) নিয়ে গঠিত। এই ছয়টি ব্লকে আবা",
+      "পাই (প্রতীক π, প্রাচীন গ্রিক ভাষায় পি) একটি গুরুত্বপূর্ণ গাণিতিক ধ্রুবক, মোটামুটিভাবে এর মান প্রায় ৩.১৪১৫৯। ইউক্লিডীয় জ্যামিতিতে যেকোনো বৃত্তের পরিধি ও ব্যাসের অনুপাতকে এই ধ্রুবক দ্বারা প্রকাশ করা হয়। তবে একইভাবে এটি বৃত্তের ক্ষেত্রফলের সঙ্গে এর "
+    ]
+  },
+  "ar": {
+    "lang": "ar",
+    "wiki_mb": 26.17335605621338,
+    "news_mb": 0.0,
+    "tr_mb": 22.506980895996094,
+    "va_mb": 1.8567829132080078,
+    "te_mb": 1.8095922470092773,
+    "purity": 99.85475610351506,
+    "floor": 0.2,
+    "ceiling": 0.4,
+    "val_ov": 0.12397745667556345,
+    "test_ov": 0.38778803909262083,
+    "dup_rate": 3.211722174679965,
+    "doc_id_overlap": 0,
+    "hash_ok": true,
+    "pass_purity": true,
+    "pass_size": true,
+    "pass_val_ov": true,
+    "pass_test_ov": true,
+    "status": "PASS",
+    "sha256": {
+      "train": "e7a3266ebffd8a0d1526f8aea3008f6078ae74369f4b3f93ec859d2a31738405",
+      "val": "75b713ad29fb48461a0e9755516593cf74edf11758ee1ae23e782386ef79ad02",
+      "test": "6b2c94a0f0053633cbd68738d2ff934f73584b1eff8150a1b474af062e89a4eb"
+    },
+    "top_10_overlap": [
+      [
+        "العالم من قبل الاتحاد الدولي لتاريخ وإحصاءات كرة",
+        2
+      ],
+      [
+        "من قبل الاتحاد الدولي لتاريخ وإحصاءات كرة القدم",
+        2
+      ],
+      [
+        "لاعبو كرة قدم رجالية مغاربة مغتربون لاعبو كرة",
+        2
+      ],
+      [
+        "كرة قدم رجالية مغاربة مغتربون لاعبو كرة قدم",
+        2
+      ],
+      [
+        "قدم رجالية مغاربة مغتربون لاعبو كرة قدم رجالية",
+        2
+      ],
+      [
+        "رجالية مغاربة مغتربون لاعبو كرة قدم رجالية مغتربون",
+        2
+      ],
+      [
+        "مغاربة مغتربون لاعبو كرة قدم رجالية مغتربون في",
+        2
+      ],
+      [
+        "لاعبو الدوري الفرنسي الدرجة الثانية لاعبو كرة قدم",
+        2
+      ],
+      [
+        "تقع إلى الشمال الغربي من مدينة القدس وتبعد",
+        2
+      ],
+      [
+        "إلى الشمال الغربي من مدينة القدس وتبعد عنها",
+        2
+      ]
+    ],
+    "samples_3": [
+      "الجبيل مدينة سعودية، والعاصمة الإدارية لمحافظة الجبيل التابعة للمنطقة الشرقية، يبلغ عدد سكانها (505,162) نسمة حسب تعداد السعودية 2022. وتقسم الجبيل إلى ثلاث أقسام. حيث (الجبيل الصناعية) التي تضم المصانع الكبرى والتي تحتوي على الجبيل1 والجبيل2 والمنطق",
+      "إفريقية (أو المغرب الأدنى) هي إحدى الأسماء التاريخية التي تطلق على تونس، والتي شكلت ولاية تابعة للدولة الإسلامية إبّان الفتح الإسلامي للمغرب. وهي، إلى حد ما، نفسها المناطق التي كانت في ما سبق تشكل مقاطعة إفريقية الرومانية .  حاليا، تشمل بلاد إفريقية ",
+      "جورجيس ماركوبيدس المعروف باسم جورس فان لانكفلت (23 أبريل؟ 1487 م - نهاية يوليو 1558 م) هو كاتب كلاسيكي هولندي يعتبر من أشهر كتاب المسرحيات اللاتينية في القرن السادس عشر.  ولد ماركوبيدس باسم جورس فان لانكفلت في بلدة جيرمت في هولندا عام 1487 وكان معلما"
+    ]
+  }
+}
