@@ -1,0 +1,17 @@
+{
+  "id": "tijildas/ebrain-stage-7-test-evaluation",
+  "title": "EBrain Stage 7 Test Evaluation",
+  "code_file": "kaggle_stage7_test_evaluation.py",
+  "language": "python",
+  "kernel_type": "script",
+  "is_private": "true",
+  "enable_gpu": "true",
+  "enable_tpu": "false",
+  "enable_internet": "false",
+  "dataset_sources": [
+    "tijildas/ebrain-multilingual-v3-certified",
+    "tijildas/ebrain-stage7-checkpoint"
+  ],
+  "competition_sources": [],
+  "kernel_sources": []
+}
