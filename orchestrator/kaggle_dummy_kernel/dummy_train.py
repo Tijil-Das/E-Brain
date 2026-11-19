@@ -18,10 +18,10 @@ import hashlib
 import requests
 
 # ── Config ────────────────────────────────────────────────────────────────────
-WORKER_URL     = os.environ.get("WORKER_URL", "")          # set as Kaggle secret
+WORKER_URL      = os.environ.get("WORKER_URL", "")          # set as Kaggle secret
 HEARTBEAT_TOKEN = os.environ.get("HEARTBEAT_TOKEN", "")    # set as Kaggle secret
-TOTAL_DUMMY_STEPS = 20
-SLEEP_PER_STEP    = 5    # seconds — simulates training time
+TOTAL_DUMMY_STEPS = 12
+SLEEP_PER_STEP    = 10   # seconds — sends heartbeat and polls control every 10 s (~2 min total)
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
