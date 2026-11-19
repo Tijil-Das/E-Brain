@@ -35,6 +35,8 @@ jobs:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY:      ${{ secrets.KAGGLE_KEY }}
           KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_KEY }}
+          WORKER_URL:      ${{ secrets.WORKER_URL }}
+          HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
         run: |
           mkdir -p ~/.kaggle
           # Support both access_token format (KGAT_...) and legacy username/key
@@ -44,8 +46,15 @@ jobs:
           cd orchestrator/kaggle_dummy_kernel
           # Substitute the actual Kaggle username into kernel-metadata.json
           python3 -c "import json; d=json.load(open('kernel-metadata.json')); d['id']='$KAGGLE_USERNAME/ebrain-dummy-gate-d1'; json.dump(d, open('kernel-metadata.json', 'w'), indent=2)"
+          # Inject WORKER_URL and HEARTBEAT_TOKEN directly into dummy_train.py
+          python3 -c "
+          s = open('dummy_train.py').read()
+          s = s.replace('WORKER_URL      = os.environ.get(\"WORKER_URL\", \"\")', 'WORKER_URL = \"$WORKER_URL\"')
+          s = s.replace('HEARTBEAT_TOKEN = os.environ.get(\"HEARTBEAT_TOKEN\", \"\")', 'HEARTBEAT_TOKEN = \"$HEARTBEAT_TOKEN\"')
+          open('dummy_train.py', 'w').write(s)
+          "
           kaggle kernels push -p .
-          echo "Dummy kernel pushed."
+          echo "Dummy kernel pushed with injected Worker credentials."
 
       - name: Poll Dummy Kernel Status
         env:
