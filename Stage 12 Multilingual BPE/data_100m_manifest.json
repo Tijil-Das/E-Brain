@@ -1,0 +1,406 @@
+{
+  "manifest_version": "1.0-certified",
+  "tokenizer_sha256": "41cb92f102d2a11dbde826c54f09b487a27c4a157be0f179ea09682ad04344bf",
+  "languages": {
+    "ar": {
+      "num_shards": 6,
+      "total_bytes": 518610944,
+      "unique_tokens": 259305472,
+      "epoch_multiplier": 1.0,
+      "planned_tokens": 259305472,
+      "shards": [
+        {
+          "name": "train_ar_shard_00.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ar_shard_00.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ar_shard_01.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ar_shard_01.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ar_shard_02.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ar_shard_02.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ar_shard_03.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ar_shard_03.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ar_shard_04.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ar_shard_04.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ar_shard_05.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ar_shard_05.bin",
+          "bytes": 18610944,
+          "tokens": 9305472
+        }
+      ],
+      "share_percent": 12.92
+    },
+    "bn": {
+      "num_shards": 3,
+      "total_bytes": 280727552,
+      "unique_tokens": 140363776,
+      "epoch_multiplier": 1.4,
+      "planned_tokens": 196509286,
+      "shards": [
+        {
+          "name": "train_bn_shard_00.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_bn_shard_00.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_bn_shard_01.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_bn_shard_01.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_bn_shard_02.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_bn_shard_02.bin",
+          "bytes": 80727552,
+          "tokens": 40363776
+        }
+      ],
+      "share_percent": 9.79
+    },
+    "de": {
+      "num_shards": 5,
+      "total_bytes": 410959872,
+      "unique_tokens": 205479936,
+      "epoch_multiplier": 1.0,
+      "planned_tokens": 205479936,
+      "shards": [
+        {
+          "name": "train_de_shard_00.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_de_shard_00.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_de_shard_01.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_de_shard_01.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_de_shard_02.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_de_shard_02.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_de_shard_03.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_de_shard_03.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_de_shard_04.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_de_shard_04.bin",
+          "bytes": 10959872,
+          "tokens": 5479936
+        }
+      ],
+      "share_percent": 10.24
+    },
+    "en": {
+      "num_shards": 4,
+      "total_bytes": 398987264,
+      "unique_tokens": 199493632,
+      "epoch_multiplier": 1.0,
+      "planned_tokens": 199493632,
+      "shards": [
+        {
+          "name": "train_en_shard_00.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_en_shard_00.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_en_shard_01.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_en_shard_01.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_en_shard_02.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_en_shard_02.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_en_shard_03.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_en_shard_03.bin",
+          "bytes": 98987264,
+          "tokens": 49493632
+        }
+      ],
+      "share_percent": 9.94
+    },
+    "es": {
+      "num_shards": 5,
+      "total_bytes": 403525632,
+      "unique_tokens": 201762816,
+      "epoch_multiplier": 1.0,
+      "planned_tokens": 201762816,
+      "shards": [
+        {
+          "name": "train_es_shard_00.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_es_shard_00.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_es_shard_01.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_es_shard_01.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_es_shard_02.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_es_shard_02.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_es_shard_03.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_es_shard_03.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_es_shard_04.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_es_shard_04.bin",
+          "bytes": 3525632,
+          "tokens": 1762816
+        }
+      ],
+      "share_percent": 10.05
+    },
+    "fr": {
+      "num_shards": 5,
+      "total_bytes": 416354304,
+      "unique_tokens": 208177152,
+      "epoch_multiplier": 1.0,
+      "planned_tokens": 208177152,
+      "shards": [
+        {
+          "name": "train_fr_shard_00.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_fr_shard_00.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_fr_shard_01.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_fr_shard_01.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_fr_shard_02.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_fr_shard_02.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_fr_shard_03.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_fr_shard_03.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_fr_shard_04.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_fr_shard_04.bin",
+          "bytes": 16354304,
+          "tokens": 8177152
+        }
+      ],
+      "share_percent": 10.37
+    },
+    "hi": {
+      "num_shards": 2,
+      "total_bytes": 180592640,
+      "unique_tokens": 90296320,
+      "epoch_multiplier": 1.8,
+      "planned_tokens": 162533376,
+      "shards": [
+        {
+          "name": "train_hi_shard_00.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_hi_shard_00.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_hi_shard_01.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_hi_shard_01.bin",
+          "bytes": 80592640,
+          "tokens": 40296320
+        }
+      ],
+      "share_percent": 8.1
+    },
+    "ja": {
+      "num_shards": 3,
+      "total_bytes": 209514496,
+      "unique_tokens": 104757248,
+      "epoch_multiplier": 1.8,
+      "planned_tokens": 188563046,
+      "shards": [
+        {
+          "name": "train_ja_shard_00.bin",
+          "path": "Stage 12 Multilingual BPE/data_100m_binary/train_ja_shard_00.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ja_shard_01.bin",
+          "path": "Stage 12 Multilingual BPE/data_100m_binary/train_ja_shard_01.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ja_shard_02.bin",
+          "path": "Stage 12 Multilingual BPE/data_100m_binary/train_ja_shard_02.bin",
+          "bytes": 9514496,
+          "tokens": 4757248
+        }
+      ],
+      "share_percent": 9.4
+    },
+    "ru": {
+      "num_shards": 6,
+      "total_bytes": 516136960,
+      "unique_tokens": 258068480,
+      "epoch_multiplier": 1.0,
+      "planned_tokens": 258068480,
+      "shards": [
+        {
+          "name": "train_ru_shard_00.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ru_shard_00.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ru_shard_01.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ru_shard_01.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ru_shard_02.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ru_shard_02.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ru_shard_03.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ru_shard_03.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ru_shard_04.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ru_shard_04.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_ru_shard_05.bin",
+          "path": "Stage 12 Multilingual BPE/kaggle_100m_tokenized_output/data_100m_binary/train_ru_shard_05.bin",
+          "bytes": 16136960,
+          "tokens": 8068480
+        }
+      ],
+      "share_percent": 12.86
+    },
+    "zh": {
+      "num_shards": 2,
+      "total_bytes": 140931072,
+      "unique_tokens": 70465536,
+      "epoch_multiplier": 1.8,
+      "planned_tokens": 126837965,
+      "shards": [
+        {
+          "name": "train_zh_shard_00.bin",
+          "path": "Stage 12 Multilingual BPE/data_100m_binary/train_zh_shard_00.bin",
+          "bytes": 100000000,
+          "tokens": 50000000
+        },
+        {
+          "name": "train_zh_shard_01.bin",
+          "path": "Stage 12 Multilingual BPE/data_100m_binary/train_zh_shard_01.bin",
+          "bytes": 40931072,
+          "tokens": 20465536
+        }
+      ],
+      "share_percent": 6.32
+    }
+  },
+  "total_unique_tokens": 1738170368,
+  "total_bytes": 3476340736,
+  "total_shards": 41,
+  "total_planned_tokens": 2006731161,
+  "planned_training_steps_32k": 61241,
+  "decontamination_audit": {
+    "doc_id_overlap": {
+      "val_vault": 0,
+      "test_vault": 0,
+      "alice_val": 0
+    },
+    "natural_floors": {
+      "ja_val_test_char_10gram": 0.004454,
+      "zh_val_test_char_10gram": 0.001677
+    },
+    "measured_training_overlap": {
+      "ja": {
+        "val_overlap": 0.003009,
+        "val_ratio_vs_floor": 0.68,
+        "test_overlap": 0.002369,
+        "test_ratio_vs_floor": 0.53,
+        "alice_overlap": 7e-06,
+        "status": "PASS (<= 2.0x floor)"
+      },
+      "zh": {
+        "val_overlap": 0.000329,
+        "val_ratio_vs_floor": 0.2,
+        "test_overlap": 0.002405,
+        "test_ratio_vs_floor": 1.43,
+        "alice_overlap": 0.0,
+        "status": "PASS (<= 2.0x floor)"
+      }
+    }
+  },
+  "inspection_samples": {
+    "ja": [
+      "豊田 四郎（とよだ しろう、1906年（明治39年）1月3日 - 1977年（昭和52年）11月13日）は、日本の映画監督。多くの文芸映画を作り、「文芸映画の巨匠」と呼ばれた。  概歴  京都府京都市上京区生まれ。父は鉄道会社の重役で、裕福な家に育った。幼いころから体が弱く、小学校に入学するころに肋骨カリエスにかかった経験がある。中学校卒業後、東京にいた長兄をたよって上京する。1924年に松竹蒲田撮影所に入社し島津保次郎に師事、やがて島津の助監督となった。脚本家志望だった豊田は、松竹に入社するときに脚本を書いて持参したが、その脚本が島津監督に『夕の鐘』として映画化される。1929年、佐藤春夫の小説『売笑婦マリ』を下敷きにした自作の脚本による『彩られる唇』で監督デビューする。しかし、次に撮った",
+      "孫 堅（そん けん、永寿元年（155年）または同2年（156年） - 初平2年（191年）または同3年（192年））は、中国後漢末期の武将。字は文台(ぶんだい)。揚州呉郡富春県の人。妻は呉夫人。子は孫策・孫権・孫翊・孫匡・孫夫人・孫朗。廟号は始祖、諡号は武烈皇帝。  生涯  その出自  清代の『四庫全書』の記載によると、孫堅は春秋時代の兵家の孫武の子孫と伝えられている。  孫堅が17歳の時、立ち寄った銭唐県において、海賊が略奪を行なっている状況に遭遇したため、それを見た孫堅は一計を案じた。見晴らしの良い位置に立ち、あたかも大軍の指揮を執って、海賊を包囲殲滅するかのような身振りをしたのである。それを見た海賊たちは、大軍が攻めてくるものと勘違いし、我先にと逃げ出してしまった。この件で孫堅は有名と",
+      "55年体制（ごじゅうごねんたいせい）は、日本において、与党第1党自由民主党が国政選挙で単独過半数を占め続けることで政権を維持し、野党第1党日本社会党とその他非自社政党の合計で3分の1を占め、憲法改正と再軍備を阻止していた（非武装中立を是とする）体制。1955年（昭和30年）に自民党・社会党（+その他）の2:1構図が成立したためこう呼ばれる。  初出は、社会党が衰退・政権を担うことを狙う新党が乱立する時代となった1964年（昭和39年）に政治学者の升味準之輔が発表した論文「1955年の政治体制（『思想』1964年4月号）」である。  与党の自民党は、改憲を志向しつつも軽武装路線を行った。野党第一党の社会党は途中から過半数の候補者を選挙に擁立自体せず、政権交代は狙わない万年野党である代わりに、憲"
+    ],
+    "zh": [
+      "丘念台（），初名伯琮、國琮，入中學時更名琮，臺灣省臺灣縣捒東上堡大埔厝莊（今台中市潭子區）人，清臺要員、臺灣民主國副總統丘逢甲之子。其父於臺灣被割讓日本後離台遷居廣東鎮平（今蕉嶺縣），榜其居曰「念臺山館」，以示不忘光復臺灣，更為子取別號念臺，冀其繼承父志完成復臺宏願。念台仰承庭訓，奉為畢生力行之鵠的，日後辦中國國民黨黨務時，總裁蔣中正發給黨部委任狀，書其名為「丘念台」，自此以「念台」為正名，易「-{臺}-」為「台」。政治立場上親近CC派。  早年生平  念台天資聰穎，五歲啟蒙，父母即教以詩文，灌輸其民族思想。年十三，入鎮平縣立中學，時革命思潮到處湧盪，次年經教師丘君實（光漢）介紹加入同盟會，立志獻身革命事業。中學畢業後，適值武昌起義成功，認為報國時機已至，乃獨往梅縣欲參加革命工作，為家人發覺",
+      "松山市政公園（，）是位於澳門東望洋山山頂的多功能公園。  沿革 原因形似臥琴，故稱琴山，本為荒蕪山崗。澳葡政府早在19世紀，已在此山進行綠化工作，由於以松樹為種植對象，故被稱為松山。1931年，由葡萄牙軍人庫尼亞少尉在此建造防空洞隧道，部分地區成為軍事禁區。其後於1997年，山頂部分被開闢為松山市政公園。公園佔地約143000平方米，原為荒蕪的山崗，在19世紀末，總督羅沙推行綠化政策，經過多年綠化工作，種植以華南地區的松樹為主，故這裡又稱為松山。1980年代，公園曾修築水庫，以改善澳門供水。公園內除設有石刻壁畫、觀景台、自然資訊站、眺望台、健康徑、燒烤場、兒童遊樂場、螺旋水池、綜合球場、半山亭外，還有屬於世界文化遺產的松山燈塔、聖母雪地殿教堂及炮台，更有防空洞隧道及33彎環山跑道等。  地理",
+      "陳果夫（），名祖燾，字果夫。浙江吳興東林澤河里人。民國時期政治人物，是國民黨內右派。陳果夫及其弟陳立夫與蔣介石關係密切，在大陸時期為蔣所倚重，負責國民黨內組織及黨務，有「二陳」、「CC系」之稱。  生平  陳果夫的叔父陳其美是辛亥革命元勳，與蔣中正曾為結拜兄弟。陳果夫年輕時於浙江陸軍小學畢業，受陳其美影響，加入中國革命同盟會。參加過辛亥革命、二次革命及討袁之役。1920年，在上海經營証券物品交易所，股東有蔣介石等國民黨人，曾獲利頗豐。所得利潤部分用作支持孫中山革命。  1924年，蔣中正主持黃埔軍校籌建，陳果夫在上海代其處理軍品採購、人才招攬等工作。1925年，蔣經國前往廣州，在黃埔軍校與蔣中正討論計畫出國前往蘇聯莫斯科留學，之後獲得蔣中正同意。儘管蔣中正一開始並不希望送自己的兒子前往蘇聯，"
+    ]
+  },
+  "source_license_log": {
+    "provenance": "Wikimedia Foundation dumps (Wikipedia, Wikisource)",
+    "licenses": [
+      "Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)",
+      "GNU Free Documentation License (GFDL)"
+    ],
+    "terms_compliance": "Permits commercial use, modification, and training derivative works with proper attribution. Training text vetted free of non-commercial/restrictive CC-NC/CC-ND content."
+  }
+}

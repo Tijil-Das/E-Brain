@@ -1,0 +1,63 @@
+name: Gate D.1 Dummy Kernel Test
+on:
+  workflow_dispatch:
+
+jobs:
+  run-dummy-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Install Kaggle CLI
+        run: pip install --quiet kaggle
+
+      - name: Configure Kaggle credentials
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY:      ${{ secrets.KAGGLE_KEY }}
+        run: |
+          mkdir -p ~/.kaggle
+          echo '{"username":"'"$KAGGLE_USERNAME"'","key":"'"$KAGGLE_KEY"'"}' > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
+
+      - name: Check Cloudflare Worker Status
+        env:
+          WORKER_URL: ${{ secrets.WORKER_URL }}
+        run: |
+          echo "Checking Cloudflare Worker at $WORKER_URL/control"
+          curl -sf "$WORKER_URL/control" || echo "Worker control endpoint reached with non-200 or empty"
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure and Push Dummy Kernel
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+        run: |
+          cd orchestrator/kaggle_dummy_kernel
+          # Substitute the actual Kaggle username into kernel-metadata.json
+          python3 -c "import json; d=json.load(open('kernel-metadata.json')); d['id']='$KAGGLE_USERNAME/ebrain-dummy-gate-d1'; json.dump(d, open('kernel-metadata.json', 'w'), indent=2)"
+          kaggle kernels push -p .
+          echo "Dummy kernel pushed."
+
+      - name: Poll Dummy Kernel Status
+        env:
+          KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+        run: |
+          KERNEL_SLUG="$KAGGLE_USERNAME/ebrain-dummy-gate-d1"
+          echo "Polling dummy kernel: $KERNEL_SLUG"
+          for i in $(seq 1 30); do
+            sleep 15
+            STATUS=$(kaggle kernels status "$KERNEL_SLUG" 2>&1 | tail -1)
+            echo "[$i] Status: $STATUS"
+            if echo "$STATUS" | grep -q "complete\|COMPLETE"; then
+              echo "Dummy kernel completed successfully!"
+              exit 0
+            fi
+            if echo "$STATUS" | grep -q "error\|ERROR\|cancel\|CANCEL"; then
+              echo "Dummy kernel error or cancellation: $STATUS"
+              exit 1
+            fi
+          done
+          echo "Dummy kernel timed out."
+          exit 1
