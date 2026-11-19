@@ -9,7 +9,7 @@ Architecture decisions (locked):
   Target:     6.36B tokens = 194,000 steps, batch = 32,768 tokens (micro=2, accum=4)
               ≈ 101% Chinchilla-optimal for 315M params (20 × 315M = 6.3B)
   Schedule:   warmup 2000 steps + cosine decay to 0.1×lr_max over 194,000 steps
-  Precision:  bfloat16 (wider dynamic range, no GradScaler needed)
+  Precision:  float16 (T4/Turing has no native BF16; FP16 + GradScaler)
   Attention:  PyTorch SDPA (FlashAttention) — eliminates O(T²) VRAM, enables T=4096 on T4
   Languages:  en es ru fr de ja zh hi bn ar  (equal 10% share each)
   Phase 2:    After main training, extend context to 16K–32K via YaRN RoPE scaling
@@ -73,7 +73,7 @@ LR_MIN      = LR_MAX * 0.1               # → 2e-5
 WARMUP_STEPS = 2000
 TOTAL_STEPS = 194_000                     # 194,000 × 32,768 = 6.36B tokens ≈ 101% Chinchilla for 315M
 CLIP_NORM   = 1.0
-DTYPE       = torch.bfloat16              # bfloat16: wider dynamic range than float16, more stable at 315M
+DTYPE       = torch.float16              # T4 (Turing) has no native BF16; use FP16 + GradScaler
 
 LANGUAGES   = ['en','es','ru','fr','de','ja','zh','hi','bn','ar']
 TOK_SHA256  = "41cb92f102d2a11dbde826c54f09b487a27c4a157be0f179ea09682ad04344bf"
@@ -556,11 +556,10 @@ def main():
     print(f\"Model: {total_p:,} total params  ({non_emb_p:,} non-embedding)\")
 
     # ── Optimizer
-    # bfloat16 has wider dynamic range than float16 — no GradScaler needed.
-    # SDPA (FlashAttention) works natively with bfloat16.
+    # float16 on T4 requires GradScaler to prevent underflow — always enabled.
     optimizer = torch.optim.AdamW(model.parameters(), lr=LR_MAX, betas=(0.9, 0.95),
                                   weight_decay=0.1, eps=1e-8)
-    scaler = GradScaler(enabled=(DTYPE == torch.float16))  # disabled for bfloat16
+    scaler = GradScaler()  # always on for float16
 
     # ── Load checkpoint
     ckpt = load_latest_checkpoint()
@@ -614,7 +613,7 @@ def main():
         assert loss.item() < 0.5, f"Overfit test failed: loss={loss.item():.4f}"
         print("--- OVERFIT TEST PASSED ---\n")
         # Reset model and optimizer
-        model = EBrain100M().to(device)
+        model = EBrain315M().to(device)
         optimizer = torch.optim.AdamW(model.parameters(), lr=LR_MAX, betas=(0.9, 0.95),
                                       weight_decay=0.1, eps=1e-8)
         scaler = GradScaler()
