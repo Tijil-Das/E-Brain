@@ -33,7 +33,11 @@ jobs:
       - name: Configure and Push Dummy Kernel
         env:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY:      ${{ secrets.KAGGLE_KEY }}
         run: |
+          mkdir -p ~/.kaggle
+          echo '{"username":"'"$KAGGLE_USERNAME"'","key":"'"$KAGGLE_KEY"'"}' > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
           cd orchestrator/kaggle_dummy_kernel
           # Substitute the actual Kaggle username into kernel-metadata.json
           python3 -c "import json; d=json.load(open('kernel-metadata.json')); d['id']='$KAGGLE_USERNAME/ebrain-dummy-gate-d1'; json.dump(d, open('kernel-metadata.json', 'w'), indent=2)"
@@ -43,7 +47,11 @@ jobs:
       - name: Poll Dummy Kernel Status
         env:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+          KAGGLE_KEY:      ${{ secrets.KAGGLE_KEY }}
         run: |
+          mkdir -p ~/.kaggle
+          echo '{"username":"'"$KAGGLE_USERNAME"'","key":"'"$KAGGLE_KEY"'"}' > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
           KERNEL_SLUG="$KAGGLE_USERNAME/ebrain-dummy-gate-d1"
           echo "Polling dummy kernel: $KERNEL_SLUG"
           for i in $(seq 1 30); do
