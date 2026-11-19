@@ -18,8 +18,9 @@ Public API
       -> replaces model's cos/sin buffers and stores attn_factor in model
 
 Usage in MHA forward (after replacing the cache):
-    q = q * self.yarn_attn_factor   # temperature correction BEFORE SDPA
+    q = q * self.yarn_attn_factor   # temperature correction BEFORE SDPA, q ONLY
     out = F.scaled_dot_product_attention(q, k, v, is_causal=True)
+    # ⚠️  Apply to q ONLY. Applying to both q and k gives factor² effect (wrong).
 
 Extension schedule (Phase 2 context extension):
     Stage 1: T_base=T_native -> T_ext=8192   (~4-5% of main steps, LR=LR_max/10)
@@ -179,8 +180,13 @@ def yarn_rope_upgrade(
     Returns the attn_factor that must be applied to q in MHA forward.
 
     After calling this function, MHA.forward must be patched to scale q:
-        q = q * model.yarn_attn_factor
+        q = q * model.yarn_attn_factor   # q ONLY — do NOT apply to k
     OR the model's MHA class must accept and apply the factor.
+
+    ⚠️  MUST be applied to q ONLY, before SDPA.
+        Applying to both q and k gives factor² (incorrect temperature correction).
+        In SDPA the denominator is effectively sqrt(d_head × t) when q is scaled by
+        sqrt(1/t); applying the same factor to k squares t, over-dampening attention.
 
     Usage:
         factor = yarn_rope_upgrade(model, T_ext=32768, T_base=2048)

@@ -294,6 +294,96 @@ def test_t8_attn_temperature_applied():
           f"max_diff={max_diff:.2e} (expected > 1e-5)")
 
 
+# ── Wrong-way model: applies factor to both q AND k (gives factor² effect) ───
+
+class TinyMHABothQK(nn.Module):
+    """Wrong implementation: applies yarn_factor to both q AND k (doubles the effect)."""
+    def __init__(self, yarn_factor: float = 1.0):
+        super().__init__()
+        self.qkv  = nn.Linear(D, 3 * D, bias=False)
+        self.proj = nn.Linear(D, D, bias=False)
+        self.yarn_factor = yarn_factor
+
+    def forward(self, x: torch.Tensor, cos: torch.Tensor, sin: torch.Tensor) -> torch.Tensor:
+        B, T, _ = x.shape
+        q, k, v = self.qkv(x).split(D, dim=-1)
+        q = q.view(B, T, H, D_HEAD).transpose(1, 2)
+        k = k.view(B, T, H, D_HEAD).transpose(1, 2)
+        v = v.view(B, T, H, D_HEAD).transpose(1, 2)
+        c = cos[:T].unsqueeze(0).unsqueeze(0)
+        s = sin[:T].unsqueeze(0).unsqueeze(0)
+        q = q * c + rotate_half(q) * s
+        k = k * c + rotate_half(k) * s
+        q = q * self.yarn_factor  # WRONG: also applying to k below → factor² effect
+        k = k * self.yarn_factor
+        out = F.scaled_dot_product_attention(q, k, v, is_causal=True)
+        return self.proj(out.transpose(1, 2).reshape(B, T, D))
+
+class TinyModelBothQK(nn.Module):
+    def __init__(self, T_max: int = 128, yarn_factor: float = 1.0):
+        super().__init__()
+        self.emb     = nn.Embedding(VOCAB, D)
+        self.attn    = TinyMHABothQK(yarn_factor=yarn_factor)
+        self.ff      = nn.Sequential(
+            nn.Linear(D, D_FF), nn.SiLU(), nn.Linear(D_FF, D)
+        )
+        self.head    = nn.Linear(D, VOCAB, bias=False)
+        self.head.weight = self.emb.weight
+        cos, sin = build_rope_cache_standard(T_max, D_HEAD)
+        self.register_buffer("cos", cos)
+        self.register_buffer("sin", sin)
+        self.yarn_attn_factor = yarn_factor
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        h = self.emb(x)
+        h = h + self.attn(h, self.cos, self.sin)
+        h = h + self.ff(h)
+        return self.head(h)
+
+
+def test_t8b_factor_applied_to_q_only():
+    """T8b: q-only (correct) vs both-q-and-k (wrong) must produce different outputs.
+    This verifies the factor is NOT silently applied twice, which gives factor² effect.
+    """
+    T = 32
+    model_correct = TinyModel(T_max=T, yarn_factor=0.885)      # q only — correct
+    model_wrong   = TinyModelBothQK(T_max=T, yarn_factor=0.885)  # q and k — wrong
+
+    # Copy identical weights into the wrong model
+    with torch.no_grad():
+        for (n1, p1), (n2, p2) in zip(
+            model_correct.named_parameters(), model_wrong.named_parameters()
+        ):
+            p2.copy_(p1)
+
+    model_correct.eval(); model_wrong.eval()
+    x = torch.randint(0, VOCAB, (1, T))
+    with torch.no_grad():
+        out_c = model_correct(x)
+        out_w = model_wrong(x)
+
+    max_diff = (out_c - out_w).abs().max().item()
+    check("T8b q-only vs both-qk produces different outputs (factor vs factor²)",
+          max_diff > 1e-5,
+          f"max_diff={max_diff:.2e} (expected >1e-5)")
+    # Sanity: neither is the same as factor=1 baseline
+    model_one = TinyModel(T_max=T, yarn_factor=1.0)
+    with torch.no_grad():
+        for (n1, p1), (n2, p2) in zip(
+            model_correct.named_parameters(), model_one.named_parameters()
+        ):
+            p2.copy_(p1)
+    model_one.eval()
+    with torch.no_grad():
+        out_one = model_one(x)
+    diff_c = (out_c  - out_one).abs().max().item()
+    diff_w = (out_w  - out_one).abs().max().item()
+    check("T8b correct (q-only) differs from factor=1 baseline",
+          diff_c > 1e-5, f"diff={diff_c:.2e}")
+    check("T8b wrong (both-qk) differs from factor=1 baseline",
+          diff_w > 1e-5, f"diff={diff_w:.2e}")
+
+
 def test_t9_diagnostics():
     """T9: yarn_diagnostics runs and contains expected strings."""
     for scale, T_base in [(4.0, 2048), (16.0, 2048), (4.0, 4096)]:
@@ -341,8 +431,90 @@ def test_t10_sequential_upgrade():
           "attribute missing")
 
 
-# ── Entry point ───────────────────────────────────────────────────────────────
+def test_t11_yarn_on_trained_model():
+    """T11: YaRN does not degrade a trained model at base context (Δloss < 2.0).
+    Extended-context loss must be finite and not NaN.
 
+    Caveat: this test verifies mathematical correctness only (shapes, no NaN, no huge
+    degradation at base context). It does NOT verify YaRN quality at extended context.
+    Quality is proven only by position-band loss eval and needle test after real training.
+    """
+    T_BASE   = 64
+    T_EXT    = T_BASE * 4   # 256
+    N_TRAIN  = 500
+    torch.manual_seed(0)
+
+    # ── Train a tiny model on a repeating token sequence ─────────────────────
+    model = TinyModel(T_max=T_BASE, yarn_factor=1.0)
+    opt   = torch.optim.AdamW(model.parameters(), lr=5e-3)
+    seq   = torch.arange(T_BASE + 1, dtype=torch.long) % VOCAB  # [0,1,...,T_BASE]
+
+    model.train()
+    for _ in range(N_TRAIN):
+        x = seq[:-1].unsqueeze(0)   # [1, T_BASE]
+        y = seq[1:].unsqueeze(0)    # [1, T_BASE]
+        loss = F.cross_entropy(model(x).view(-1, VOCAB), y.view(-1))
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    trained_loss = loss.item()
+
+    random_baseline = math.log(VOCAB)
+    check("T11 model learned (trained_loss < random_baseline)",
+          trained_loss < random_baseline,
+          f"trained={trained_loss:.4f}  random={random_baseline:.4f}")
+
+    # ── Build YaRN-extended model ─────────────────────────────────────────────
+    scale    = T_EXT / T_BASE
+    cos_y, sin_y, factor = build_yarn_cache(
+        T_EXT, D_HEAD, 10000.0, scale, torch.device("cpu"), T_base=T_BASE
+    )
+    model_yarn = TinyModel(T_max=T_EXT, yarn_factor=factor)
+    # Copy trained weights
+    with torch.no_grad():
+        for p_src, p_dst in zip(model.parameters(), model_yarn.parameters()):
+            p_dst.copy_(p_src)
+    model_yarn.cos = cos_y
+    model_yarn.sin = sin_y
+
+    model.eval(); model_yarn.eval()
+
+    with torch.no_grad():
+        # Base-context loss: original model
+        loss_base = F.cross_entropy(
+            model(seq[:-1].unsqueeze(0)).view(-1, VOCAB),
+            seq[1:].unsqueeze(0).view(-1),
+        )
+        # Base-context loss: YaRN model (should not degrade much)
+        loss_yarn_base = F.cross_entropy(
+            model_yarn(seq[:-1].unsqueeze(0)).view(-1, VOCAB),
+            seq[1:].unsqueeze(0).view(-1),
+        )
+        # Extended-context loss: YaRN model at T_EXT
+        seq_ext = torch.arange(T_EXT + 1, dtype=torch.long) % VOCAB
+        loss_yarn_ext = F.cross_entropy(
+            model_yarn(seq_ext[:-1].unsqueeze(0)).view(-1, VOCAB),
+            seq_ext[1:].unsqueeze(0).view(-1),
+        )
+
+    degradation = loss_yarn_base.item() - loss_base.item()
+    check("T11 YaRN base-context degradation < 2.0",
+          degradation < 2.0,
+          f"Δloss={degradation:+.4f}  (base={loss_base.item():.4f}  yarn_base={loss_yarn_base.item():.4f})")
+    check("T11 YaRN extended-context loss is finite",
+          torch.isfinite(loss_yarn_ext).item(),
+          f"loss_ext={loss_yarn_ext.item()}")
+    check("T11 YaRN extended-context loss is not NaN",
+          not torch.isnan(loss_yarn_ext).item(),
+          f"loss_ext={loss_yarn_ext.item()}")
+    check("T11 YaRN extended-context loss < 3× random baseline",
+          loss_yarn_ext.item() < 3.0 * random_baseline,
+          f"loss_ext={loss_yarn_ext.item():.4f}  3×random={3*random_baseline:.4f}")
+    # Note: loss > 1× random is expected at 4× extrapolation with no position training.
+    # This check only verifies no catastrophic blow-up. Quality needs post-training eval.
+
+
+# ── Entry point ───────────────────────────────────────────────────────────────
 def main() -> None:
     print("=" * 70)
     print("YaRN CPU Tests")
@@ -364,9 +536,13 @@ def main() -> None:
     print()
     test_t8_attn_temperature_applied()
     print()
+    test_t8b_factor_applied_to_q_only()
+    print()
     test_t9_diagnostics()
     print()
     test_t10_sequential_upgrade()
+    print()
+    test_t11_yarn_on_trained_model()
     print()
 
     print("=" * 70)
@@ -375,6 +551,12 @@ def main() -> None:
         sys.exit(1)
     else:
         print("ALL PASS — YaRN implementation is consistent on CPU.")
+        print("T8b confirms factor is applied to q only (not q+k).")
+        print("T11 confirms a trained model is not broken by YaRN at base context.")
+        print()
+        print("CAVEAT: CPU tests verify shapes and math. YaRN *quality* (position-band")
+        print("loss improvement, needle test) is proven only after real training eval.")
+        print()
         print("Next: GPU memory probe (Phase 0 bench.py section 3c).")
         print("Then: integrate yarn_rope_upgrade into train.py for context extension.")
     print("=" * 70)

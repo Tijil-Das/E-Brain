@@ -20,7 +20,7 @@ Tokenizer: /kaggle/input/ebrain-100m-data-binary/ebrain_tokenizer_16k.json
 Expected SHA-256: 41cb92f102d2a11dbde826c54f09b487a27c4a157be0f179ea09682ad04344bf
 """
 
-import sys, math, hashlib
+import sys, math, hashlib, time
 from pathlib import Path
 
 import torch
@@ -36,6 +36,22 @@ DEVICE       = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 DTYPE        = torch.float16
 OUT_DIR      = Path("/kaggle/working")
 RESULT_FILE  = OUT_DIR / "phase0_results.txt"
+
+# Hard GPU budget: kill any section that starts after this limit.
+# The kernel itself should not run more than ~70 min; this guards against hangs.
+KERNEL_HARD_LIMIT_S = 70 * 60   # 70 minutes
+_kernel_start       = time.monotonic()
+
+def seconds_remaining() -> float:
+    return KERNEL_HARD_LIMIT_S - (time.monotonic() - _kernel_start)
+
+def time_ok(label: str, need_s: float = 120) -> bool:
+    """Return True if at least need_s seconds remain; else log and return False."""
+    rem = seconds_remaining()
+    if rem < need_s:
+        log(f"  SKIPPED: {label} (only {rem:.0f}s remaining of {KERNEL_HARD_LIMIT_S}s budget)")
+        return False
+    return True
 
 # 3h50m = actual kernel wall budget; used for days-to-complete calculations
 SESSION_S    = 3 * 3600 + 50 * 60    # 13 800 s
@@ -305,197 +321,40 @@ def run_t32k_probe(D: int, L: int, H: int, D_FF: int, label: str) -> dict:
 
 
 # ── Tokenizer measurement ─────────────────────────────────────────────────────
-# Representative snippets — real code, ~600–900 bytes each. No auto-generated content.
+# Code samples are read from the mounted Kaggle dataset (ebrain-phase0-code-samples).
+# SHA-256 of each sample file is verified before use to detect dataset tampering.
 
-_PY = """\
-import os, json
-from pathlib import Path
-from typing import List, Optional
+# SHA-256 of the five sample files committed to the repo.
+# Recompute with: Get-FileHash <file> -Algorithm SHA256  (or sha256sum on Linux)
+CODE_SAMPLE_HASHES: dict[str, str] = {
+    "python": "3e70a21600bd6e7b9353a21e9b31015b1d6f5a4078bee728b006933d100ebdba",
+    "js":     "2f42eb09750d4a3045d8d5c49bd20b20eda24c965dba7744c8c854b26599dec7",
+    "java":   "ab2859606c845803b7a25777ef4975b601ae4c01dfcf23fb3d0cda43629d214e",
+    "cpp":    "ae350561feab6543d2b86c6c870247dce2134601da908882fd0bb711a192dc3c",
+    "go":     "23d72933c0e1b923bbc1d044bea6adefcf3b61ef0916182bdceb03b20770dcac",
+}
 
-class ShardLoader:
-    \"\"\"Deterministic loader over uint16 binary shards.\"\"\"
-    def __init__(self, data_dir: str, seed: int = 42):
-        self.rng   = __import__('random').Random(seed)
-        self.files = sorted(Path(data_dir).glob('*.bin'))
-        if not self.files:
-            raise FileNotFoundError(f'No .bin shards in {data_dir}')
-        self._idx  = 0
+CODE_SAMPLE_FILES: dict[str, str] = {
+    "python": "sample.py",
+    "js":     "sample.js",
+    "java":   "sample.java",
+    "cpp":    "sample.cpp",
+    "go":     "sample.go",
+}
 
-    def next_chunk(self, length: int):
-        import numpy as np
-        data = np.frombuffer(self.files[self._idx % len(self.files)].read_bytes(),
-                             dtype=np.uint16).astype(np.int64)
-        self._idx += 1
-        return data[:length]
+CODE_SAMPLES_DATASET_DIR = Path("/kaggle/input/ebrain-phase0-code-samples")
 
-def compute_sha256(path: Path) -> str:
-    import hashlib
+
+def _sha256_file(path: Path) -> str:
     h = hashlib.sha256()
-    with open(path, 'rb') as f:
-        for chunk in iter(lambda: f.read(1 << 20), b''):
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
             h.update(chunk)
     return h.hexdigest()
-"""
 
-_JS = """\
-'use strict';
-const { promises: fs } = require('fs');
-const path = require('path');
-
-class LRUCache {
-  constructor(maxSize) {
-    this._max  = maxSize;
-    this._map  = new Map();
-  }
-  get(key) {
-    if (!this._map.has(key)) return undefined;
-    const val = this._map.get(key);
-    this._map.delete(key);
-    this._map.set(key, val);
-    return val;
-  }
-  set(key, val) {
-    if (this._map.has(key)) this._map.delete(key);
-    if (this._map.size >= this._max)
-      this._map.delete(this._map.keys().next().value);
-    this._map.set(key, val);
-  }
-}
-
-async function readJsonLines(filePath) {
-  const text  = await fs.readFile(filePath, 'utf8');
-  return text.split('\\n').filter(Boolean).map(JSON.parse);
-}
-
-module.exports = { LRUCache, readJsonLines };
-"""
-
-_JAVA = """\
-package io.example.util;
-import java.io.*;
-import java.nio.file.*;
-import java.security.*;
-import java.util.*;
-
-public final class Checksum {
-    private Checksum() {}
-
-    public static String sha256(Path file) throws IOException, NoSuchAlgorithmException {
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        try (InputStream in = Files.newInputStream(file)) {
-            byte[] buf = new byte[1 << 16];
-            int n;
-            while ((n = in.read(buf)) != -1) md.update(buf, 0, n);
-        }
-        byte[] digest = md.digest();
-        StringBuilder sb = new StringBuilder(64);
-        for (byte b : digest) sb.append(String.format("%02x", b));
-        return sb.toString();
-    }
-
-    public static Map<String, String> checksumDir(Path dir) throws Exception {
-        var result = new LinkedHashMap<String, String>();
-        try (var stream = Files.walk(dir)) {
-            stream.filter(Files::isRegularFile).sorted()
-                  .forEach(p -> {
-                      try { result.put(dir.relativize(p).toString(), sha256(p)); }
-                      catch (Exception e) { throw new RuntimeException(e); }
-                  });
-        }
-        return result;
-    }
-}
-"""
-
-_CPP = """\
-#include <cstddef>
-#include <stdexcept>
-#include <vector>
-#include <algorithm>
-
-template <typename T>
-class RingBuffer {
-public:
-    explicit RingBuffer(std::size_t cap) : buf_(cap), cap_(cap) {}
-
-    void push(T value) {
-        if (full()) throw std::overflow_error("RingBuffer full");
-        buf_[tail_] = std::move(value);
-        tail_ = (tail_ + 1) % cap_;
-        ++size_;
-    }
-
-    T pop() {
-        if (empty()) throw std::underflow_error("RingBuffer empty");
-        T v = std::move(buf_[head_]);
-        head_ = (head_ + 1) % cap_;
-        --size_;
-        return v;
-    }
-
-    [[nodiscard]] bool   empty() const noexcept { return size_ == 0; }
-    [[nodiscard]] bool   full()  const noexcept { return size_ == cap_; }
-    [[nodiscard]] size_t size()  const noexcept { return size_; }
-
-private:
-    std::vector<T> buf_;
-    std::size_t cap_, head_ = 0, tail_ = 0, size_ = 0;
-};
-"""
-
-_GO = """\
-package shard
-
-import (
-\t"bufio"
-\t"encoding/binary"
-\t"fmt"
-\t"io"
-\t"os"
-)
-
-// Reader reads uint16 token ids from a binary shard file.
-type Reader struct {
-\tr   *bufio.Reader
-\tf   *os.File
-\tpos int64
-}
-
-func Open(path string) (*Reader, error) {
-\tf, err := os.Open(path)
-\tif err != nil {
-\t\treturn nil, fmt.Errorf("shard.Open: %w", err)
-\t}
-\treturn &Reader{r: bufio.NewReaderSize(f, 1<<20), f: f}, nil
-}
-
-func (r *Reader) ReadTokens(buf []uint16) (int, error) {
-\tfor i := range buf {
-\t\tvar v uint16
-\t\tif err := binary.Read(r.r, binary.LittleEndian, &v); err != nil {
-\t\t\tif err == io.EOF {
-\t\t\t\treturn i, io.EOF
-\t\t\t}
-\t\t\treturn i, fmt.Errorf("read token %d: %w", r.pos+int64(i), err)
-\t\t}
-\t\tbuf[i] = v
-\t}
-\tr.pos += int64(len(buf))
-\treturn len(buf), nil
-}
-
-func (r *Reader) Close() error { return r.f.Close() }
-"""
-
-CODE_SNIPPETS = {
-    "python": _PY,
-    "js":     _JS,
-    "java":   _JAVA,
-    "cpp":    _CPP,
-    "go":     _GO,
-}
 
 def measure_tokenizer() -> tuple[dict | None, float | str]:
+    # ── 1. Locate tokenizer ──────────────────────────────────────────────────
     tok_candidates = [
         Path("/kaggle/input/ebrain-100m-data-binary/ebrain_tokenizer_16k.json"),
         Path("/kaggle/working/ebrain_tokenizer_16k.json"),
@@ -504,7 +363,7 @@ def measure_tokenizer() -> tuple[dict | None, float | str]:
     if tok_path is None:
         return None, "tokenizer file not found at any expected path"
 
-    # Verify SHA-256
+    # ── 2. Verify tokenizer SHA-256 ─────────────────────────────────────────
     sha = hashlib.sha256(tok_path.read_bytes()).hexdigest()
     sha_ok = sha == TOK_SHA256
 
@@ -516,18 +375,50 @@ def measure_tokenizer() -> tuple[dict | None, float | str]:
     except Exception as e:
         return None, f"failed to load tokenizer: {e}"
 
+    # ── 3. Locate code-samples dataset ──────────────────────────────────────
+    if not CODE_SAMPLES_DATASET_DIR.exists():
+        return None, (
+            f"code-samples dataset not found at {CODE_SAMPLES_DATASET_DIR}. "
+            "Mount ebrain-phase0-code-samples in kernel-metadata.json."
+        )
+
+    # ── 4. Verify each sample file and tokenize ──────────────────────────────
     per_lang: dict = {}
-    for lang, code in CODE_SNIPPETS.items():
+    for lang, filename in CODE_SAMPLE_FILES.items():
+        file_path = CODE_SAMPLES_DATASET_DIR / filename
+        if not file_path.exists():
+            log(f"  WARN: {filename} not found in dataset, skipping {lang}")
+            per_lang[lang] = {"bytes": -1, "tokens": -1, "bytes_per_token": -1.0,
+                              "hash_ok": False, "error": "file not found"}
+            continue
+
+        # Hash check
+        actual_hash = _sha256_file(file_path)
+        expected_hash = CODE_SAMPLE_HASHES.get(lang, "")
+        hash_ok = actual_hash == expected_hash
+        if not hash_ok:
+            log(f"  WARN: {filename} hash mismatch!")
+            log(f"    expected: {expected_hash}")
+            log(f"    actual:   {actual_hash}")
+            log(f"  Skipping {lang} (untrusted sample).")
+            per_lang[lang] = {"bytes": -1, "tokens": -1, "bytes_per_token": -1.0,
+                              "hash_ok": False, "error": "hash mismatch"}
+            continue
+
+        code = file_path.read_text(encoding="utf-8")
         b = len(code.encode("utf-8"))
         try:
             ids = tok.encode(code).ids
             t   = len(ids)
             bpt = b / t if t > 0 else -1.0
-        except Exception:
+        except Exception as ex:
+            log(f"  WARN: tokenize error for {lang}: {ex}")
             t, bpt = -1, -1.0
-        per_lang[lang] = {"bytes": b, "tokens": t, "bytes_per_token": bpt}
+        per_lang[lang] = {"bytes": b, "tokens": t, "bytes_per_token": bpt,
+                          "hash_ok": True, "error": None}
 
-    valid = [v["bytes_per_token"] for v in per_lang.values() if v["bytes_per_token"] > 0]
+    valid = [v["bytes_per_token"] for v in per_lang.values()
+             if v.get("bytes_per_token", -1) > 0]
     mean_bpt = sum(valid) / len(valid) if valid else -1.0
     return per_lang, (mean_bpt, sha_ok, sha)
 
@@ -659,7 +550,9 @@ def main() -> None:
     # 3a. T=4096 memory probe on highest-throughput candidate
     # =========================================================================
     log(f"\n[ 3a / 4 ]  T=4096 MEMORY PROBE")
-    if best_r:
+    if not time_ok("T=4096 probe", need_s=180):
+        pass  # skipped — message already logged
+    elif best_r:
         D, L, H, D_FF = best_r["D"], best_r["L"], best_r["H"], best_r["D_FF"]
         log(f"  Config: candidate {best_r['label']} D={D} L={L} H={H}")
         log(f"  T={T_PROBE}  micro_bs={MICRO_BS_T4K}  {N_PROBE} steps  no warmup  fp16")
@@ -685,7 +578,9 @@ def main() -> None:
     log(f"\n[ 3c / 4 ]  T=32768 MEMORY PROBE")
     log(f"  Purpose: verify T=32768 fits on T4 before claiming YaRN 32K extension is feasible.")
     log(f"  Settings: micro_bs=1  grad_ckpt=ON  SDPA=mem-efficient (no flash/math)  fp16  5 steps")
-    if best_r:
+    if not time_ok("T=32768 probe", need_s=300):
+        pass  # skipped — message already logged
+    elif best_r:
         D, L, H, D_FF = best_r["D"], best_r["L"], best_r["H"], best_r["D_FF"]
         log(f"  Config: candidate {best_r['label']} D={D} L={L} H={H}")
         try:
@@ -713,33 +608,36 @@ def main() -> None:
     # 3b → now 3d. Tokenizer bytes/token on code
     # =========================================================================
     log(f"\n[ 3d / 4 ]  TOKENIZER BYTES/TOKEN (16K BPE on 5 code languages)")
-    result = measure_tokenizer()
-    per_lang, meta = result
-
-    if per_lang is None:
-        log(f"  ERROR: {meta}")
-        log(f"  Decision: CANNOT DETERMINE")
+    if not time_ok("tokenizer measurement", need_s=60):
+        pass  # skipped — message already logged
     else:
-        mean_bpt, sha_ok, sha = meta
-        log(f"  Tokenizer SHA-256: {sha[:32]}... {'✅ match' if sha_ok else '❌ MISMATCH'}")
-        log()
-        log(f"  {'lang':<10} {'bytes':>8} {'tokens':>8} {'bytes/token [M]':>16}")
-        log(f"  {'-'*10} {'-'*8} {'-'*8} {'-'*16}")
-        for lang, v in per_lang.items():
-            log(f"  {lang:<10} {v['bytes']:>8,} {v['tokens']:>8,} {v['bytes_per_token']:>16.3f}")
-        log()
-        log(f"  mean bytes/token [M]: {mean_bpt:.3f}")
-        log(f"  threshold: 2.5")
-        if mean_bpt < 0:
-            log(f"  Decision: ERROR — no valid measurements")
-        elif mean_bpt >= 2.5:
-            log(f"  Decision: KEEP existing 16K BPE tokenizer")
-            log(f"  SHA-256 unchanged: {TOK_SHA256}")
+        result = measure_tokenizer()
+        per_lang, meta = result
+
+        if per_lang is None:
+            log(f"  ERROR: {meta}")
+            log(f"  Decision: CANNOT DETERMINE")
         else:
-            log(f"  Decision: RETRAIN tokenizer (< 2.5 threshold)")
-            log(f"  Action: retrain 16K or 32K BPE on text+code (~25% code, size^0.3 balance)")
-            log(f"  → re-tokenize all shards → record new SHA-256 → re-baseline val numbers")
-            log(f"  → val/test raw files stay frozen; verify SHA-256 before and after")
+            mean_bpt, sha_ok, sha = meta
+            log(f"  Tokenizer SHA-256: {sha[:32]}... {'✅ match' if sha_ok else '❌ MISMATCH'}")
+            log()
+            log(f"  {'lang':<10} {'bytes':>8} {'tokens':>8} {'bytes/token [M]':>16}")
+            log(f"  {'-'*10} {'-'*8} {'-'*8} {'-'*16}")
+            for lang, v in per_lang.items():
+                log(f"  {lang:<10} {v['bytes']:>8,} {v['tokens']:>8,} {v['bytes_per_token']:>16.3f}")
+            log()
+            log(f"  mean bytes/token [M]: {mean_bpt:.3f}")
+            log(f"  threshold: 2.5")
+            if mean_bpt < 0:
+                log(f"  Decision: ERROR — no valid measurements")
+            elif mean_bpt >= 2.5:
+                log(f"  Decision: KEEP existing 16K BPE tokenizer")
+                log(f"  SHA-256 unchanged: {TOK_SHA256}")
+            else:
+                log(f"  Decision: RETRAIN tokenizer (< 2.5 threshold)")
+                log(f"  Action: retrain 16K or 32K BPE on text+code (~25% code, size^0.3 balance)")
+                log(f"  → re-tokenize all shards → record new SHA-256 → re-baseline val numbers")
+                log(f"  → val/test raw files stay frozen; verify SHA-256 before and after")
 
     # =========================================================================
     # Summary
