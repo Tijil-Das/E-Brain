@@ -1,5 +1,5 @@
 {
-  "id": "TRAINING_KAGGLE_USERNAME/ebrain-phase0-bench",
+  "id": "tijildas/ebrain-phase0-bench",
   "title": "E-Brain Phase 0 Benchmark",
   "code_file": "bench.py",
   "language": "python",
@@ -8,8 +8,8 @@
   "enable_gpu": true,
   "enable_internet": false,
   "dataset_sources": [
-    "TRAINING_KAGGLE_USERNAME/ebrain-100m-data-binary",
-    "TRAINING_KAGGLE_USERNAME/ebrain-phase0-code-samples"
+    "tijildas/ebrain-vaults-and-tokenizer",
+    "tijildas/ebrain-phase0-code-samples"
   ],
   "competition_sources": [],
   "kernel_sources": []

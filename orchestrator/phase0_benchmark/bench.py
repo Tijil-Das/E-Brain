@@ -356,6 +356,7 @@ def _sha256_file(path: Path) -> str:
 def measure_tokenizer() -> tuple[dict | None, float | str]:
     # ── 1. Locate tokenizer ──────────────────────────────────────────────────
     tok_candidates = [
+        Path("/kaggle/input/ebrain-vaults-and-tokenizer/ebrain_tokenizer_16k.json"),
         Path("/kaggle/input/ebrain-100m-data-binary/ebrain_tokenizer_16k.json"),
         Path("/kaggle/working/ebrain_tokenizer_16k.json"),
     ]
