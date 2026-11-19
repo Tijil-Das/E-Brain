@@ -47,9 +47,9 @@ jobs:
         run: |
           STEP=$(curl -sf "$WORKER_URL/status" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('step',0))" 2>/dev/null || echo "0")
           echo "step=$STEP" >> $GITHUB_OUTPUT
-          echo "Current step: $STEP / 73242"
-          if [ "$STEP" -ge 73242 ]; then
-            echo "Training complete (step >= 73242). Skipping."
+          echo "Current step: $STEP / 61241"
+          if [ "$STEP" -ge 61241 ]; then
+            echo "Training complete (step >= 61241). Skipping."
             exit 0
           fi
 
@@ -65,8 +65,25 @@ jobs:
         env:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY:      ${{ secrets.KAGGLE_KEY }}
+          WORKER_URL:      ${{ secrets.WORKER_URL }}
+          HEARTBEAT_TOKEN: ${{ secrets.HEARTBEAT_TOKEN }}
         run: |
+          mkdir -p ~/.kaggle
+          echo "$KAGGLE_KEY" > ~/.kaggle/access_token
+          echo '{"username":"'"$KAGGLE_USERNAME"'","key":"'"$KAGGLE_KEY"'"}' > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/*
           cd orchestrator/kaggle_training_kernel
+          # Substitute the actual Kaggle username into kernel-metadata.json
+          python3 -c "import json; d=json.load(open('kernel-metadata.json')); d['id']='$KAGGLE_USERNAME/ebrain-100m-daily-train'; d['dataset_sources']=['$KAGGLE_USERNAME/ebrain-100m-data-binary']; json.dump(d, open('kernel-metadata.json', 'w'), indent=2)"
+          # Inject secrets into train.py
+          python3 -c "
+          s = open('train.py').read()
+          s = s.replace('TRAINING_USERNAME = os.environ.get(\"KAGGLE_USERNAME\", \"REPLACE_ME\")', 'TRAINING_USERNAME = \"$KAGGLE_USERNAME\"')
+          s = s.replace('WORKER_URL       = os.environ.get(\"WORKER_URL\", \"\")', 'WORKER_URL = \"$WORKER_URL\"')
+          s = s.replace('HEARTBEAT_TOKEN  = os.environ.get(\"HEARTBEAT_TOKEN\", \"\")', 'HEARTBEAT_TOKEN = \"$HEARTBEAT_TOKEN\"')
+          s = s.replace('KAGGLE_KEY       = os.environ.get(\"KAGGLE_KEY\", \"\")', 'KAGGLE_KEY = \"$KAGGLE_KEY\"')
+          open('train.py', 'w').write(s)
+          "
           kaggle kernels push -p .
           echo "Kernel pushed."
 

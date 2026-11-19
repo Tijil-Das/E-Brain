@@ -8,10 +8,7 @@
   "enable_gpu": true,
   "enable_internet": true,
   "dataset_sources": [
-    "TRAINING_KAGGLE_USERNAME/ebrain-data-binary",
-    "TRAINING_KAGGLE_USERNAME/ebrain-checkpoints",
-    "TRAINING_KAGGLE_USERNAME/ebrain-val-vault",
-    "TRAINING_KAGGLE_USERNAME/ebrain-tokenizer"
+    "TRAINING_KAGGLE_USERNAME/ebrain-100m-data-binary"
   ],
   "competition_sources": [],
   "kernel_sources": []

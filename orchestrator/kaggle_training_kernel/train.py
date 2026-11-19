@@ -39,10 +39,18 @@ import requests
 
 # ── Paths ─────────────────────────────────────────────────────────────────────
 TRAINING_USERNAME = os.environ.get("KAGGLE_USERNAME", "REPLACE_ME")
-DATA_DIR    = Path("/kaggle/input/datasets") / TRAINING_USERNAME / "ebrain-data-binary"
+# Everything is self-contained in ebrain-100m-data-binary
+DATA_DIR    = Path("/kaggle/input/datasets") / TRAINING_USERNAME / "ebrain-100m-data-binary"
+if not DATA_DIR.exists():
+    # Fallback to standard Kaggle mount path
+    DATA_DIR = Path("/kaggle/input/ebrain-100m-data-binary")
+
 CKPT_DIR    = Path("/kaggle/input/datasets") / TRAINING_USERNAME / "ebrain-checkpoints"
-VAL_DIR     = Path("/kaggle/input/datasets") / TRAINING_USERNAME / "ebrain-val-vault"
-TOK_DIR     = Path("/kaggle/input/datasets") / TRAINING_USERNAME / "ebrain-tokenizer"
+if not CKPT_DIR.exists():
+    CKPT_DIR = Path("/kaggle/input/ebrain-checkpoints")
+
+VAL_DIR     = DATA_DIR / "val_vault"
+TOK_DIR     = DATA_DIR
 OUT_DIR     = Path("/kaggle/working")
 CKPT_OUT    = OUT_DIR / "checkpoints"
 LOG_OUT     = OUT_DIR / "logs"
@@ -63,7 +71,7 @@ GLOBAL_BS   = MICRO_BS * ACCUM_STEPS * T_CTX   # = 32,768 tokens
 LR_MAX      = 3e-4
 LR_MIN      = LR_MAX * 0.1
 WARMUP_STEPS = 2000
-TOTAL_STEPS = 73_242
+TOTAL_STEPS = 61_241                      # 2,006,731,161 tokens / 32,768 = 61,241 steps (1.8x repeat cap)
 CLIP_NORM   = 1.0
 DTYPE       = torch.float16
 
