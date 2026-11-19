@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: Install Kaggle CLI
-        run: pip install --quiet kaggle
+        run: pip install --quiet "kaggle<2.0.0"
 
       - name: Configure Kaggle credentials
         env:
