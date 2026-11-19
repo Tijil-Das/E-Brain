@@ -34,10 +34,13 @@ jobs:
         env:
           KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
           KAGGLE_KEY:      ${{ secrets.KAGGLE_KEY }}
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_KEY }}
         run: |
           mkdir -p ~/.kaggle
+          # Support both access_token format (KGAT_...) and legacy username/key
+          echo "$KAGGLE_KEY" > ~/.kaggle/access_token
           echo '{"username":"'"$KAGGLE_USERNAME"'","key":"'"$KAGGLE_KEY"'"}' > ~/.kaggle/kaggle.json
-          chmod 600 ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/*
           cd orchestrator/kaggle_dummy_kernel
           # Substitute the actual Kaggle username into kernel-metadata.json
           python3 -c "import json; d=json.load(open('kernel-metadata.json')); d['id']='$KAGGLE_USERNAME/ebrain-dummy-gate-d1'; json.dump(d, open('kernel-metadata.json', 'w'), indent=2)"
