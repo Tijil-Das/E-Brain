@@ -48,8 +48,8 @@ jobs:
           STEP=$(curl -sf "$WORKER_URL/status" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('step',0))" 2>/dev/null || echo "0")
           echo "step=$STEP" >> $GITHUB_OUTPUT
           echo "Current step: $STEP / 61241"
-          if [ "$STEP" -ge 61241 ]; then
-            echo "Training complete (step >= 61241). Skipping."
+          if [ "$STEP" -ge 194000 ]; then
+            echo "Training complete (step >= 194000). Skipping."
             exit 0
           fi
 

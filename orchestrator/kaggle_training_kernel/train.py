@@ -1,26 +1,26 @@
 """
-E-Brain 100M Production Training Kernel
+E-Brain 315M Production Training Kernel
 ========================================
-Gate D.2+: Real training kernel pushed to Kaggle daily via GitHub Actions.
-
 Architecture decisions (locked):
-  Model:      D=768, L=12, H=12, SwiGLU (hidden=2048), RoPE, RMSNorm, tied embeddings
-  Context:    T=2048
+  Model:      D=1024, L=24, H=16, SwiGLU (hidden=2688), RoPE, RMSNorm, tied embeddings
+  Context:    T=4096 (native — enabled by SDPA/FlashAttention)
+  Params:     ~315M total
   Tokenizer:  frozen 16K BPE, SHA-256 = 41cb92f102d2a11dbde826c54f09b487a27c4a157be0f179ea09682ad04344bf
-  Target:     2.40B tokens = 73,242 steps, batch = 32,768 tokens (micro=4, accum=4)
-  Schedule:   warmup 2000 steps + cosine decay to 0.1*lr_max over 73,242 steps
+  Target:     6.36B tokens = 194,000 steps, batch = 32,768 tokens (micro=2, accum=4)
+              ≈ 101% Chinchilla-optimal for 315M params (20 × 315M = 6.3B)
+  Schedule:   warmup 2000 steps + cosine decay to 0.1×lr_max over 194,000 steps
+  Precision:  bfloat16 (wider dynamic range, no GradScaler needed)
+  Attention:  PyTorch SDPA (FlashAttention) — eliminates O(T²) VRAM, enables T=4096 on T4
   Languages:  en es ru fr de ja zh hi bn ar  (equal 10% share each)
+  Phase 2:    After main training, extend context to 16K–32K via YaRN RoPE scaling
 
 Kaggle dataset mounts (set in kernel-metadata.json):
-  /kaggle/input/datasets/TRAINING_USERNAME/ebrain-data-binary/    — uint16 binary shards
-  /kaggle/input/datasets/TRAINING_USERNAME/ebrain-checkpoints/    — latest checkpoint + manifest
-  /kaggle/input/datasets/TRAINING_USERNAME/ebrain-val-vault/      — frozen val files
-  /kaggle/input/datasets/TRAINING_USERNAME/ebrain-tokenizer/      — frozen 16K tokenizer JSON
+  /kaggle/input/ebrain-100m-data-binary/   — uint16 binary shards + tokenizer + val_vault
 
-Secrets (set as Kaggle environment variables in kernel settings):
+Secrets (injected by GitHub Actions before kernel push):
   WORKER_URL        — Cloudflare Worker base URL
   HEARTBEAT_TOKEN   — shared secret for POST /heartbeat
-  KAGGLE_USERNAME   — training account username (for dataset upload)
+  KAGGLE_USERNAME   — training account username
   KAGGLE_KEY        — training account API key
 """
 
@@ -58,22 +58,22 @@ CKPT_OUT.mkdir(parents=True, exist_ok=True)
 LOG_OUT.mkdir(parents=True, exist_ok=True)
 
 # ── Hyperparameters ───────────────────────────────────────────────────────────
-D_MODEL     = 768
-N_LAYERS    = 12
-N_HEADS     = 12
+D_MODEL     = 1024
+N_LAYERS    = 24
+N_HEADS     = 16
 D_HEAD      = D_MODEL // N_HEADS          # 64
-D_FF        = 2048                        # SwiGLU hidden
+D_FF        = 2688                        # SwiGLU hidden — gives ~315M total params
 VOCAB_SIZE  = 16000
-T_CTX       = 2048
-MICRO_BS    = 4                           # sequences per micro-batch
-ACCUM_STEPS = 4                           # gradient accumulation
-GLOBAL_BS   = MICRO_BS * ACCUM_STEPS * T_CTX   # = 32,768 tokens
-LR_MAX      = 3e-4
-LR_MIN      = LR_MAX * 0.1
+T_CTX       = 4096                        # native 4096 context (FlashAttention via SDPA)
+MICRO_BS    = 2                           # sequences per micro-batch (2 × 4096 = 8,192 tokens)
+ACCUM_STEPS = 4                           # gradient accumulation → global_bs = 2×4×4096 = 32,768
+GLOBAL_BS   = MICRO_BS * ACCUM_STEPS * T_CTX   # = 32,768 tokens (unchanged)
+LR_MAX      = 2e-4                        # slightly lower LR for 315M
+LR_MIN      = LR_MAX * 0.1               # → 2e-5
 WARMUP_STEPS = 2000
-TOTAL_STEPS = 61_241                      # 2,006,731,161 tokens / 32,768 = 61,241 steps (1.8x repeat cap)
+TOTAL_STEPS = 194_000                     # 194,000 × 32,768 = 6.36B tokens ≈ 101% Chinchilla for 315M
 CLIP_NORM   = 1.0
-DTYPE       = torch.float16
+DTYPE       = torch.bfloat16              # bfloat16: wider dynamic range than float16, more stable at 315M
 
 LANGUAGES   = ['en','es','ru','fr','de','ja','zh','hi','bn','ar']
 TOK_SHA256  = "41cb92f102d2a11dbde826c54f09b487a27c4a157be0f179ea09682ad04344bf"
@@ -129,21 +129,26 @@ class RMSNorm(nn.Module):
         return x * torch.rsqrt(x.pow(2).mean(-1, keepdim=True) + self.eps) * self.g
 
 class MHA(nn.Module):
+    """Multi-head attention using PyTorch SDPA (FlashAttention when available).
+    SDPA eliminates the O(T²) attention matrix from VRAM — required for T=4096 on T4.
+    At T=4096 without SDPA: attention matrix alone = 12.9 GB → OOM.
+    With SDPA: attention memory ≈ O(T×D) → ~400 MB. Same flops, tiled execution.
+    """
     def __init__(self):
         super().__init__()
         self.qkv = nn.Linear(D_MODEL, 3 * D_MODEL, bias=False)
         self.out  = nn.Linear(D_MODEL, D_MODEL, bias=False)
-    def forward(self, x, cos, sin, mask):
+
+    def forward(self, x, cos, sin):
         B, T, C = x.shape
         qkv = self.qkv(x).reshape(B, T, 3, N_HEADS, D_HEAD).permute(2, 0, 3, 1, 4)
         q, k, v = qkv[0], qkv[1], qkv[2]
         q, k = apply_rope(q, k,
                            cos[:T].unsqueeze(0).unsqueeze(0),
                            sin[:T].unsqueeze(0).unsqueeze(0))
-        attn = (q @ k.transpose(-2, -1)) * (D_HEAD ** -0.5)
-        attn = attn.masked_fill(mask[:T, :T].unsqueeze(0).unsqueeze(0), float('-inf'))
-        attn = F.softmax(attn.float(), dim=-1).to(x.dtype)
-        return self.out((attn @ v).transpose(1, 2).reshape(B, T, C))
+        # SDPA: causal mask handled internally, no T×T matrix stored in VRAM
+        out = F.scaled_dot_product_attention(q, k, v, attn_mask=None, is_causal=True)
+        return self.out(out.transpose(1, 2).reshape(B, T, C))
 
 class FFN(nn.Module):
     def __init__(self):
@@ -161,12 +166,12 @@ class Block(nn.Module):
         self.attn = MHA()
         self.ln2  = RMSNorm(D_MODEL)
         self.ffn  = FFN()
-    def forward(self, x, cos, sin, mask):
-        x = x + self.attn(self.ln1(x), cos, sin, mask)
+    def forward(self, x, cos, sin):
+        x = x + self.attn(self.ln1(x), cos, sin)
         x = x + self.ffn(self.ln2(x))
         return x
 
-class EBrain100M(nn.Module):
+class EBrain315M(nn.Module):
     def __init__(self):
         super().__init__()
         self.emb    = nn.Embedding(VOCAB_SIZE, D_MODEL)
@@ -175,13 +180,11 @@ class EBrain100M(nn.Module):
         # Tied embeddings: lm_head weight = emb weight (no extra params)
         self.lm_head = nn.Linear(D_MODEL, VOCAB_SIZE, bias=False)
         self.lm_head.weight = self.emb.weight
-        # RoPE cache (registered as buffer — persistent=True)
+        # RoPE cache (registered as buffer)
         cos, sin = build_rope_cache(T_CTX, D_HEAD, torch.device('cpu'))
         self.register_buffer('cos', cos)
         self.register_buffer('sin', sin)
-        # Causal mask
-        mask = torch.ones(T_CTX, T_CTX, dtype=torch.bool).triu(1)
-        self.register_buffer('mask', mask)
+        # NOTE: no causal mask buffer — SDPA (FlashAttention) handles causality internally
         # Init
         self.apply(self._init_weights)
 
@@ -197,7 +200,7 @@ class EBrain100M(nn.Module):
         cos = self.cos[:T]
         sin = self.sin[:T]
         for block in self.blocks:
-            h = block(h, cos, sin, self.mask)
+            h = block(h, cos, sin)
         h = self.ln_f(h)
         return self.lm_head(h)
 
@@ -548,14 +551,16 @@ def main():
     tok_path = verify_tokenizer()
 
     # ── Build model
-    model = EBrain100M().to(device)
+    model = EBrain315M().to(device)
     total_p, non_emb_p = model.param_count()
-    print(f"Model: {total_p:,} total params  ({non_emb_p:,} non-embedding)")
+    print(f\"Model: {total_p:,} total params  ({non_emb_p:,} non-embedding)\")
 
     # ── Optimizer
+    # bfloat16 has wider dynamic range than float16 — no GradScaler needed.
+    # SDPA (FlashAttention) works natively with bfloat16.
     optimizer = torch.optim.AdamW(model.parameters(), lr=LR_MAX, betas=(0.9, 0.95),
                                   weight_decay=0.1, eps=1e-8)
-    scaler = GradScaler()
+    scaler = GradScaler(enabled=(DTYPE == torch.float16))  # disabled for bfloat16
 
     # ── Load checkpoint
     ckpt = load_latest_checkpoint()
