@@ -423,10 +423,25 @@ def evaluate_val(model, device, full=False, limit_per_lang=50):
     results = {}
     with torch.no_grad():
         for lang in LANGUAGES:
-            val_file = VAL_DIR / f"val_{lang}.bin"
-            if not val_file.exists():
+            # Val files are plain .txt — tokenize on the fly using the frozen tokenizer.
+            # Fall back to .bin only if a pre-tokenized version somehow exists.
+            txt_file = VAL_DIR / f"val_{lang}.txt"
+            bin_file = VAL_DIR / f"val_{lang}.bin"
+            if txt_file.exists():
+                try:
+                    from tokenizers import Tokenizer as _Tok
+                    _tok = _Tok.from_file(str(TOK_DIR / "ebrain_tokenizer_16k.json"))
+                    text = txt_file.read_text(encoding="utf-8", errors="replace")
+                    enc  = _tok.encode(text)
+                    tokens = np.array(enc.ids, dtype=np.int64)
+                except Exception as e:
+                    print(f"  [val] tokenizer error for {lang}: {e}")
+                    continue
+            elif bin_file.exists():
+                tokens = np.frombuffer(bin_file.read_bytes(), dtype=np.uint16).astype(np.int64)
+            else:
+                print(f"  [val] no val file found for {lang} (checked .txt and .bin) — skipping")
                 continue
-            tokens = np.frombuffer(val_file.read_bytes(), dtype=np.uint16).astype(np.int64)
             total_loss, total_toks = 0.0, 0
             n_seq = 0
             i = 0
