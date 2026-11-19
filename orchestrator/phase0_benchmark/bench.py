@@ -26,7 +26,7 @@ from pathlib import Path
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.cuda.amp import GradScaler
+from torch.amp import GradScaler
 import torch.utils.checkpoint as _ckpt
 
 # ── Constants ─────────────────────────────────────────────────────────────────
@@ -209,17 +209,17 @@ def run_benchmark(
     Returns measurements or raises torch.cuda.OutOfMemoryError.
     """
     T_max = T_max or T
-    model  = BenchModel(D, L, H, D_FF, T_max, grad_ckpt=grad_ckpt).to(DEVICE).to(DTYPE)
+    model  = BenchModel(D, L, H, D_FF, T_max, grad_ckpt=grad_ckpt).to(DEVICE)
     total_p, non_emb_p = model.param_count()
     opt    = torch.optim.AdamW(
         model.parameters(), lr=2e-4, betas=(0.9, 0.95), weight_decay=0.1, eps=1e-8
     )
-    scaler = GradScaler()
+    scaler = GradScaler('cuda')
 
     def step() -> None:
         x = torch.randint(0, VOCAB_SIZE, (micro_bs, T), device=DEVICE)
         y = torch.randint(0, VOCAB_SIZE, (micro_bs, T), device=DEVICE)
-        with torch.cuda.amp.autocast(dtype=DTYPE):
+        with torch.amp.autocast('cuda', dtype=DTYPE):
             loss = F.cross_entropy(model(x).view(-1, VOCAB_SIZE), y.view(-1))
         scaler.scale(loss).backward()
         scaler.unscale_(opt)
@@ -272,11 +272,11 @@ def run_t32k_probe(D: int, L: int, H: int, D_FF: int, label: str) -> dict:
     Returns: peak_vram_gb [M], step_ms [M], tok_s [M].
     Raises torch.cuda.OutOfMemoryError if T=32768 does not fit.
     """
-    model = BenchModel(D, L, H, D_FF, T_max=T_32K, grad_ckpt=True).to(DEVICE).to(DTYPE)
+    model = BenchModel(D, L, H, D_FF, T_max=T_32K, grad_ckpt=True).to(DEVICE)
     model.train()
     opt    = torch.optim.AdamW(model.parameters(), lr=2e-5, betas=(0.9, 0.95),
                                weight_decay=0.1, eps=1e-8)
-    scaler = GradScaler()
+    scaler = GradScaler('cuda')
 
     def step_32k() -> None:
         x = torch.randint(0, VOCAB_SIZE, (1, T_32K), device=DEVICE)
@@ -285,7 +285,7 @@ def run_t32k_probe(D: int, L: int, H: int, D_FF: int, label: str) -> dict:
         with torch.backends.cuda.sdp_kernel(
             enable_flash=False, enable_math=False, enable_mem_efficient=True
         ):
-            with torch.cuda.amp.autocast(dtype=DTYPE):
+            with torch.amp.autocast('cuda', dtype=DTYPE):
                 loss = F.cross_entropy(model(x).view(-1, VOCAB_SIZE), y.view(-1))
         scaler.scale(loss).backward()
         scaler.unscale_(opt)
