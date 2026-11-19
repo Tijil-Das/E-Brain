@@ -1,0 +1,72 @@
+================================================================================
+E-Brain Phase 0 Benchmark
+GPU:     Tesla T4
+VRAM:    14.6 GB total
+CUDA:    13.0
+PyTorch: 2.11.0+cu130
+================================================================================
+
+[ 1 / 3 ]  ARCHITECTURE BENCHMARKS
+  T=2048  fp16  GradScaler  SDPA
+  micro_bs=4  global_bs=32768 tokens
+  50 measured steps  (5 warmup excluded from timing)
+
+  cand            total_params       non_emb   tok/s [M]   vram [M]  ms/step [M]
+  ------------------------------------------------------------------------------
+  A D=1024 L=16    215,647,232   199,263,232       7,118     11.03G      1151.0ms
+  B D=1024 L=20            OOM           OOM         OOM        OOM          OOM
+  C D=896 L=16     166,900,608   152,564,608       7,376      9.56G      1110.6ms
+
+[ 2 / 3 ]  PHASE 1 AUTO-LOCK INPUTS
+  session_budget_s = 13800  (3h50m kernel wall time)
+  Selection rule: largest candidate where days<=75 AND tok/non_emb_param>=15 AND repeats<=2.0x
+  Unique-token totals: 4B and 5B shown; actual comes from Phase 2 audit.
+
+  cand           sess_steps [M]  days@4B [M]  days@5B [M]   tok/p@4B   tok/p@5B
+  -----------------------------------------------------------------------------
+  A D=1024 L=16            2998         40.7         50.9       20.1       25.1
+  C D=896 L=16             3106         39.3         49.1       26.2       32.8
+
+  Repeats (conservative, before Phase 2 audit):
+  At 4B total target: code group rep = 0.88x (using 1.5B unique floor)
+  At 5B total target: code group rep = 1.10x
+  Text group rep at 4B: 1.50x  at 5B: 1.87x
+  Cap = 2.0x per group. Actual per-group counts after Phase 2 audit.
+
+  Gate check at 4B floor:
+    A D=1024 L=16: days=40.7 tok/p=20.1 → PASS
+    C D=896 L=16: days=39.3 tok/p=26.2 → PASS
+
+  PRELIMINARY SELECTION (4B floor): candidate A D=1024 L=16
+  Final selection confirmed after Phase 2 audit.
+
+[ 3a / 4 ]  T=4096 MEMORY PROBE
+  Config: candidate C D=896 L=16 H=14
+  T=4096  micro_bs=2  5 steps  no warmup  fp16
+  peak_vram_T4096 [M]:  9.54 GB
+  tok/s_T4096     [M]:  6546
+  OOM: no
+  → T=4096 is FEASIBLE on this T4 instance.
+
+[ 3c / 4 ]  T=32768 MEMORY PROBE
+  Purpose: verify T=32768 fits on T4 before claiming YaRN 32K extension is feasible.
+  Settings: micro_bs=1  grad_ckpt=ON  SDPA=mem-efficient (no flash/math)  fp16  5 steps
+  Config: candidate C D=896 L=16 H=14
+  peak_vram_T32K [M]:  8.85 GB
+  ms/step_T32K   [M]:  21321 ms
+  tok/s_T32K     [M]:  1537
+  OOM: no
+  → T=32768 training is FEASIBLE on this T4 instance (memory only).
+  Note: this probe does NOT verify YaRN quality or position extrapolation.
+        YaRN quality is verified separately on CPU (yarn/test_yarn_cpu.py).
+
+[ 3d / 4 ]  TOKENIZER BYTES/TOKEN (16K BPE on 5 code languages)
+  ERROR: tokenizer file not found at any expected path
+  Decision: CANNOT DETERMINE
+
+================================================================================
+PHASE 0 COMPLETE
+All numbers above tagged [M] are measured on this T4 instance.
+No measured value should be substituted or estimated in Phase 1.
+Review this output, then proceed to Phase 1 spec lock.
+================================================================================
